@@ -1,0 +1,32 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import { isLanguage } from '@/i18n'
+import { profile, template } from '@/settings'
+import { getCollection, render } from 'astro:content'
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog')
+	return posts
+		.filter((post) => !post.data.draft)
+		.map((post) => ({ params: { lang: post.data.language, slug: post.id }, props: { post } }))
+}
+
+const rawLang = Astro.params.lang
+if (!isLanguage(rawLang)) throw new Error(`Unsupported language: ${rawLang}`)
+const lang = rawLang
+const { post } = Astro.props
+const { Content } = await render(post)
+const person = profile[lang]
+---
+
+<Layout lang={lang} title={`${post.data.title} | ${person.fullName}`} description={post.data.excerpt}>
+	<article class='mx-auto max-w-3xl' data-reveal>
+		<header class='mb-10 border-b border-base-300 pb-8'>
+			<time class='text-sm text-base-content/60' datetime={post.data.date}>{new Date(post.data.date).toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+			<h1 class='mt-3 text-4xl font-black leading-tight'>{post.data.title}</h1>
+			{post.data.tags && <div class='mt-5 flex flex-wrap gap-2'>{post.data.tags.map((tag: string) => <span class='badge badge-outline'>{tag}</span>)}</div>}
+		</header>
+		{post.data.featuredImage && <img src={`${template.base}${post.data.featuredImage}`} alt='' class='mb-10 max-h-[28rem] w-full rounded-2xl object-cover' />}
+		<div class='prose max-w-none prose-headings:text-base-content prose-p:text-base-content/80 prose-a:text-secondary'><Content /></div>
+	</article>
+</Layout>

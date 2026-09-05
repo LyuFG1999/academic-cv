@@ -1,5 +1,7 @@
 import type { Education, Experience, Publication, Skill } from '@/types/cv'
 import type { Language } from '@/i18n'
+import cvZh from './cv.zh.json'
+import cvEn from './cv.en.json'
 
 export type LocalizedCv = {
 	experiences: Experience[]
@@ -8,18 +10,7 @@ export type LocalizedCv = {
 	publications: Publication[]
 }
 
-// Add the same item in both language blocks when you want it to appear bilingually.
 export const cv: Record<Language, LocalizedCv> = {
-	zh: {
-		experiences: [],
-		education: [],
-		skills: [],
-		publications: [],
-	},
-	en: {
-		experiences: [],
-		education: [],
-		skills: [],
-		publications: [],
-	},
+	zh: cvZh as LocalizedCv,
+	en: cvEn as LocalizedCv,
 }

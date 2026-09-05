@@ -1,0 +1,226 @@
+backend:
+  name: git-gateway
+  branch: main
+
+publish_mode: simple
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: site
+    label: 网站资料
+    files:
+      - name: site_zh
+        label: 中文主页与研究
+        file: src/data/site.zh.json
+        format: json
+        fields:
+          - { label: 姓名, name: fullName, widget: string }
+          - { label: 身份或职称, name: title, widget: string }
+          - { label: 院校或机构, name: institute, widget: string }
+          - { label: 论文作者姓名, name: authorName, widget: string, required: false, hint: 用于在作者列表中突出显示你的姓名 }
+          - { label: 首页简介, name: intro, widget: text }
+          - { label: 研究陈述, name: researchStatement, widget: text }
+          - { label: 研究贡献, name: researchImpact, widget: text }
+          - { label: 侧栏头像, name: avatar, widget: image }
+          - { label: 浏览器标题, name: seoTitle, widget: string }
+          - { label: 搜索摘要, name: seoDescription, widget: text }
+          - label: 研究领域
+            name: researchAreas
+            widget: list
+            required: false
+            summary: "{{fields.title}}"
+            fields:
+              - { label: 名称, name: title, widget: string }
+              - { label: 简介, name: description, widget: text }
+              - label: 图标
+                name: field
+                widget: select
+                default: computer-science
+                options:
+                  - { label: 社会科学或通用, value: computer-science }
+                  - { label: 物理, value: physics }
+                  - { label: 生物, value: biology }
+                  - { label: 化学, value: chemistry }
+                  - { label: 数学, value: mathematics }
+                  - { label: 法学, value: law }
+                  - { label: 工程, value: engineering }
+          - label: 研究项目
+            name: projects
+            widget: list
+            required: false
+            summary: "{{fields.title}}"
+            fields:
+              - { label: 项目名称, name: title, widget: string }
+              - { label: 项目介绍, name: description, widget: text }
+              - { label: 项目链接, name: link, widget: string, required: false }
+      - name: site_en
+        label: English Profile & Research
+        file: src/data/site.en.json
+        format: json
+        fields:
+          - { label: Name, name: fullName, widget: string }
+          - { label: Title, name: title, widget: string }
+          - { label: Institute, name: institute, widget: string }
+          - { label: Author name, name: authorName, widget: string, required: false }
+          - { label: Home introduction, name: intro, widget: text }
+          - { label: Research statement, name: researchStatement, widget: text }
+          - { label: Research impact, name: researchImpact, widget: text }
+          - { label: Sidebar portrait, name: avatar, widget: image }
+          - { label: Browser title, name: seoTitle, widget: string }
+          - { label: Search description, name: seoDescription, widget: text }
+          - label: Research areas
+            name: researchAreas
+            widget: list
+            required: false
+            summary: "{{fields.title}}"
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Description, name: description, widget: text }
+              - label: Icon
+                name: field
+                widget: select
+                default: computer-science
+                options: [computer-science, physics, biology, chemistry, mathematics, law, engineering]
+          - label: Projects
+            name: projects
+            widget: list
+            required: false
+            summary: "{{fields.title}}"
+            fields:
+              - { label: Project title, name: title, widget: string }
+              - { label: Description, name: description, widget: text }
+              - { label: Link, name: link, widget: string, required: false }
+      - name: social
+        label: 联系方式
+        file: src/data/social.json
+        format: json
+        fields:
+          - { label: 邮箱, name: email, widget: string, required: false }
+          - { label: GitHub, name: github, widget: string, required: false }
+          - { label: X, name: x, widget: string, required: false }
+          - { label: ORCID, name: orcid, widget: string, required: false }
+          - { label: 知网主页, name: cnki, widget: string, required: false }
+
+  - name: cv
+    label: 履历与成果
+    files:
+      - name: cv_zh
+        label: 中文履历
+        file: src/data/cv.zh.json
+        format: json
+        fields:
+          - label: 工作经历
+            name: experiences
+            widget: list
+            required: false
+            summary: "{{fields.title}} — {{fields.company}}"
+            fields:
+              - { label: 机构, name: company, widget: string }
+              - { label: 时间, name: time, widget: string, hint: 例如 2022 - 至今 }
+              - { label: 职位, name: title, widget: string }
+              - { label: 地点, name: location, widget: string, required: false }
+              - { label: 说明, name: description, widget: text, required: false }
+          - label: 教育经历
+            name: education
+            widget: list
+            required: false
+            summary: "{{fields.degree}} — {{fields.school}}"
+            fields:
+              - { label: 学校, name: school, widget: string }
+              - { label: 时间, name: time, widget: string }
+              - { label: 学位, name: degree, widget: string }
+              - { label: 地点, name: location, widget: string, required: false }
+              - { label: 说明, name: description, widget: text, required: false }
+          - label: 技能
+            name: skills
+            widget: list
+            required: false
+            summary: "{{fields.title}}"
+            fields:
+              - { label: 名称, name: title, widget: string }
+              - { label: 说明, name: description, widget: text }
+          - label: 论文与成果
+            name: publications
+            widget: list
+            required: false
+            summary: "{{fields.title}}"
+            fields:
+              - { label: 标题, name: title, widget: string }
+              - { label: 作者, name: authors, widget: string }
+              - { label: 期刊或出版物, name: journal, widget: string }
+              - { label: 时间, name: time, widget: string }
+              - { label: 链接, name: link, widget: string, required: false }
+              - { label: 摘要, name: abstract, widget: text, required: false }
+      - name: cv_en
+        label: English CV
+        file: src/data/cv.en.json
+        format: json
+        fields:
+          - label: Experience
+            name: experiences
+            widget: list
+            required: false
+            summary: "{{fields.title}} — {{fields.company}}"
+            fields:
+              - { label: Organization, name: company, widget: string }
+              - { label: Time, name: time, widget: string }
+              - { label: Position, name: title, widget: string }
+              - { label: Location, name: location, widget: string, required: false }
+              - { label: Description, name: description, widget: text, required: false }
+          - label: Education
+            name: education
+            widget: list
+            required: false
+            summary: "{{fields.degree}} — {{fields.school}}"
+            fields:
+              - { label: School, name: school, widget: string }
+              - { label: Time, name: time, widget: string }
+              - { label: Degree, name: degree, widget: string }
+              - { label: Location, name: location, widget: string, required: false }
+              - { label: Description, name: description, widget: text, required: false }
+          - label: Skills
+            name: skills
+            widget: list
+            required: false
+            summary: "{{fields.title}}"
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Description, name: description, widget: text }
+          - label: Publications
+            name: publications
+            widget: list
+            required: false
+            summary: "{{fields.title}}"
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Authors, name: authors, widget: string }
+              - { label: Journal or publisher, name: journal, widget: string }
+              - { label: Time, name: time, widget: string }
+              - { label: Link, name: link, widget: string, required: false }
+              - { label: Abstract, name: abstract, widget: text, required: false }
+
+  - name: news
+    label: 新闻与动态
+    label_singular: 动态
+    folder: src/content/BlogPosts
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}} · {{language}}"
+    fields:
+      - { label: 标题, name: title, widget: string }
+      - label: 语言
+        name: language
+        widget: select
+        default: zh
+        options:
+          - { label: 中文, value: zh }
+          - { label: English, value: en }
+      - { label: 日期, name: date, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }
+      - { label: 摘要, name: excerpt, widget: text }
+      - { label: 标签, name: tags, widget: list, required: false }
+      - { label: 题图, name: featuredImage, widget: image, required: false }
+      - { label: 草稿, name: draft, widget: boolean, default: false }
+      - { label: 正文, name: body, widget: markdown }

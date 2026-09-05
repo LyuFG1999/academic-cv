@@ -2,32 +2,51 @@
 
 This repository is a customized build of [Astro Academia](https://github.com/maiobarbero/astro_academia) for `LyuFG1999/academic-cv`.
 
-## Included changes
+## Included features
 
-- Chinese and English static routes: `/zh/` and `/en/`
+- Chinese and English routes: `/zh/` and `/en/`
 - A language switch that keeps the current section
-- Light and dark themes only
-- A text-only Home hero (no portrait or contact links in the Home content)
-- Sidebar contacts limited to Email, GitHub, X, ORCID, and CNKI
-- An original book-and-search icon for CNKI
-- Scroll reveal effects with `prefers-reduced-motion` support
-- GitHub Pages configuration for `https://lyufg1999.github.io/academic-cv/`
+- Light and dark themes
+- A text-only Home hero; the portrait and contacts stay in the sidebar
+- Email, GitHub, X, ORCID, and CNKI contact links
+- An original CNKI icon
+- Scroll reveal effects with reduced-motion support
+- Bilingual news pages
+- A Decap CMS editor at `/admin/`
+- Automatic path handling for both GitHub Pages and Netlify
 
-## Add your information
+## Edit content in the browser
 
-Edit [`src/settings.ts`](src/settings.ts):
+The Decap CMS editor lets you update the following content without editing code:
 
-- Fill both `profile.zh` and `profile.en`.
-- Replace `你的姓名 / Your Name`, title, institute, introduction, and research areas.
-- Fill `social.email`, `social.github`, `social.x`, `social.orcid`, and `social.cnki`.
-- Empty contact fields stay visible in the sidebar as “待填写 / Add link”, so unfinished links are never misleading.
+- Chinese and English profile text
+- Research areas and projects
+- Sidebar portrait and contact links
+- Chinese and English CV entries
+- Bilingual news posts and images
 
-Edit [`src/data/cv.ts`](src/data/cv.ts):
+The recommended deployment is Netlify because Netlify Identity and Git Gateway provide login and GitHub write access for the editor.
 
-- Add corresponding Chinese and English entries under `cv.zh` and `cv.en`.
-- Supported sections are education, experience, skills, and publications.
+1. Import this GitHub repository into Netlify.
+2. The included `netlify.toml` supplies the build command (`npm run build`) and publish directory (`dist`).
+3. In the Netlify site dashboard, enable **Identity** and set registration to **Invite only**.
+4. Under **Identity → Services**, enable **Git Gateway**.
+5. Invite your own email address from the Identity page.
+6. Accept the invitation, then open `https://YOUR-SITE.netlify.app/admin/`.
 
-Replace [`src/assets/profile_pictures.jpg`](src/assets/profile_pictures.jpg) with the portrait used in the sidebar. The Home page deliberately does not display it.
+Each save in the editor creates a commit in the GitHub repository. Netlify then rebuilds and publishes the site automatically.
+
+## Edit content directly
+
+If you prefer to edit files, the same CMS-managed content is stored in:
+
+- `src/data/site.zh.json` and `src/data/site.en.json`
+- `src/data/social.json`
+- `src/data/cv.zh.json` and `src/data/cv.en.json`
+- `src/content/BlogPosts/`
+- `public/uploads/`
+
+Empty contact fields appear as “待填写 / Add link” instead of linking to a placeholder account.
 
 ## Local development
 
@@ -36,10 +55,10 @@ npm ci
 npm run dev
 ```
 
-The configured base path is `/academic-cv`, so open `http://localhost:4321/academic-cv/`.
+The local and GitHub Pages base path is `/academic-cv`, so open `http://localhost:4321/academic-cv/`.
 
-## Deploy
+## GitHub Pages deployment
 
 The included `.github/workflows/deploy.yml` builds and deploys every push to `main`. In GitHub, set **Settings → Pages → Build and deployment → Source** to **GitHub Actions**.
 
-If the repository is renamed or moved to a custom-domain root, update `websiteUrl` and `base` in `src/settings.ts`.
+GitHub Pages remains available, but Decap CMS login is configured for Netlify Identity and Git Gateway. Use the Netlify site URL for `/admin/`.

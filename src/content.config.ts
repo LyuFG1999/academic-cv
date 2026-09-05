@@ -12,9 +12,12 @@ const blog = defineCollection({
     }),
     schema: z.object({
         title: z.string(),
+        language: z.enum(['zh', 'en']).default('zh'),
         date: z.string(),
         excerpt: z.string(),
         tags: z.array(z.string()).optional(),
+        featuredImage: z.string().optional(),
+        draft: z.boolean().optional().default(false),
     }),
 });
 // 4. Export a single `collections` object to register your collection(s)

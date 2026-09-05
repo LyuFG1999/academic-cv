@@ -1,0 +1,14 @@
+{
+  "fullName": "你的姓名",
+  "title": "社会学研究者",
+  "institute": "你的院校或研究机构",
+  "authorName": "",
+  "intro": "在这里用两三句话介绍你的研究主题、学术关切与代表性贡献。",
+  "researchStatement": "请在这里介绍你的核心研究问题、理论视角、方法路径，以及这些工作希望回应的学术或现实议题。",
+  "researchImpact": "请在这里概括你的研究贡献、学术影响或社会价值。",
+  "avatar": "/uploads/profile.jpg",
+  "seoTitle": "学术简历",
+  "seoDescription": "个人学术主页、研究成果与履历。",
+  "researchAreas": [],
+  "projects": []
+}

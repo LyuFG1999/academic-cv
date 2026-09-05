@@ -1,8 +1,10 @@
 ---
 title: "The Discovery of Radium"
+language: "en"
 date: "1902-12-26"
 tags: ["Physics", "Research"]
 excerpt: "An account of the discovery of radium and its properties."
+draft: false
 ---
 
 # The Discovery of Radium
