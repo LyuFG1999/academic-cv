@@ -2,13 +2,78 @@ backend:
   name: git-gateway
   branch: main
 
+site_url: https://delicate-biscochitos-9061ae.netlify.app
+display_url: https://delicate-biscochitos-9061ae.netlify.app
 publish_mode: simple
+show_preview_links: false
+editor:
+  preview: false
 media_folder: public/uploads
 public_folder: /uploads
 
+commit_messages:
+  create: "内容：新建 {{collection}} {{slug}}"
+  update: "内容：更新 {{collection}} {{slug}}"
+  delete: "内容：删除 {{collection}} {{slug}}"
+  uploadMedia: "媒体：上传 {{path}}"
+  deleteMedia: "媒体：删除 {{path}}"
+
 collections:
-  - name: site
-    label: 网站资料
+  - name: settings
+    label: 01 网站设置
+    files:
+      - name: navigation
+        label: 导航栏与成果显示
+        file: src/data/navigation.json
+        format: json
+        fields:
+          - label: 首页
+            name: home
+            widget: object
+            fields: &nav_fields
+              - { label: 显示, name: enabled, widget: boolean, default: true }
+              - { label: 中文名, name: zh, widget: string }
+              - { label: English name, name: en, widget: string }
+          - label: 研究
+            name: research
+            widget: object
+            fields: *nav_fields
+          - label: 成果
+            name: papers
+            widget: object
+            fields: *nav_fields
+          - label: 课程
+            name: courses
+            widget: object
+            fields: *nav_fields
+          - label: 博客
+            name: blog
+            widget: object
+            fields: *nav_fields
+          - label: 履历
+            name: cv
+            widget: object
+            fields: *nav_fields
+          - label: Papers 页面展示范围
+            name: paperDisplay
+            widget: select
+            default: all
+            hint: 选择某一类后，Papers 页面和首页近期成果只展示该类别。
+            options:
+              - { label: 展示全部类别, value: all }
+              - { label: 只展示已发表论文, value: published }
+              - { label: 只展示工作论文, value: working }
+              - { label: 只展示书籍, value: book }
+      - name: social
+        label: 联系方式
+        file: src/data/social.json
+        format: json
+        fields:
+          - { label: 邮箱, name: email, widget: string, required: false }
+          - { label: GitHub 主页, name: github, widget: string, required: false }
+
+  - name: profile
+    label: 02 个人主页
     files:
       - name: site_zh
         label: 中文主页与研究
@@ -29,28 +94,23 @@ collections:
             name: researchAreas
             widget: list
             required: false
+            collapsed: true
             summary: "{{fields.title}}"
-            fields:
+            fields: &research_area_fields
               - { label: 名称, name: title, widget: string }
               - { label: 简介, name: description, widget: text }
               - label: 图标
                 name: field
                 widget: select
                 default: computer-science
-                options:
-                  - { label: 社会科学或通用, value: computer-science }
-                  - { label: 物理, value: physics }
-                  - { label: 生物, value: biology }
-                  - { label: 化学, value: chemistry }
-                  - { label: 数学, value: mathematics }
-                  - { label: 法学, value: law }
-                  - { label: 工程, value: engineering }
+                options: [computer-science, physics, biology, chemistry, mathematics, law, engineering]
           - label: 研究项目
             name: projects
             widget: list
             required: false
+            collapsed: true
             summary: "{{fields.title}}"
-            fields:
+            fields: &project_fields
               - { label: 项目名称, name: title, widget: string }
               - { label: 项目介绍, name: description, widget: text }
               - { label: 项目链接, name: link, widget: string, required: false }
@@ -73,40 +133,22 @@ collections:
             name: researchAreas
             widget: list
             required: false
+            collapsed: true
             summary: "{{fields.title}}"
-            fields:
-              - { label: Title, name: title, widget: string }
-              - { label: Description, name: description, widget: text }
-              - label: Icon
-                name: field
-                widget: select
-                default: computer-science
-                options: [computer-science, physics, biology, chemistry, mathematics, law, engineering]
+            fields: *research_area_fields
           - label: Projects
             name: projects
             widget: list
             required: false
+            collapsed: true
             summary: "{{fields.title}}"
-            fields:
-              - { label: Project title, name: title, widget: string }
-              - { label: Description, name: description, widget: text }
-              - { label: Link, name: link, widget: string, required: false }
-      - name: social
-        label: 联系方式
-        file: src/data/social.json
-        format: json
-        fields:
-          - { label: 邮箱, name: email, widget: string, required: false }
-          - { label: GitHub, name: github, widget: string, required: false }
-          - { label: X, name: x, widget: string, required: false }
-          - { label: ORCID, name: orcid, widget: string, required: false }
-          - { label: 知网主页, name: cnki, widget: string, required: false }
+            fields: *project_fields
 
   - name: cv
-    label: 履历与成果
+    label: 03 履历与成果
     files:
       - name: cv_zh
-        label: 中文履历
+        label: 中文履历与成果
         file: src/data/cv.zh.json
         format: json
         fields:
@@ -114,8 +156,9 @@ collections:
             name: experiences
             widget: list
             required: false
+            collapsed: true
             summary: "{{fields.title}} — {{fields.company}}"
-            fields:
+            fields: &experience_fields
               - { label: 机构, name: company, widget: string }
               - { label: 时间, name: time, widget: string, hint: 例如 2022 - 至今 }
               - { label: 职位, name: title, widget: string }
@@ -125,8 +168,9 @@ collections:
             name: education
             widget: list
             required: false
+            collapsed: true
             summary: "{{fields.degree}} — {{fields.school}}"
-            fields:
+            fields: &education_fields
               - { label: 学校, name: school, widget: string }
               - { label: 时间, name: time, widget: string }
               - { label: 学位, name: degree, widget: string }
@@ -136,16 +180,26 @@ collections:
             name: skills
             widget: list
             required: false
+            collapsed: true
             summary: "{{fields.title}}"
-            fields:
+            fields: &skill_fields
               - { label: 名称, name: title, widget: string }
               - { label: 说明, name: description, widget: text }
-          - label: 论文与成果
+          - label: 论文与书籍
             name: publications
             widget: list
             required: false
+            collapsed: true
             summary: "{{fields.title}}"
-            fields:
+            fields: &publication_fields
+              - label: 类别
+                name: category
+                widget: select
+                default: published
+                options:
+                  - { label: 已发表论文, value: published }
+                  - { label: 工作论文, value: working }
+                  - { label: 书籍, value: book }
               - { label: 标题, name: title, widget: string }
               - { label: 作者, name: authors, widget: string }
               - { label: 期刊或出版物, name: journal, widget: string }
@@ -153,7 +207,7 @@ collections:
               - { label: 链接, name: link, widget: string, required: false }
               - { label: 摘要, name: abstract, widget: text, required: false }
       - name: cv_en
-        label: English CV
+        label: English CV & Publications
         file: src/data/cv.en.json
         format: json
         fields:
@@ -161,48 +215,70 @@ collections:
             name: experiences
             widget: list
             required: false
+            collapsed: true
             summary: "{{fields.title}} — {{fields.company}}"
-            fields:
-              - { label: Organization, name: company, widget: string }
-              - { label: Time, name: time, widget: string }
-              - { label: Position, name: title, widget: string }
-              - { label: Location, name: location, widget: string, required: false }
-              - { label: Description, name: description, widget: text, required: false }
+            fields: *experience_fields
           - label: Education
             name: education
             widget: list
             required: false
+            collapsed: true
             summary: "{{fields.degree}} — {{fields.school}}"
-            fields:
-              - { label: School, name: school, widget: string }
-              - { label: Time, name: time, widget: string }
-              - { label: Degree, name: degree, widget: string }
-              - { label: Location, name: location, widget: string, required: false }
-              - { label: Description, name: description, widget: text, required: false }
+            fields: *education_fields
           - label: Skills
             name: skills
             widget: list
             required: false
+            collapsed: true
             summary: "{{fields.title}}"
-            fields:
-              - { label: Title, name: title, widget: string }
-              - { label: Description, name: description, widget: text }
-          - label: Publications
+            fields: *skill_fields
+          - label: Papers and books
             name: publications
             widget: list
             required: false
+            collapsed: true
             summary: "{{fields.title}}"
-            fields:
-              - { label: Title, name: title, widget: string }
-              - { label: Authors, name: authors, widget: string }
-              - { label: Journal or publisher, name: journal, widget: string }
-              - { label: Time, name: time, widget: string }
-              - { label: Link, name: link, widget: string, required: false }
-              - { label: Abstract, name: abstract, widget: text, required: false }
+            fields: *publication_fields
 
-  - name: news
-    label: 新闻与动态
-    label_singular: 动态
+  - name: courses
+    label: 04 课程
+    files:
+      - name: courses_zh
+        label: 中文课程
+        file: src/data/courses.zh.json
+        format: json
+        fields:
+          - { label: 页面简介, name: intro, widget: text, required: false }
+          - label: 课程列表
+            name: courses
+            widget: list
+            required: false
+            collapsed: true
+            summary: "{{fields.title}} · {{fields.term}}"
+            fields: &course_fields
+              - { label: 课程名称, name: title, widget: string }
+              - { label: 课程编号, name: code, widget: string, required: false }
+              - { label: 学期或时间, name: term, widget: string }
+              - { label: 授课角色, name: role, widget: string, required: false }
+              - { label: 课程简介, name: description, widget: text, required: false }
+              - { label: 课程链接, name: link, widget: string, required: false }
+      - name: courses_en
+        label: English Courses
+        file: src/data/courses.en.json
+        format: json
+        fields:
+          - { label: Page introduction, name: intro, widget: text, required: false }
+          - label: Courses
+            name: courses
+            widget: list
+            required: false
+            collapsed: true
+            summary: "{{fields.title}} · {{fields.term}}"
+            fields: *course_fields
+
+  - name: blog
+    label: 05 博客
+    label_singular: 博客文章
     folder: src/content/BlogPosts
     create: true
     extension: md
@@ -220,7 +296,17 @@ collections:
           - { label: English, value: en }
       - { label: 日期, name: date, widget: datetime, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }
       - { label: 摘要, name: excerpt, widget: text }
-      - { label: 标签, name: tags, widget: list, required: false }
+      - { label: 标签, name: tags, widget: list, required: false, collapsed: true }
       - { label: 题图, name: featuredImage, widget: image, required: false }
+      - label: 附件下载区
+        name: attachments
+        widget: list
+        required: false
+        collapsed: true
+        summary: "{{fields.label}}"
+        hint: 上传文件并填写名称后，文章底部会自动出现下载按钮。
+        fields:
+          - { label: 下载名称, name: label, widget: string }
+          - { label: 文件, name: file, widget: file }
       - { label: 草稿, name: draft, widget: boolean, default: false }
-      - { label: 正文, name: body, widget: markdown }
+      - { label: 正文, name: body, widget: richtext, buttons: [bold, italic, code, link, heading-one, heading-two, heading-three, quote, bulleted-list, numbered-list] }

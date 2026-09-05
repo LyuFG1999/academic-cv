@@ -6,6 +6,7 @@ import ArticleList from '@/components/ui/ArticleList.astro'
 import { copy, isLanguage, languages } from '@/i18n'
 import { profile } from '@/settings'
 import { cv } from '@/data/cv'
+import { navigation } from '@/data/navigation'
 
 export function getStaticPaths() {
 	return languages.map((lang) => ({ params: { lang } }))
@@ -16,7 +17,9 @@ if (!isLanguage(rawLang)) throw new Error(`Unsupported language: ${rawLang}`)
 const lang = rawLang
 const t = copy[lang]
 const person = profile[lang]
-const publications = cv[lang].publications.slice(0, 3)
+const publications = cv[lang].publications
+	.filter((paper) => navigation.paperDisplay === 'all' || (paper.category ?? 'published') === navigation.paperDisplay)
+	.slice(0, 3)
 ---
 
 <Layout lang={lang}>

@@ -1,6 +1,6 @@
-# Academic CV · Astro Academia bilingual edition
+# Bilingual Academic CV
 
-This repository is a customized build of [Astro Academia](https://github.com/maiobarbero/astro_academia) for `LyuFG1999/academic-cv`.
+This repository contains a bilingual academic website for `LyuFG1999/academic-cv`.
 
 ## Included features
 
@@ -8,10 +8,9 @@ This repository is a customized build of [Astro Academia](https://github.com/mai
 - A language switch that keeps the current section
 - Light and dark themes
 - A text-only Home hero; the portrait and contacts stay in the sidebar
-- Email, GitHub, X, ORCID, and CNKI contact links
-- An original CNKI icon
+- Email and GitHub contact links
 - Scroll reveal effects with reduced-motion support
-- Bilingual news pages
+- Bilingual blog pages with file downloads
 - A Decap CMS editor at `/admin/`
 - Automatic path handling for both GitHub Pages and Netlify
 
@@ -21,9 +20,11 @@ The Decap CMS editor lets you update the following content without editing code:
 
 - Chinese and English profile text
 - Research areas and projects
-- Sidebar portrait and contact links
+- Sidebar portrait, email, and GitHub link
 - Chinese and English CV entries
-- Bilingual news posts and images
+- Navigation visibility and bilingual labels
+- Paper category visibility and bilingual courses
+- Bilingual blog posts, images, and downloadable files
 
 The recommended deployment is Netlify because Netlify Identity and Git Gateway provide login and GitHub write access for the editor.
 
@@ -43,6 +44,8 @@ If you prefer to edit files, the same CMS-managed content is stored in:
 - `src/data/site.zh.json` and `src/data/site.en.json`
 - `src/data/social.json`
 - `src/data/cv.zh.json` and `src/data/cv.en.json`
+- `src/data/navigation.json`
+- `src/data/courses.zh.json` and `src/data/courses.en.json`
 - `src/content/BlogPosts/`
 - `public/uploads/`
 

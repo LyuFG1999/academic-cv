@@ -24,6 +24,7 @@ export interface Publication {
   authors: string;
   journal: string;
   time: string;
+  category?: 'published' | 'working' | 'book';
   link?: string;
   abstract?: string;
 }

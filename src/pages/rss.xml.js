@@ -3,7 +3,7 @@ import { seo } from "../settings";
 import { getCollection } from "astro:content";
 
 export async function GET(context) {
-    const blog = await getCollection("blog");
+    const blog = (await getCollection("blog")).filter((post) => !post.data.draft);
     return rss({
         // `<title>` field in output xml
         title: seo.en.defaultTitle,
@@ -18,7 +18,7 @@ export async function GET(context) {
             title: post.data.title,
             pubDate: post.data.date,
             description: post.data.excerpt,
-            link: `/blog/${post.id}`,
+            link: `/${post.data.language}/blog/${post.id}/`,
         })),
         // (optional) inject custom xml
         customData: `<language>en-us</language>`,

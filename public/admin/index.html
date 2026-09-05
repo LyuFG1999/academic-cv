@@ -5,9 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex,nofollow" />
     <title>学术主页后台</title>
+    <style>
+      :root { color-scheme: light; }
+      body { background: #f5f7fb; }
+      button, input, textarea, select { border-radius: 8px !important; }
+      [data-slate-editor="true"] { min-height: 22rem; }
+    </style>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
   <body>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script>
+      CMS.registerEditorComponent({
+        id: 'download-file',
+        label: '插入文件下载',
+        fields: [
+          { name: 'label', label: '链接文字', widget: 'string' },
+          { name: 'file', label: '上传或选择文件', widget: 'file' }
+        ],
+        pattern: /^\[📎 (.+?)\]\((.+?)\)$/,
+        fromBlock: function (match) {
+          return { label: match[1], file: match[2] };
+        },
+        toBlock: function (data) {
+          var file = data.file || '';
+          if (file.indexOf('/uploads/') === 0) file = '../../../' + file.slice(1);
+          return '[📎 ' + data.label + '](' + file + ')';
+        },
+        toPreview: function (data) {
+          return '<a href="' + data.file + '" download>📎 ' + data.label + '</a>';
+        }
+      });
+
+      // Decap does not expose a configuration switch for the dashboard Quick Add shortcut.
+      // Hide only that named shortcut; normal create/add controls remain available.
+      var hideQuickAdd = function () {
+        document.querySelectorAll('button, a').forEach(function (element) {
+          var label = (element.textContent || element.getAttribute('aria-label') || '').trim().toLowerCase();
+          if (label === 'quick add' || label === '快速添加' || label === '快速新增') {
+            element.style.display = 'none';
+          }
+        });
+      };
+      new MutationObserver(hideQuickAdd).observe(document.body, { childList: true, subtree: true });
+      hideQuickAdd();
+    </script>
   </body>
 </html>

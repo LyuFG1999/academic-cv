@@ -1,6 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro'
-import { isLanguage } from '@/i18n'
+import { copy, isLanguage } from '@/i18n'
 import { profile, template } from '@/settings'
 import { getCollection, render } from 'astro:content'
 
@@ -14,6 +14,7 @@ export async function getStaticPaths() {
 const rawLang = Astro.params.lang
 if (!isLanguage(rawLang)) throw new Error(`Unsupported language: ${rawLang}`)
 const lang = rawLang
+const t = copy[lang]
 const { post } = Astro.props
 const { Content } = await render(post)
 const person = profile[lang]
@@ -28,5 +29,19 @@ const person = profile[lang]
 		</header>
 		{post.data.featuredImage && <img src={`${template.base}${post.data.featuredImage}`} alt='' class='mb-10 max-h-[28rem] w-full rounded-2xl object-cover' />}
 		<div class='prose max-w-none prose-headings:text-base-content prose-p:text-base-content/80 prose-a:text-secondary'><Content /></div>
+
+		{post.data.attachments && post.data.attachments.length > 0 && (
+			<section class='mt-12 border-t border-base-300 pt-8'>
+				<h2 class='mb-4 text-2xl font-bold'>{t.attachments}</h2>
+				<div class='flex flex-wrap gap-3'>
+					{post.data.attachments.map((attachment) => (
+						<a href={`${template.base}${attachment.file}`} class='btn btn-outline btn-secondary' download>
+							<svg class='size-5' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' aria-hidden='true'><path d='M12 3v12m0 0 4-4m-4 4-4-4M5 21h14' /></svg>
+							{attachment.label}
+						</a>
+					))}
+				</div>
+			</section>
+		)}
 	</article>
 </Layout>

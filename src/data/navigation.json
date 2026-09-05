@@ -1,0 +1,33 @@
+{
+  "home": {
+    "enabled": true,
+    "zh": "首页",
+    "en": "Home"
+  },
+  "research": {
+    "enabled": true,
+    "zh": "研究",
+    "en": "Research"
+  },
+  "papers": {
+    "enabled": true,
+    "zh": "成果",
+    "en": "Papers"
+  },
+  "courses": {
+    "enabled": true,
+    "zh": "课程",
+    "en": "Courses"
+  },
+  "blog": {
+    "enabled": true,
+    "zh": "博客",
+    "en": "Blog"
+  },
+  "cv": {
+    "enabled": true,
+    "zh": "履历",
+    "en": "CV"
+  },
+  "paperDisplay": "all"
+}

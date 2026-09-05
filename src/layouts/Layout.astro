@@ -6,7 +6,7 @@ import Navbar from '@/components/ui/Navbar.astro'
 import Footer from '@/components/ui/Footer.astro'
 import Head from '@/components/Head.astro'
 import { seo, profile, template } from '@/settings'
-import type { Language } from '@/i18n'
+import { copy, type Language } from '@/i18n'
 
 type Props = {
 	lang?: Language
@@ -20,6 +20,14 @@ const localizedSeo = seo[lang]
 const pageTitle = title ?? localizedSeo.defaultTitle
 const pageDescription = description ?? localizedSeo.defaultDescription
 const person = profile[lang]
+const otherLanguage: Language = lang === 'zh' ? 'en' : 'zh'
+const currentWithoutBase = Astro.url.pathname.startsWith(template.base)
+	? Astro.url.pathname.slice(template.base.length)
+	: Astro.url.pathname
+const switchedPath = /^\/(zh|en)\/blog\/.+/.test(currentWithoutBase)
+	? `/${otherLanguage}/blog`
+	: currentWithoutBase.replace(`/${lang}`, `/${otherLanguage}`) || `/${otherLanguage}`
+const languagePath = `${template.base}${switchedPath}`
 ---
 
 <!doctype html>
@@ -45,7 +53,13 @@ const person = profile[lang]
 							</label>
 						</div>
 						<div class='navbar-center lg:hidden text-base font-black'>{person.fullName}</div>
-						<div class='navbar-end'><DarkLightController lang={lang} /></div>
+						<div class='navbar-end gap-2'>
+							<a href={languagePath} class='btn btn-ghost rounded-full border border-base-300 bg-base-200/70 px-4' hreflang={otherLanguage} aria-label={copy[lang].language} title={copy[lang].language}>
+								<span aria-hidden='true' class='font-black'>文 / A</span>
+								<span class='hidden sm:inline'>{copy[lang].language}</span>
+							</a>
+							<DarkLightController lang={lang} />
+						</div>
 					</nav>
 				</div>
 				<main class='mx-auto flex min-h-[calc(100vh-4rem)] min-w-0 w-full max-w-5xl flex-col justify-between overflow-x-hidden px-6 pb-4 pt-10 sm:px-8 lg:px-12 lg:pt-16'>

@@ -1,0 +1,45 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import { copy, isLanguage, languages } from '@/i18n'
+import { courses } from '@/data/courses'
+import { profile } from '@/settings'
+
+export function getStaticPaths() {
+	return languages.map((lang) => ({ params: { lang } }))
+}
+
+const rawLang = Astro.params.lang
+if (!isLanguage(rawLang)) throw new Error(`Unsupported language: ${rawLang}`)
+const lang = rawLang
+const t = copy[lang]
+const person = profile[lang]
+const data = courses[lang]
+---
+
+<Layout lang={lang} title={`${t.courses} | ${person.fullName}`}>
+	<header class='mb-10' data-reveal>
+		<p class='text-sm font-semibold uppercase tracking-[0.2em] text-secondary'>{t.courses}</p>
+		<h1 class='mt-3 text-4xl font-black'>{t.courses}</h1>
+		{data.intro && <p class='mt-4 max-w-3xl text-lg text-base-content/70'>{data.intro}</p>}
+	</header>
+
+	{data.courses.length > 0 ? (
+		<div class='grid gap-6 md:grid-cols-2'>
+			{data.courses.map((course) => (
+				<article class='card border border-base-300 bg-base-200/70 shadow-sm' data-reveal>
+					<div class='card-body'>
+						<div class='flex flex-wrap items-start justify-between gap-3'>
+							<h2 class='card-title text-xl'>{course.title}</h2>
+							{course.code && <span class='badge badge-outline'>{course.code}</span>}
+						</div>
+						<p class='text-sm font-semibold text-secondary'>{course.term}{course.role ? ` · ${course.role}` : ''}</p>
+						{course.description && <p class='text-base-content/75'>{course.description}</p>}
+						{course.link && <div class='card-actions mt-3 justify-end'><a href={course.link} class='btn btn-secondary btn-sm' target='_blank' rel='noopener noreferrer'>{t.courseWebsite}</a></div>}
+					</div>
+				</article>
+			))}
+		</div>
+	) : (
+		<div class='alert border border-base-300 bg-base-200/70' data-reveal><span>{t.noCourses}</span></div>
+	)}
+</Layout>

@@ -4,6 +4,7 @@ import { copy, isLanguage, languages } from '@/i18n'
 import { cv } from '@/data/cv'
 import { profile } from '@/settings'
 import { highlightAuthor } from '@/lib/utils'
+import { navigation, type PaperCategory } from '@/data/navigation'
 
 export function getStaticPaths() {
 	return languages.map((lang) => ({ params: { lang } }))
@@ -14,7 +15,16 @@ if (!isLanguage(rawLang)) throw new Error(`Unsupported language: ${rawLang}`)
 const lang = rawLang
 const t = copy[lang]
 const person = profile[lang]
-const papers = cv[lang].publications
+const display = navigation.paperDisplay
+const papers = cv[lang].publications.filter((paper) => display === 'all' || (paper.category ?? 'published') === display)
+const categories: Array<{ key: PaperCategory; label: string }> = [
+	{ key: 'published', label: t.publishedPapers },
+	{ key: 'working', label: t.workingPapers },
+	{ key: 'book', label: t.books },
+]
+const sections = categories
+	.map(({ key, label }) => ({ key, label, papers: papers.filter((paper) => (paper.category ?? 'published') === key) }))
+	.filter((section) => section.papers.length > 0)
 ---
 
 <Layout lang={lang} title={`${t.papers} | ${person.fullName}`}>
@@ -23,18 +33,25 @@ const papers = cv[lang].publications
 		<h1 class='mt-3 text-4xl font-black'>{t.publications}</h1>
 	</header>
 
-	{papers.length > 0 ? (
-		<div class='space-y-6'>
-			{papers.map((paper) => (
-				<article class='card border border-base-300 bg-base-200/70 shadow-sm' data-reveal>
-					<div class='card-body'>
-						<h2 class='card-title text-xl'>{paper.link ? <a href={paper.link} class='hover:text-secondary'>{paper.title}</a> : paper.title}</h2>
-						<p><span class='font-medium'>{t.authors}:</span> <span set:html={highlightAuthor(paper.authors, person.authorName)} /></p>
-						<p class='text-sm'><span class='italic'>{paper.journal}</span>{paper.time ? ` · ${paper.time}` : ''}</p>
-						{paper.abstract && <p class='text-sm text-base-content/75'>{paper.abstract}</p>}
-						{paper.link && <div class='card-actions mt-3 justify-end'><a href={paper.link} class='btn btn-secondary btn-sm' target='_blank' rel='noopener noreferrer'>{t.readPaper}</a></div>}
+	{sections.length > 0 ? (
+		<div class='space-y-12'>
+			{sections.map((section) => (
+				<section data-reveal>
+					<h2 class='mb-5 border-b border-base-300 pb-3 text-2xl font-bold'>{section.label}</h2>
+					<div class='space-y-6'>
+						{section.papers.map((paper) => (
+							<article class='card border border-base-300 bg-base-200/70 shadow-sm'>
+								<div class='card-body'>
+									<h3 class='card-title text-xl'>{paper.link ? <a href={paper.link} class='hover:text-secondary'>{paper.title}</a> : paper.title}</h3>
+									<p><span class='font-medium'>{t.authors}:</span> <span set:html={highlightAuthor(paper.authors, person.authorName)} /></p>
+									<p class='text-sm'><span class='italic'>{paper.journal}</span>{paper.time ? ` · ${paper.time}` : ''}</p>
+									{paper.abstract && <p class='text-sm text-base-content/75'>{paper.abstract}</p>}
+									{paper.link && <div class='card-actions mt-3 justify-end'><a href={paper.link} class='btn btn-secondary btn-sm' target='_blank' rel='noopener noreferrer'>{t.readPaper}</a></div>}
+								</div>
+							</article>
+						))}
 					</div>
-				</article>
+				</section>
 			))}
 		</div>
 	) : (

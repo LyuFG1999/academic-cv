@@ -18,10 +18,10 @@ const posts = (await getCollection('blog'))
 	.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
 ---
 
-<Layout lang={lang} title={`${t.news} | ${person.fullName}`}>
+<Layout lang={lang} title={`${t.blog} | ${person.fullName}`}>
 	<header class='mb-10' data-reveal>
-		<p class='text-sm font-semibold uppercase tracking-[0.2em] text-secondary'>{t.news}</p>
-		<h1 class='mt-3 text-4xl font-black'>{t.news}</h1>
+		<p class='text-sm font-semibold uppercase tracking-[0.2em] text-secondary'>{t.blog}</p>
+		<h1 class='mt-3 text-4xl font-black'>{t.blog}</h1>
 	</header>
 
 	{posts.length > 0 ? (
@@ -31,14 +31,14 @@ const posts = (await getCollection('blog'))
 					{post.data.featuredImage && <img src={`${template.base}${post.data.featuredImage}`} alt='' class='h-52 w-full object-cover' loading='lazy' />}
 					<div class='card-body'>
 						<time class='text-sm text-base-content/60' datetime={post.data.date}>{new Date(post.data.date).toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
-						<h2 class='card-title text-2xl'><a class='hover:text-secondary' href={`${template.base}/${lang}/news/${post.id}/`}>{post.data.title}</a></h2>
+						<h2 class='card-title text-2xl'><a class='hover:text-secondary' href={`${template.base}/${lang}/blog/${post.id}/`}>{post.data.title}</a></h2>
 						<p class='text-base-content/75'>{post.data.excerpt}</p>
-						<div class='card-actions mt-2 justify-end'><a class='btn btn-secondary btn-sm' href={`${template.base}/${lang}/news/${post.id}/`}>{t.readMore}</a></div>
+						<div class='card-actions mt-2 justify-end'><a class='btn btn-secondary btn-sm' href={`${template.base}/${lang}/blog/${post.id}/`}>{t.readMore}</a></div>
 					</div>
 				</article>
 			))}
 		</div>
 	) : (
-		<div class='alert border border-base-300 bg-base-200/70' data-reveal><span>{t.noNews}</span></div>
+		<div class='alert border border-base-300 bg-base-200/70' data-reveal><span>{t.noBlog}</span></div>
 	)}
 </Layout>
