@@ -12,14 +12,14 @@ This repository contains a bilingual academic website for `LyuFG1999/academic-cv
 - Premium responsive UI, configurable light/dark palettes, and reduced-motion support
 - A one-switch bilingual maintenance page for temporarily hiding public content
 - Bilingual blog pages with file downloads
-- A Decap CMS editor at `/admin/`
+- A direct settings dashboard at `/admin/` and a Decap blog editor at `/admin/editor/`
 - Automatic path handling for both GitHub Pages and Netlify
 
 ## Edit content in the browser
 
-The Decap CMS editor lets you update the following content without editing code:
+The settings dashboard lets you update the following content without editing code:
 
-- Chinese and English profile text side by side in one main settings editor
+- Chinese and English profile text paired vertically under each setting
 - Research areas and projects
 - Sidebar portrait and individually switchable profile links
 - Light/dark color palettes and the opening animation switch
@@ -51,9 +51,9 @@ If you prefer to edit files, the same CMS-managed content is stored in:
 - `src/content/BlogPosts/`
 - `public/uploads/`
 
-Empty contact fields appear as “待填写 / Add link” instead of linking to a placeholder account.
+Disabled or empty contact fields are omitted from the public site.
 
-Opening `/admin/` sends authenticated editors directly to the unified main settings entry. Blog writing, CV entries, and courses remain separate content editors. Netlify's platform-injected “Powered by Netlify” badge is not part of this source tree; turn it off once for the project under **Project configuration → General → Powered by Netlify badge**.
+Opening `/admin/` displays a single settings dashboard with expanded fields and section links. Profile, CV, publications and courses all pair Chinese and English fields within each item. Only blog writing opens the dedicated Decap editor. Saves use Netlify Identity and Git Gateway, create one atomic Git commit, and report deployment progress. Maintenance takes effect after deployment; the admin remains available to turn it off. Netlify's platform-injected “Powered by Netlify” badge is controlled under **Project configuration → General → Powered by Netlify badge**; the dashboard links to that setting.
 
 ## Local development
 

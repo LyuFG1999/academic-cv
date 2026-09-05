@@ -319,4 +319,4 @@ collections:
           - { label: 下载名称, name: label, widget: string }
           - { label: 文件, name: file, widget: file }
       - { label: 草稿, name: draft, widget: boolean, default: false }
-      - { label: 正文, name: body, widget: richtext, buttons: [bold, italic, code, link, heading-one, heading-two, heading-three, quote, bulleted-list, numbered-list] }
+      - { label: 正文, name: body, widget: markdown, buttons: [bold, italic, code, link, heading-one, heading-two, heading-three, quote, bulleted-list, numbered-list] }

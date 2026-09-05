@@ -68,7 +68,7 @@ const languagePath = `${template.base}${switchedPath}`
 						</div>
 					</nav>
 				</div>
-				<main class='site-main mx-auto flex min-h-[calc(100vh-4rem)] min-w-0 w-full max-w-6xl flex-col justify-between overflow-x-hidden px-6 pb-4 pt-10 sm:px-10 lg:px-14 lg:pt-16'>
+				<main tabindex='-1' class='site-main mx-auto flex min-h-[calc(100vh-4rem)] min-w-0 w-full max-w-6xl flex-col justify-between px-6 pb-4 pt-10 sm:px-10 lg:px-14 lg:pt-16'>
 					<div><slot /></div>
 					<Footer lang={lang} />
 				</main>
@@ -95,6 +95,7 @@ const languagePath = `${template.base}${switchedPath}`
 </script>
 
 <script is:inline>
+	(() => {
 	const initializeReveal = () => {
 		const elements = document.querySelectorAll('[data-reveal]')
 		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -117,10 +118,19 @@ const languagePath = `${template.base}${switchedPath}`
 	}
 	initializeReveal()
 	document.addEventListener('astro:page-load', initializeReveal)
+	})()
 </script>
 
 <style is:global>
 	html { scroll-behavior: smooth; }
+	:focus-visible { outline: 2px solid var(--fallback-p, oklch(var(--p))); outline-offset: 4px; }
+	.site-main:focus { outline: none; }
+	.drawer-content { overflow: clip; }
+	@media (min-width: 1024px) {
+		[data-site-shell].drawer { display: block; padding-left: 18.5rem; }
+		[data-site-shell].drawer > .drawer-toggle ~ .drawer-side { position: fixed; inset: 0 auto 0 0; height: 100dvh; width: 18.5rem; overflow: hidden; }
+		.site-sidebar { height: 100dvh; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+	}
 	body { margin: 0; min-height: 100%; overflow-x: hidden; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", sans-serif; background-color: var(--fallback-b1, oklch(var(--b1))); background-image: radial-gradient(circle at 78% 10%, color-mix(in oklab, var(--fallback-p, oklch(var(--p))) 9%, transparent), transparent 30rem), radial-gradient(circle at 20% 85%, color-mix(in oklab, var(--fallback-s, oklch(var(--s))) 7%, transparent), transparent 28rem); }
 	[data-site-shell] { transition: filter .9s ease, transform .9s cubic-bezier(.2,.75,.2,1); }
 	.intro-active [data-site-shell] { filter: blur(10px); transform: scale(.985); }
@@ -141,6 +151,7 @@ const languagePath = `${template.base}${switchedPath}`
 	.js [data-reveal].is-visible { opacity: 1; transform: none; }
 	@media (prefers-reduced-motion: reduce) {
 		html { scroll-behavior: auto; }
-		[data-reveal] { opacity: 1; transform: none; transition: none; }
+		.js [data-reveal]:not(.is-visible), [data-reveal] { opacity: 1; transform: none; transition: none; }
+		.card, [data-site-shell] { transition: none; }
 	}
 </style>

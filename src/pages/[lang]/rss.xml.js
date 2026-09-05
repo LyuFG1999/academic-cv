@@ -1,7 +1,7 @@
 import rss from '@astrojs/rss'
 import { getCollection } from 'astro:content'
 import { languages } from '@/i18n'
-import { seo, template } from '@/settings'
+import { maintenance, seo, template } from '@/settings'
 
 export function getStaticPaths() {
   return languages.map((lang) => ({ params: { lang }, props: { lang } }))
@@ -14,10 +14,10 @@ export async function GET(context) {
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 
   return rss({
-    title: seo[lang].defaultTitle,
-    description: seo[lang].defaultDescription,
+    title: maintenance.enabled ? maintenance.title[lang] : seo[lang].defaultTitle,
+    description: maintenance.enabled ? maintenance.message[lang] : seo[lang].defaultDescription,
     site: new URL(`${template.base}/${lang}/`, context.site),
-    items: blog.map((post) => ({
+    items: (maintenance.enabled ? [] : blog).map((post) => ({
       title: post.data.title,
       pubDate: post.data.date,
       description: post.data.excerpt,

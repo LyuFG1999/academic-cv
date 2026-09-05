@@ -31,10 +31,10 @@ const contacts = [
 
 {contacts.length > 0 && (
 <section aria-label={t.contact}>
-	<ul class='flex flex-wrap items-center justify-center gap-2'>
+	<ul class:list={['flex flex-wrap items-center justify-center', size === 'large' ? 'gap-2 max-w-[16rem] sm:max-w-none' : 'gap-1']}>
 		{contacts.map(({ label, href, Icon }) => (
 			<li>
-				<a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'me noopener noreferrer' : undefined} class:list={['tooltip grid place-items-center rounded-full border border-base-300/80 bg-base-100/80 text-base-content/75 shadow-sm backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-primary hover:text-primary-content hover:shadow-lg hover:shadow-primary/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary', size === 'large' ? 'size-12' : 'size-10']} data-tip={label} aria-label={label}>
+				<a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'me noopener noreferrer' : undefined} class:list={['tooltip grid place-items-center rounded-full border border-base-300/80 bg-base-100/80 text-base-content/75 shadow-sm backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-primary hover:text-primary-content hover:shadow-lg hover:shadow-primary/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary', size === 'large' ? 'size-12' : 'size-8']} data-tip={label} aria-label={label}>
 					<Icon class={size === 'large' ? 'size-5' : 'size-[1.1rem]'} fill='currentColor' />
 				</a>
 			</li>

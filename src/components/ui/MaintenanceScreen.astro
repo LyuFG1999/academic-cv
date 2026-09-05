@@ -1,7 +1,7 @@
 ---
 import DarkLightController from './DarkLightController.astro'
 import { copy, type Language } from '@/i18n'
-import { maintenance, profile, template } from '@/settings'
+import { maintenance, template } from '@/settings'
 
 type Props = { lang: Language }
 const { lang } = Astro.props
@@ -23,7 +23,6 @@ const otherLanguage: Language = lang === 'zh' ? 'en' : 'zh'
 		<p class='maintenance-kicker'>{lang === 'zh' ? 'MAINTENANCE' : 'MAINTENANCE'}</p>
 		<h1>{maintenance.title[lang]}</h1>
 		<p>{maintenance.message[lang]}</p>
-		<div class='maintenance-signature'>{profile[lang].fullName}</div>
 	</section>
 </main>
 

@@ -29,7 +29,13 @@ export type Profile = {
 }
 
 const localized = <T>(value: Partial<Record<Language, T>> | undefined, lang: Language, fallback: T): T => value?.[lang] ?? fallback
-const data = settingsData as typeof settingsData
+type BilingualText = Partial<Record<Language, string>>
+const data = settingsData as Omit<typeof settingsData, 'profile'> & {
+	profile: Omit<typeof settingsData.profile, 'researchAreas' | 'projects'> & {
+		researchAreas: { title: BilingualText; description: BilingualText; field: string }[]
+		projects: { title: BilingualText; description: BilingualText; link?: BilingualText }[]
+	}
+}
 
 const buildProfile = (lang: Language): Profile => ({
 	fullName: localized(data.profile.fullName, lang, ''),

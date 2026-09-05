@@ -29,10 +29,22 @@
   },
   "avatar": "/uploads/剪贴板图片.png",
   "profile": {
-    "fullName": { "zh": "你的姓名", "en": "Your Name" },
-    "title": { "zh": "社会学研究者", "en": "Sociology Researcher" },
-    "institute": { "zh": "你的院校或研究机构", "en": "Your University or Research Institute" },
-    "authorName": { "zh": "www", "en": "" },
+    "fullName": {
+      "zh": "你的姓名",
+      "en": "Your Name"
+    },
+    "title": {
+      "zh": "社会学研究者",
+      "en": "Sociology Researcher"
+    },
+    "institute": {
+      "zh": "你的院校或研究机构",
+      "en": "Your University or Research Institute"
+    },
+    "authorName": {
+      "zh": "",
+      "en": ""
+    },
     "intro": {
       "zh": "在这里用两三句话介绍你的研究主题、学术关切与代表性贡献。",
       "en": "Introduce your research agenda, academic interests, and key contributions in two or three sentences."
@@ -45,33 +57,48 @@
       "zh": "请在这里概括你的研究贡献、学术影响或社会价值。",
       "en": "Summarize the scholarly contribution, broader impact, or practical value of your research."
     },
-    "seoTitle": { "zh": "学术简历", "en": "Academic CV" },
+    "seoTitle": {
+      "zh": "学术简历",
+      "en": "Academic CV"
+    },
     "seoDescription": {
-      "zh": "个人学术主页、研究成果与履历。22222",
+      "zh": "个人学术主页、研究成果与履历。",
       "en": "Personal academic profile, research outputs, and curriculum vitae."
     },
-    "researchAreas": [
-      {
-        "field": "computer-science",
-        "title": { "zh": "222", "en": "" },
-        "description": { "zh": "呃呃呃呃", "en": "" }
-      }
-    ],
-    "projects": [
-      {
-        "title": { "zh": "我问问", "en": "" },
-        "description": { "zh": "eeee", "en": "" },
-        "link": { "zh": "wwww", "en": "" }
-      }
-    ]
+    "researchAreas": [],
+    "projects": []
   },
   "navigation": {
-    "home": { "enabled": true, "zh": "首页", "en": "Home" },
-    "research": { "enabled": true, "zh": "研究", "en": "Research" },
-    "papers": { "enabled": true, "zh": "成果", "en": "Papers" },
-    "courses": { "enabled": true, "zh": "课程", "en": "Courses" },
-    "blog": { "enabled": true, "zh": "博客", "en": "Blog" },
-    "cv": { "enabled": true, "zh": "履历", "en": "CV" },
+    "home": {
+      "enabled": true,
+      "zh": "首页",
+      "en": "Home"
+    },
+    "research": {
+      "enabled": true,
+      "zh": "研究",
+      "en": "Research"
+    },
+    "papers": {
+      "enabled": true,
+      "zh": "成果",
+      "en": "Papers"
+    },
+    "courses": {
+      "enabled": true,
+      "zh": "课程",
+      "en": "Courses"
+    },
+    "blog": {
+      "enabled": true,
+      "zh": "博客",
+      "en": "Blog"
+    },
+    "cv": {
+      "enabled": true,
+      "zh": "履历",
+      "en": "CV"
+    },
     "paperVisibility": {
       "published": true,
       "working": true,
@@ -79,12 +106,33 @@
     }
   },
   "social": {
-    "email": { "enabled": true, "url": "lv@126.com" },
-    "github": { "enabled": true, "url": "https://github.com/LyuFG1999" },
-    "orcid": { "enabled": true, "url": "https://www.cnki.net/" },
-    "cnki": { "enabled": true, "url": "https://www.cnki.net/" },
-    "school": { "enabled": true, "url": "https://www.cnki.net/" },
-    "x": { "enabled": true, "url": "https://www.cnki.net/" },
-    "linkedin": { "enabled": true, "url": "https://www.cnki.net/" }
+    "email": {
+      "enabled": true,
+      "url": "lv@126.com"
+    },
+    "github": {
+      "enabled": true,
+      "url": "https://github.com/LyuFG1999"
+    },
+    "orcid": {
+      "enabled": true,
+      "url": "https://www.cnki.net/"
+    },
+    "cnki": {
+      "enabled": true,
+      "url": "https://www.cnki.net/"
+    },
+    "school": {
+      "enabled": true,
+      "url": "https://www.cnki.net/"
+    },
+    "x": {
+      "enabled": true,
+      "url": "https://www.cnki.net/"
+    },
+    "linkedin": {
+      "enabled": true,
+      "url": "https://www.cnki.net/"
+    }
   }
 }

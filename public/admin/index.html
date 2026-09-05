@@ -1,68 +1,37 @@
 <!doctype html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex,nofollow" />
-    <title>学术主页后台</title>
-    <style>
-      :root { color-scheme: light; }
-      body { background: #f5f7fb; }
-      button, input, textarea, select { border-radius: 8px !important; }
-      [data-slate-editor="true"] { min-height: 22rem; }
-      [data-testid*="quick-add" i], [class*="QuickAdd"] { display: none !important; }
-    </style>
-    <script>
-      // Open the unified settings editor immediately instead of the dashboard.
-      // Invitation and password-recovery hashes are deliberately left untouched.
-      (function () {
-        var settingsHash = '#/collections/settings/entries/site';
-        var openSettingsFromDashboard = function () {
-          if (!location.hash || location.hash === '#' || location.hash === '#/') {
-            location.replace(location.pathname + location.search + settingsHash);
-          }
-        };
-        openSettingsFromDashboard();
-        window.addEventListener('hashchange', openSettingsFromDashboard);
-      })();
-    </script>
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  </head>
-  <body>
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-    <script>
-      CMS.registerEditorComponent({
-        id: 'download-file',
-        label: '插入文件下载',
-        fields: [
-          { name: 'label', label: '链接文字', widget: 'string' },
-          { name: 'file', label: '上传或选择文件', widget: 'file' }
-        ],
-        pattern: /^\[📎 (.+?)\]\((.+?)\)$/,
-        fromBlock: function (match) {
-          return { label: match[1], file: match[2] };
-        },
-        toBlock: function (data) {
-          var file = data.file || '';
-          if (file.indexOf('/uploads/') === 0) file = '../../../' + file.slice(1);
-          return '[📎 ' + data.label + '](' + file + ')';
-        },
-        toPreview: function (data) {
-          return '<a href="' + data.file + '" download>📎 ' + data.label + '</a>';
-        }
-      });
-
-      // Defense in depth if a future Decap route exposes the dashboard again.
-      var hideQuickAdd = function () {
-        document.querySelectorAll('button, a').forEach(function (element) {
-          var label = (element.textContent || element.getAttribute('aria-label') || '').trim().toLowerCase();
-          if (label === 'quick add' || label === '快速添加' || label === '快速新增') {
-            element.style.display = 'none';
-          }
-        });
-      };
-      new MutationObserver(hideQuickAdd).observe(document.body, { childList: true, subtree: true });
-      hideQuickAdd();
-    </script>
-  </body>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>网站管理</title>
+  <link rel="stylesheet" href="./dashboard.css" />
+  <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script type="module" src="./dashboard.js"></script>
+</head>
+<body>
+  <div class="admin-shell">
+    <aside class="admin-sidebar">
+      <a class="brand" href="./">网站管理<span>内容与外观</span></a>
+      <nav id="section-nav" aria-label="设置分类"></nav>
+      <div class="sidebar-footer">
+        <a href="./editor/#/collections/blog">博客写作 ↗</a>
+        <a href="/zh/" target="_blank" rel="noopener">查看网站 ↗</a>
+        <button id="account" type="button">登录后台</button>
+      </div>
+    </aside>
+    <main>
+      <header class="toolbar">
+        <div><h1>网站设置</h1><p id="status" role="status" aria-live="polite">正在连接后台…</p></div>
+        <button id="save" type="submit" form="settings-form" class="primary" disabled>保存并发布</button>
+      </header>
+      <div id="login-panel" class="welcome" hidden>
+        <h2>欢迎回来</h2><p>登录后，直接编辑网站内容、双语资料与配色。</p>
+        <button id="login" type="button" class="primary">登录后台</button>
+      </div>
+      <form id="settings-form" hidden></form>
+      <noscript>请启用 JavaScript 后管理网站。</noscript>
+    </main>
+  </div>
+</body>
 </html>

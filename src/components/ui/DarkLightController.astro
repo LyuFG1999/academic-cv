@@ -34,8 +34,8 @@ const { lang } = Astro.props
 				const next = document.documentElement.dataset.themeMode === 'dark' ? 'light' : 'dark'
 				document.documentElement.dataset.themeMode = next
 				document.documentElement.dataset.theme = next === 'dark' ? darkTheme : lightTheme
-				localStorage.setItem('site-theme-mode', next)
-				update()
+				try { localStorage.setItem('site-theme-mode', next) } catch {}
+				initializeThemeToggle()
 			})
 		})
 	}
