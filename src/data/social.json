@@ -9,22 +9,22 @@
   },
   "orcid": {
     "enabled": true,
-    "url": ""
+    "url": "https://www.cnki.net/"
   },
   "cnki": {
     "enabled": true,
-    "url": ""
+    "url": "https://www.cnki.net/"
   },
   "school": {
     "enabled": true,
-    "url": ""
+    "url": "https://www.cnki.net/"
   },
   "x": {
     "enabled": true,
-    "url": ""
+    "url": "https://www.cnki.net/"
   },
   "linkedin": {
-    "enabled": false,
-    "url": ""
+    "enabled": true,
+    "url": "https://www.cnki.net/"
   }
 }
