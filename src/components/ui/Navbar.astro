@@ -1,0 +1,51 @@
+---
+import { Image } from 'astro:assets'
+import ProfilePicture from '@/assets/profile_pictures.jpg'
+import SocialIcons from './SocialIcons.astro'
+import { copy, localizedPath, type Language } from '@/i18n'
+import { profile, template } from '@/settings'
+
+type Props = { lang: Language }
+const { lang } = Astro.props
+const t = copy[lang]
+const person = profile[lang]
+const otherLanguage: Language = lang === 'zh' ? 'en' : 'zh'
+const currentWithoutBase = Astro.url.pathname.startsWith(template.base)
+	? Astro.url.pathname.slice(template.base.length)
+	: Astro.url.pathname
+const languagePath = `${template.base}${currentWithoutBase.replace(`/${lang}`, `/${otherLanguage}`) || `/${otherLanguage}`}`
+const navItems = [
+	{ label: t.home, path: localizedPath(lang) },
+	{ label: t.research, path: localizedPath(lang, 'research') },
+	{ label: t.papers, path: localizedPath(lang, 'papers') },
+	{ label: t.cv, path: localizedPath(lang, 'cv') },
+]
+---
+
+<aside class='flex h-screen w-[20rem] flex-col overflow-y-auto border-r border-base-300 bg-base-200 px-5 py-6 text-base-content'>
+	<div class='flex min-h-full flex-col'>
+		<div class='flex flex-col items-center pt-4'>
+			<Image class='mask mask-circle size-36 object-cover ring-4 ring-base-100 shadow-xl' src={ProfilePicture} alt={`${person.fullName} profile`} />
+			<h1 class='mt-6 text-center text-xl font-black'>{person.fullName}</h1>
+			<p class='mt-1 text-center text-sm text-base-content/65'>{person.title}</p>
+		</div>
+
+		<nav class='mt-9' aria-label={lang === 'zh' ? '主导航' : 'Main navigation'}>
+			<ul class='menu gap-1 p-0 text-base'>
+				{navItems.map((item) => {
+					const href = `${template.base}${item.path}`
+					const active = Astro.url.pathname.replace(/\/$/, '') === href.replace(/\/$/, '')
+					return <li><a href={href} class:list={['rounded-xl px-4 py-3', { active }]} aria-current={active ? 'page' : undefined}>{item.label}</a></li>
+				})}
+			</ul>
+		</nav>
+
+		<div class='mt-auto pt-8'>
+			<SocialIcons lang={lang} />
+			<a href={languagePath} class='btn btn-outline btn-sm mt-5 w-full rounded-xl' hreflang={otherLanguage}>
+				<span aria-hidden='true'>文 / A</span>
+				{t.language}
+			</a>
+		</div>
+	</div>
+</aside>

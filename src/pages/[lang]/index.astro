@@ -1,0 +1,42 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import Hero from '@/components/ui/Hero.astro'
+import Grid from '@/components/ui/Grid.astro'
+import ArticleList from '@/components/ui/ArticleList.astro'
+import { copy, isLanguage, languages } from '@/i18n'
+import { profile } from '@/settings'
+import { cv } from '@/data/cv'
+
+export function getStaticPaths() {
+	return languages.map((lang) => ({ params: { lang } }))
+}
+
+const rawLang = Astro.params.lang
+if (!isLanguage(rawLang)) throw new Error(`Unsupported language: ${rawLang}`)
+const lang = rawLang
+const t = copy[lang]
+const person = profile[lang]
+const publications = cv[lang].publications.slice(0, 3)
+---
+
+<Layout lang={lang}>
+	<section class='border-b border-base-300 pb-12' data-reveal>
+		<Hero lang={lang} fullName={person.fullName} title={person.title} institute={person.institute} intro={person.intro} />
+	</section>
+
+	{person.researchAreas.length > 0 ? (
+		<section class='border-b border-base-300 py-14' data-reveal>
+			<Grid gridTitle={t.researchAreas} gridItems={person.researchAreas} />
+		</section>
+	) : (
+		<section class='py-12' data-reveal>
+			<div class='alert border border-base-300 bg-base-200/70'><span>{t.emptyProfile}</span></div>
+		</section>
+	)}
+
+	{publications.length > 0 && (
+		<section class='py-14' data-reveal>
+			<ArticleList listTitle={t.recentPublications} listItems={publications} />
+		</section>
+	)}
+</Layout>

@@ -1,0 +1,98 @@
+---
+import { ClientRouter } from 'astro:transitions'
+import BetterIcon from '@/components/ui/BetterIcon.astro'
+import DarkLightController from '@/components/ui/DarkLightController.astro'
+import Navbar from '@/components/ui/Navbar.astro'
+import Footer from '@/components/ui/Footer.astro'
+import Head from '@/components/Head.astro'
+import { seo, profile, template } from '@/settings'
+import type { Language } from '@/i18n'
+
+type Props = {
+	lang?: Language
+	title?: string
+	description?: string
+	image?: string
+}
+
+const { lang = 'zh', title, description, image = seo.defaultImage } = Astro.props
+const localizedSeo = seo[lang]
+const pageTitle = title ?? localizedSeo.defaultTitle
+const pageDescription = description ?? localizedSeo.defaultDescription
+const person = profile[lang]
+---
+
+<!doctype html>
+<html lang={lang}>
+	<head>
+		{template.transitions && <ClientRouter />}
+		<Head title={pageTitle} description={pageDescription} image={image} />
+	</head>
+	<body>
+		<div class={`min-h-screen bg-base-100 drawer lg:drawer-open ${template.menuLeft ? 'drawer-end' : ''}`}>
+			<input id='site-drawer' type='checkbox' class='drawer-toggle' />
+			<div class='drawer-content min-w-0 overflow-x-hidden bg-base-100'>
+				<div class='sticky top-0 z-30 border-b border-base-300/70 bg-base-100/85 text-base-content backdrop-blur'>
+					<nav class='navbar px-4 lg:px-8'>
+						<div class='navbar-start'>
+							<label for='site-drawer' class='btn btn-square btn-ghost lg:hidden' aria-label={lang === 'zh' ? '打开菜单' : 'Open menu'}>
+								<BetterIcon>
+									<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' class='size-6 stroke-current'>
+										<path stroke-linecap='round' stroke-linejoin='round' d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'></path>
+									</svg>
+								</BetterIcon>
+							</label>
+						</div>
+						<div class='navbar-center lg:hidden text-base font-black'>{person.fullName}</div>
+						<div class='navbar-end'><DarkLightController lang={lang} /></div>
+					</nav>
+				</div>
+				<main class='mx-auto flex min-h-[calc(100vh-4rem)] min-w-0 w-full max-w-5xl flex-col justify-between overflow-x-hidden px-6 pb-4 pt-10 sm:px-8 lg:px-12 lg:pt-16'>
+					<div><slot /></div>
+					<Footer lang={lang} />
+				</main>
+			</div>
+			<div class='drawer-side z-40'>
+				<label for='site-drawer' aria-label={lang === 'zh' ? '关闭菜单' : 'Close menu'} class='drawer-overlay'></label>
+				<Navbar lang={lang} />
+			</div>
+		</div>
+	</body>
+</html>
+
+<script is:inline>
+	const initializeReveal = () => {
+		const elements = document.querySelectorAll('[data-reveal]')
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			elements.forEach((element) => element.classList.add('is-visible'))
+			return
+		}
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach((entry) => {
+				if (entry.isIntersecting) {
+					entry.target.classList.add('is-visible')
+					observer.unobserve(entry.target)
+				}
+			})
+		}, { threshold: 0.12 })
+		elements.forEach((element) => observer.observe(element))
+	}
+	initializeReveal()
+	document.addEventListener('astro:page-load', initializeReveal)
+</script>
+
+<style is:global>
+	html { scroll-behavior: smooth; }
+	body { margin: 0; min-height: 100%; overflow-x: hidden; }
+	.alert > span { min-width: 0; overflow-wrap: anywhere; }
+	[data-reveal] {
+		opacity: 0;
+		transform: translateY(1.25rem);
+		transition: opacity 650ms ease, transform 650ms cubic-bezier(.2,.7,.2,1);
+	}
+	[data-reveal].is-visible { opacity: 1; transform: none; }
+	@media (prefers-reduced-motion: reduce) {
+		html { scroll-behavior: auto; }
+		[data-reveal] { opacity: 1; transform: none; transition: none; }
+	}
+</style>

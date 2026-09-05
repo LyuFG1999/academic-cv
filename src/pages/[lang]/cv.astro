@@ -1,0 +1,47 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import CvTimeline from '@/components/ui/CvTimeline.astro'
+import List from '@/components/ui/List.astro'
+import PublicationsList from '@/components/ui/PublicationsList.astro'
+import { copy, isLanguage, languages } from '@/i18n'
+import { cv } from '@/data/cv'
+import { profile } from '@/settings'
+
+export function getStaticPaths() {
+	return languages.map((lang) => ({ params: { lang } }))
+}
+
+const rawLang = Astro.params.lang
+if (!isLanguage(rawLang)) throw new Error(`Unsupported language: ${rawLang}`)
+const lang = rawLang
+const t = copy[lang]
+const person = profile[lang]
+const data = cv[lang]
+
+const orderElement = <T extends { time: string }>(a: T, b: T) => {
+	const end = (value: string) => value.split(' - ')[1] ?? value
+	const current = ['present', 'now', 'current', 'today', '至今', '现在']
+	if (current.includes(end(a.time).toLowerCase())) return -1
+	if (current.includes(end(b.time).toLowerCase())) return 1
+	return new Date(end(b.time)).getTime() - new Date(end(a.time)).getTime()
+}
+
+const experiences = [...data.experiences].sort(orderElement)
+const education = [...data.education].sort(orderElement)
+const publications = [...data.publications].sort(orderElement)
+const isEmpty = !experiences.length && !education.length && !publications.length && !data.skills.length
+---
+
+<Layout lang={lang} title={`${t.cv} | ${person.fullName}`}>
+	<header class='mb-12' data-reveal>
+		<p class='text-sm font-semibold uppercase tracking-[0.2em] text-secondary'>{t.cv}</p>
+		<h1 class='mt-3 text-4xl font-black'>{person.fullName}</h1>
+		<p class='mt-3 text-lg text-base-content/65'>{person.title}</p>
+	</header>
+
+	{isEmpty && <div class='alert border border-base-300 bg-base-200/70' data-reveal><span>{t.emptyCv}</span></div>}
+	{education.length > 0 && <section class='mb-12' data-reveal><h2 class='mb-6 border-b border-base-300 pb-3 text-2xl font-bold'>{t.education}</h2><CvTimeline elements={education} colored={true} /></section>}
+	{experiences.length > 0 && <section class='mb-12' data-reveal><h2 class='mb-6 border-b border-base-300 pb-3 text-2xl font-bold'>{t.experiences}</h2><CvTimeline elements={experiences} colored={true} /></section>}
+	{publications.length > 0 && <section class='mb-12' data-reveal><h2 class='mb-6 border-b border-base-300 pb-3 text-2xl font-bold'>{t.lastPublications}</h2><PublicationsList elements={publications} /></section>}
+	{data.skills.length > 0 && <section class='mb-12' data-reveal><List listTitle={t.skills} listItems={data.skills} /></section>}
+</Layout>

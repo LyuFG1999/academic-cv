@@ -1,0 +1,21 @@
+---
+import { copy, type Language } from '@/i18n'
+
+type Props = {
+	lang: Language
+	fullName: string
+	title: string
+	institute: string
+	intro: string
+}
+
+const { lang, fullName, title, institute, intro } = Astro.props
+const t = copy[lang]
+---
+
+<div class='max-w-3xl py-6 sm:py-10'>
+	<p class='mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-secondary'>{t.introPrefix}</p>
+	<h1 class='text-5xl font-black leading-tight sm:text-6xl'>{fullName}</h1>
+	<p class='mt-6 text-xl text-base-content/70'>{title}{institute ? ` · ${institute}` : ''}</p>
+	<p class='mt-7 max-w-2xl text-lg leading-8 text-base-content/85'>{intro}</p>
+</div>

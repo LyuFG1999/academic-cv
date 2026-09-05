@@ -1,0 +1,15 @@
+---
+import { copy, type Language } from '@/i18n'
+import { profile } from '@/settings'
+
+type Props = { lang: Language }
+const { lang } = Astro.props
+const t = copy[lang]
+---
+
+<footer class='footer footer-center border-t border-base-300 bg-base-100 px-4 py-10 text-base-content/65'>
+	<aside>
+		<p>© {new Date().getFullYear()} {profile[lang].fullName} · {t.copyright}</p>
+		<p><a href='https://github.com/maiobarbero/astro_academia' class='font-semibold hover:text-secondary' target='_blank' rel='noopener noreferrer'>{t.builtWith}</a></p>
+	</aside>
+</footer>

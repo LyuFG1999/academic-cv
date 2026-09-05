@@ -1,0 +1,48 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import BetterIcon from '@/components/ui/BetterIcon.astro'
+import { RESEARCH_ICONS } from '@/data/researchIcons'
+import { copy, isLanguage, languages } from '@/i18n'
+import { profile } from '@/settings'
+
+export function getStaticPaths() {
+	return languages.map((lang) => ({ params: { lang } }))
+}
+
+const rawLang = Astro.params.lang
+if (!isLanguage(rawLang)) throw new Error(`Unsupported language: ${rawLang}`)
+const lang = rawLang
+const t = copy[lang]
+const person = profile[lang]
+const statement = lang === 'zh'
+	? '请在这里介绍你的核心研究问题、理论视角、方法路径，以及这些工作希望回应的学术或现实议题。'
+	: 'Describe your central research questions, theoretical perspective, methods, and the scholarly or practical problems your work addresses.'
+---
+
+<Layout lang={lang} title={`${t.research} | ${person.fullName}`}>
+	<article class='prose max-w-none prose-headings:text-base-content prose-p:text-base-content/80' data-reveal>
+		<p class='text-sm font-semibold uppercase tracking-[0.2em] text-secondary'>{t.research}</p>
+		<h1 class='mt-3 text-4xl font-black'>{t.researchStatement}</h1>
+		<p class='lead mt-7'>{statement}</p>
+	</article>
+
+	<section class='mt-14' data-reveal>
+		<h2 class='mb-8 text-3xl font-bold'>{t.researchAreas}</h2>
+		{person.researchAreas.length > 0 ? (
+			<div class='grid gap-5'>
+				{person.researchAreas.map((area) => (
+					<div class='flex items-start gap-5 rounded-2xl border border-base-300 bg-base-200/70 p-6'>
+						<BetterIcon>
+							<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke-width='2' class='size-6 stroke-secondary'>
+								<path stroke-linecap='round' stroke-linejoin='round' d={RESEARCH_ICONS[area.field as keyof typeof RESEARCH_ICONS]?.path || RESEARCH_ICONS['computer-science'].path} />
+							</svg>
+						</BetterIcon>
+						<div><h3 class='text-xl font-semibold'>{area.title}</h3><p class='mt-2 text-base-content/75'>{area.description}</p></div>
+					</div>
+				))}
+			</div>
+		) : (
+			<div class='alert border border-base-300 bg-base-200/70'><span>{t.emptyResearch}</span></div>
+		)}
+	</section>
+</Layout>
