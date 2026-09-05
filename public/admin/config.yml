@@ -1,9 +1,10 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: LyuFG1999/academic-cv
   branch: main
 
-site_url: https://delicate-biscochitos-9061ae.netlify.app
-display_url: https://delicate-biscochitos-9061ae.netlify.app
+site_url: https://lyufg1999.github.io/academic-cv
+display_url: https://lyufg1999.github.io/academic-cv
 publish_mode: simple
 show_preview_links: false
 editor:

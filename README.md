@@ -12,7 +12,7 @@ This repository contains a bilingual academic website for `LyuFG1999/academic-cv
 - Premium responsive UI, configurable light/dark palettes, and reduced-motion support
 - A one-switch bilingual maintenance page for temporarily hiding public content
 - Bilingual blog pages with file downloads
-- A direct settings dashboard at `/admin/` and a Decap blog editor at `/admin/editor/`
+- A direct settings/blog dashboard at `/admin/`, with local drafts and one atomic release
 - Automatic path handling for both GitHub Pages and Netlify
 
 ## Edit content in the browser
@@ -30,16 +30,9 @@ The settings dashboard lets you update the following content without editing cod
 - Paper category visibility and bilingual courses
 - Bilingual blog posts, images, and downloadable files
 
-The recommended deployment is Netlify because Netlify Identity and Git Gateway provide login and GitHub write access for the editor.
+Production hosting is **GitHub Pages**. The dashboard uses **GitHub App OAuth**, not Netlify Identity or Git Gateway. The small authentication service is supplied in `auth-worker/` and needs one-time owner configuration; see [migration and setup instructions](docs/github-pages-migration.md).
 
-1. Import this GitHub repository into Netlify.
-2. The included `netlify.toml` supplies the build command (`npm run build`) and publish directory (`dist`).
-3. In the Netlify site dashboard, enable **Identity** and set registration to **Invite only**.
-4. Under **Identity → Services**, enable **Git Gateway**.
-5. Invite your own email address from the Identity page.
-6. Accept the invitation, then open `https://YOUR-SITE.netlify.app/admin/`.
-
-Each save in the editor creates a commit in the GitHub repository. Netlify then rebuilds and publishes the site automatically.
+Open https://lyufg1999.github.io/academic-cv/admin/ . Edit settings, blog posts and attachments together. **Save local draft** stores only in this browser and does not deploy. **Publish all** creates one atomic commit and starts GitHub Actions. Wait for deployment confirmation before expecting public changes. Local drafts do not sync between devices. Credentials are never saved in drafts.
 
 ## Edit content directly
 
@@ -53,7 +46,7 @@ If you prefer to edit files, the same CMS-managed content is stored in:
 
 Disabled or empty contact fields are omitted from the public site.
 
-Opening `/admin/` displays a single settings dashboard with expanded fields and section links. Profile, CV, publications and courses all pair Chinese and English fields within each item. Only blog writing opens the dedicated Decap editor. Saves use Netlify Identity and Git Gateway, create one atomic Git commit, and report deployment progress. Maintenance takes effect after deployment; the admin remains available to turn it off. Styles hide the current “Powered by Netlify” iframe on public and admin pages. To also disable platform injection, use **Project configuration → General → Powered by Netlify badge**; the dashboard links to that setting.
+Opening `/admin/` displays expanded bilingual settings and collapsible Markdown blog editors. All sections share one publish action. Same-file conflicts block publication rather than overwriting concurrent changes. Maintenance takes effect after deployment; it is not immediate access control. The old `/admin/editor/` redirects to the consolidated dashboard. The YAML configuration remains as the settings schema, not an independently publishing Decap interface.
 
 ## Local development
 
@@ -68,4 +61,4 @@ The local and GitHub Pages base path is `/academic-cv`, so open `http://localhos
 
 The included `.github/workflows/deploy.yml` builds and deploys every push to `main`. In GitHub, set **Settings → Pages → Build and deployment → Source** to **GitHub Actions**.
 
-GitHub Pages remains available, but Decap CMS login is configured for Netlify Identity and Git Gateway. Use the Netlify site URL for `/admin/`.
+The old Netlify site is retained but automatic builds are ignored by `netlify.toml`. Dashboard commits also contain `[skip netlify]`. Do not continue editing with the old Netlify dashboard. No paid plan changes or domain changes are made by this migration.

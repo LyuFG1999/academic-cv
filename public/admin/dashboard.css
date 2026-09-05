@@ -39,5 +39,20 @@ textarea { min-height:104px; resize:vertical; } input:focus,textarea:focus,selec
 .welcome { padding:72px 28px; text-align:center; background:#fff; border:1px solid var(--line); border-radius:18px; margin-top:24px; } .welcome p { color:var(--muted); }
 .maintenance-summary { margin-bottom:20px; padding:14px 18px; background:#eff6ff; border:1px solid #dbeafe; border-radius:10px; }
 .external-setting { display:inline-block; color:var(--primary); text-decoration:underline; margin:8px 0; }
+.toolbar-actions { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+.token-form,.login-help { max-width:640px; margin:24px auto; text-align:left; }
+.login-help summary,.blog-entry summary { cursor:pointer; font-weight:650; padding:16px; }
+.blog-entry { border:1px solid var(--line); border-radius:12px; margin:16px 0; scroll-margin-top:140px; }
+.blog-fields { padding:8px 20px 20px; }
+.markdown-body { min-height:360px; font-family:ui-monospace,monospace; }
+html.admin-page { font:15px/1.6 Inter,system-ui,-apple-system,"Segoe UI","Noto Sans SC",sans-serif; }
+.admin-page button { padding:9px 16px; border:1px solid var(--line); border-radius:10px; }
+.admin-page button.primary { background:var(--primary); color:#fff; }
+.admin-page h1 { font-size:24px; font-weight:700; margin:0; }
+.admin-page h2 { font-weight:650; }
+.admin-page fieldset { margin:0 0 24px; }
+.admin-page legend { font-weight:650; margin-bottom:12px; }
+.admin-page ol { list-style:decimal; padding-left:24px; }
+@media(max-width:800px) { .toolbar { flex-direction:column; align-items:stretch; } .toolbar-actions { justify-content:flex-start; } .welcome { padding:28px 20px; } }
 @media(min-width:1200px) { #section-navigation > .fields,#section-social > .fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 28px; } }
 @media(max-width:800px) { .admin-sidebar { position:relative; width:100%; padding:16px; border-right:0; border-bottom:1px solid var(--line); } .brand { padding:0 0 12px; font-size:18px; } .brand span { display:none; } .admin-sidebar nav { display:flex; overflow-x:auto; gap:4px; } .admin-sidebar nav a { white-space:nowrap; font-size:13px; } .sidebar-footer { display:flex; gap:8px; margin:0; padding:12px 0 0; align-items:center; flex-wrap:wrap; } .sidebar-footer button { width:auto; margin:0; } main { margin:0; padding:0 16px 40px; } .toolbar { padding:16px 0; gap:12px; } h1 { font-size:20px; } .toolbar button { white-space:nowrap; padding:9px 12px; } .settings-section { padding:20px; } .palette { grid-template-columns:1fr; } }

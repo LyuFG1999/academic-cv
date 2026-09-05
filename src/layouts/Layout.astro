@@ -39,7 +39,6 @@ const languagePath = `${template.base}${switchedPath}`
 	<head>
 		{template.transitions && <ClientRouter />}
 		<Head lang={lang} title={pageTitle} description={pageDescription} image={pageImage} alternatePath={languagePath} />
-		{template.base === '' && <script is:inline src='https://identity.netlify.com/v1/netlify-identity-widget.js'></script>}
 	</head>
 	<body>
 		{maintenance.enabled ? <MaintenanceScreen lang={lang} /> : <>
@@ -81,18 +80,6 @@ const languagePath = `${template.base}${switchedPath}`
 		</>}
 	</body>
 </html>
-
-<script is:inline>
-	if (window.netlifyIdentity) {
-		window.netlifyIdentity.on('init', (user) => {
-			if (!user) {
-				window.netlifyIdentity.on('login', () => {
-					document.location.href = '/admin/'
-				})
-			}
-		})
-	}
-</script>
 
 <script is:inline>
 	(() => {

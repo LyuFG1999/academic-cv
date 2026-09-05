@@ -30,6 +30,12 @@ export function safeHttpUrl(value?: string): string | undefined {
 	}
 }
 
+export function assetUrl(value: string, base: string): string {
+	if (/^https?:\/\//i.test(value)) return value
+	const portable = value.replace(/^\/academic-cv(?=\/uploads\/)/, '')
+	return portable.startsWith('/uploads/') ? base + portable : ''
+}
+
 type DatedItem = { time: string; sortDate?: string }
 
 function dateScore(item: DatedItem): number {

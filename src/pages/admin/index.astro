@@ -1,0 +1,61 @@
+---
+import { template } from '../../settings';
+const base = template.base;
+---
+<!doctype html>
+<html lang="zh-CN" class="admin-page">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="referrer" content="no-referrer" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob: data: https:; connect-src 'self' https://api.github.com; object-src 'none'; base-uri 'self'; form-action 'none'" />
+  <title>网站管理</title>
+  <link rel="stylesheet" href={`${base}/admin/dashboard.css`} />
+  <script>import '../../admin/dashboard.js';</script>
+</head>
+<body>
+  <div class="admin-shell">
+    <aside class="admin-sidebar">
+      <a class="brand" href={`${base}/admin/`}>网站管理<span>GitHub Pages · 集中发布</span></a>
+      <nav id="section-nav" aria-label="设置分类"></nav>
+      <div class="sidebar-footer">
+        <a href={`${base}/zh/`} target="_blank" rel="noopener">查看网站 ↗</a>
+        <a href="https://github.com/LyuFG1999/academic-cv/actions" target="_blank" rel="noopener">发布记录 ↗</a>
+        <button id="account" type="button">登录后台</button>
+      </div>
+    </aside>
+    <main>
+      <header class="toolbar">
+        <div><h1>网站控制中心</h1><p id="status" role="status" aria-live="polite">正在连接后台…</p></div>
+        <div class="toolbar-actions">
+          <button id="discard-draft" type="button" disabled>放弃草稿</button>
+          <button id="save-draft" type="button" disabled>保存本地草稿</button>
+          <button id="save" type="submit" form="settings-form" class="primary" disabled>统一发布</button>
+        </div>
+      </header>
+      <div id="login-panel" class="welcome">
+        <h2>登录网站管理</h2>
+        <p>设置、博客和附件统一编辑，最后一次性发布。无需 Netlify 账号。</p>
+        <button id="oauth-login" type="button" class="primary">使用 GitHub 一键授权</button>
+        <p id="auth-help" class="hint">正在读取登录配置…</p>
+        <details class="login-help"><summary>备用方式：仅授权本仓库的临时令牌</summary>
+          <form id="token-login" class="token-form">
+            <label class="field"><span>GitHub 细粒度访问令牌（不是 GitHub 密码）</span>
+              <input id="github-token" type="password" required autocomplete="off" spellcheck="false" placeholder="github_pat_…" />
+            </label><button type="submit">使用令牌登录</button>
+          </form>
+          <p class="hint">仅在自己的设备上使用。令牌只留在当前页面内存，刷新后需重新登录；不会写入草稿、仓库或链接。请勿把令牌发给他人。</p>
+          <ol>
+            <li><a class="external-setting" href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">打开 GitHub 令牌创建页 ↗</a>，设置较短有效期（如 30 天）。</li>
+            <li>Repository access 选择 Only select repositories，只勾选 academic-cv。</li>
+            <li>Repository permissions 中 Contents 设为 Read and write，其余保持默认。生成后仅粘贴到上方输入框。</li>
+          </ol>
+        </details>
+      </div>
+      <form id="settings-form" novalidate hidden></form>
+      <noscript>请启用 JavaScript 后管理网站。</noscript>
+    </main>
+  </div>
+</body>
+</html>

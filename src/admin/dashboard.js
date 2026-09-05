@@ -1,3 +1,8 @@
+import { parse } from 'yaml';
+import { renderBlog, serializePost } from './blog.js';
+import { api, publishBatch, repository, setCredential } from './github.js';
+import { draftStore } from './drafts.js';
+import { initializeOAuth } from './oauth.js';
 const form = document.querySelector('#settings-form');
 const statusMessage = document.querySelector('#status');
 const saveButton = document.querySelector('#save');
@@ -5,6 +10,9 @@ const nav = document.querySelector('#section-nav');
 const paths = ['src/data/site-settings.json', 'src/data/cv.zh.json', 'src/data/cv.en.json', 'src/data/courses.zh.json', 'src/data/courses.en.json'];
 const files = new Map();
 const uploads = new Map();
+const posts = new Map();
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const draftKey = `${repository}:draft-v1`;
 let schema, settings, cv, courses, dirty = false, busy = false, loaded = false, user, pollTimer;
 
 function el(tag, text, className) {
@@ -21,19 +29,6 @@ function bytesToBase64(bytes) {
   return btoa(binary);
 }
 function decode(content) { return new TextDecoder().decode(Uint8Array.from(atob(content.replace(/\s/g, '')), c => c.charCodeAt(0))); }
-async function api(path, body, method = body ? 'POST' : 'GET') {
-  if (!user) throw new Error('请先登录后台。');
-  const token = await user.jwt();
-  const response = await fetch('/.netlify/git/github/' + path, {
-    method, cache: 'no-store', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-    ...(body ? { body: JSON.stringify(body) } : {}),
-  });
-  if (!response.ok) {
-    const text = response.status === 401 ? '登录已过期，请重新登录。' : response.status === 403 ? '当前账号没有编辑权限，请检查 Git Gateway 设置。' : response.status === 409 || response.status === 422 ? '有其他修改已保存。请复制尚未保存的内容，刷新后再编辑。' : `连接失败（${response.status}），请稍后重试。`;
-    throw new Error(text);
-  }
-  return response.json();
-}
 const sharedFields = new Set(['category', 'sortDate', 'field']);
 function pairSchema(fields) {
   return fields.map(field => field.widget === 'list' ? { ...field, fields: pairSchema(field.fields || []) } : sharedFields.has(field.name) ? field : {
@@ -111,7 +106,7 @@ function fieldNode(field, owner, prefix) {
     row.append(picker, input); label.append(row);
   } else label.append(input);
   if (field.widget === 'image') {
-    const preview = el('img', undefined, 'avatar-preview'); preview.alt = '共用头像预览'; preview.src = owner[key] || '/uploads/profile.jpg';
+    const preview = el('img', undefined, 'avatar-preview'); preview.alt = '共用头像预览'; preview.src = base + (owner[key] || '/uploads/profile.jpg');
     const upload = el('input'); upload.type = 'file'; upload.accept = 'image/png,image/jpeg,image/webp,image/gif'; upload.setAttribute('aria-label', '上传共用头像');
     upload.addEventListener('change', async () => {
       const file = upload.files[0]; if (!file) return;
@@ -146,23 +141,47 @@ function render() {
   section('cv', '履历与成果', pairSchema(schema.cv), cv, '每条经历或成果只添加一次，在同一处填写中英文。');
   section('courses', '课程', pairSchema(schema.courses), courses);
   section('appearance', '外观与配色', get('appearance').fields, settings.appearance);
-  const maintenance = section('maintenance', '网站维护', get('maintenance').fields, settings.maintenance, '保存并发布后生效；后台保持可用。关闭此开关并再次发布即可恢复网站。');
-  const note = el('p', '网站已默认隐藏平台徽标。如需同时关闭平台的徽标注入，可前往 Netlify 项目设置。', 'hint');
-  const badge = el('a', '打开平台徽标设置 ↗', 'external-setting'); badge.href = 'https://app.netlify.com/projects/delicate-biscochitos-9061ae/configuration/general'; badge.target = '_blank'; badge.rel = 'noopener'; maintenance.append(note, badge);
+  section('maintenance', '网站维护', get('maintenance').fields, settings.maintenance, '统一发布并完成 GitHub Pages 部署后生效；后台保持可用。这不是即时访问控制，也不会删除 Git 历史。');
+  renderBlog({ posts, uploads, section, fieldNode, el, changed, message, bytesToBase64 });
 }
 async function load() {
   if (loaded || busy) return;
   busy = true; message('正在读取最新设置…');
   try {
     schema = await fetch('./schema.json', { cache: 'no-store' }).then(r => { if (!r.ok) throw new Error('设置表单加载失败，请刷新重试。'); return r.json(); });
+    const head = (await api('git/ref/heads/main')).object.sha;
     await Promise.all(paths.map(async path => {
-      const file = await api(`contents/${path}?ref=main`); files.set(path, { sha: file.sha, data: JSON.parse(decode(file.content)) });
+      const file = await api(`contents/${path}?ref=${head}`); files.set(path, { sha: file.sha, data: JSON.parse(decode(file.content)) });
     }));
+    const tree = await api(`git/trees/${head}?recursive=1`);
+    if (tree.truncated) throw new Error('仓库目录不完整，无法安全加载。');
+    posts.clear();
+    for (const entry of tree.tree.filter(item => item.path.startsWith('src/content/BlogPosts/') && item.path.endsWith('.md'))) {
+      const blob = await api(`git/blobs/${entry.sha}`);
+      const original = decode(blob.content);
+      const match = original.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)([\s\S]*)$/);
+      if (!match) throw new Error(`文章格式错误：${entry.path}`);
+      posts.set(entry.path, { sha: entry.sha, original, data: parse(match[1]), body: match[2].trimStart(), deleted: false });
+    }
     settings = structuredClone(files.get(paths[0]).data);
     cv = pairData(schema.cv, files.get(paths[1]).data, files.get(paths[2]).data);
     courses = pairData(schema.courses, files.get(paths[3]).data, files.get(paths[4]).data);
+    let restored = false;
+    try {
+      const draft = await draftStore('get', draftKey);
+      if (draft && confirm('发现此浏览器保存的未发布草稿。是否恢复？发布时会检查是否与最新仓库冲突。')) {
+        ({ settings, cv, courses } = draft);
+        files.clear(); draft.files.forEach(([key, value]) => files.set(key, value));
+        posts.clear(); draft.posts.forEach(([key, value]) => posts.set(key, value));
+        uploads.clear(); draft.uploads.forEach(([key, value]) => uploads.set(key, value));
+        dirty = restored = true;
+      }
+    } catch { message('无法读取本地草稿，正在使用 GitHub 内容。', true); }
     render(); loaded = true; form.hidden = false; document.querySelector('#login-panel').hidden = true;
-    message('设置已加载。修改后点击“保存并发布”。');
+    document.querySelector('#save-draft').disabled = false;
+    document.querySelector('#discard-draft').disabled = false;
+    saveButton.disabled = !dirty;
+    message(restored ? '已恢复本地草稿，尚未发布。' : '已读取 GitHub 内容。可先保存本地草稿，最后统一发布。');
   } catch (error) { message(error.message, true); loaded = false; }
   finally { busy = false; }
 }
@@ -175,62 +194,81 @@ async function watchDeployment(commit) {
       if (live.commit === commit) { if (!dirty) message(live.maintenance ? '已发布：网站维护模式已生效。' : '已发布：刷新网站即可查看修改。'); return; }
     } catch {}
     if (++attempts < 60) pollTimer = setTimeout(check, 5000);
-    else if (!dirty) message('设置已保存，但尚未确认上线。请在 Netlify Deploys 查看部署结果。', true);
+    else if (!dirty) message('内容已提交，但尚未确认上线。请点击“发布记录”检查 GitHub Actions。', true);
   };
   pollTimer = setTimeout(check, 5000);
 }
 form.addEventListener('submit', async event => {
   event.preventDefault(); if (busy || !dirty) return;
+  form.querySelectorAll(':invalid').forEach(node => { const details = node.closest('details'); if (details) details.open = true; });
   if (!form.reportValidity()) return;
   busy = true; saveButton.disabled = true; form.querySelectorAll('input,textarea,select,button').forEach(node => node.disabled = true);
   message('正在保存…');
   try {
     const values = [settings, unpairData(schema.cv, cv, 'zh'), unpairData(schema.cv, cv, 'en'), unpairData(schema.courses, courses, 'zh'), unpairData(schema.courses, courses, 'en')];
     const changedFiles = paths.map((path, i) => ({ path, data: values[i] })).filter(file => JSON.stringify(file.data) !== JSON.stringify(files.get(file.path).data));
-    if (!changedFiles.length && !uploads.size) { dirty = false; message('没有需要发布的修改。'); return; }
-    const head = await api('git/ref/heads/main');
-    const base = head.object.sha;
-    await Promise.all(changedFiles.map(async file => {
-      const latest = await api(`contents/${file.path}?ref=${base}`);
-      if (latest.sha !== files.get(file.path).sha) throw new Error('其他页面已修改了同一份设置。请保留输入内容并刷新，避免覆盖。');
-    }));
-    const blobs = await Promise.all(changedFiles.map(async file => ({ path: file.path, mode: '100644', type: 'blob', sha: (await api('git/blobs', { content: JSON.stringify(file.data, null, 2) + '\n', encoding: 'utf-8' })).sha })));
-    const tree = await api('git/trees', {
-      base_tree: base,
-      tree: [
-        ...blobs,
-        ...await Promise.all([...uploads].map(async ([path, content]) => ({ path, mode: '100644', type: 'blob', sha: (await api('git/blobs', { content, encoding: 'base64' })).sha }))),
-      ],
-    });
-    const commit = await api('git/commits', { message: '更新网站设置与双语内容', tree: tree.sha, parents: [base] });
-    await api('git/refs/heads/main', { sha: commit.sha, force: false }, 'PATCH');
-    const treeEntries = new Map(blobs.map(item => [item.path, item.sha]));
+    const changes = changedFiles.map(file => ({ path: file.path, originalSha: files.get(file.path).sha, content: JSON.stringify(file.data, null, 2) + '\n' }));
+    for (const [path, post] of posts) {
+      const content = post.deleted ? null : serializePost(post);
+      if (content !== post.original && !(post.deleted && !post.sha)) changes.push({ path, originalSha: post.sha, content });
+    }
+    for (const [path, content] of uploads) changes.push({ path, content, originalSha: null, encoding: 'base64' });
+    const result = await publishBatch(changes);
+    if (!result) { dirty = false; message('没有需要发布的修改。'); return; }
+    const treeEntries = new Map(result.entries.map(item => [item.path, item.sha]));
     changedFiles.forEach(file => files.set(file.path, { sha: treeEntries.get(file.path), data: structuredClone(file.data) }));
-    uploads.clear(); dirty = false; message('设置已保存，正在自动发布…'); watchDeployment(commit.sha);
+    for (const [path, post] of posts) {
+      if (post.deleted) posts.delete(path);
+      else if (treeEntries.has(path)) { post.sha = treeEntries.get(path); post.original = serializePost(post); post.edited = false; }
+    }
+    uploads.clear(); dirty = false;
+    try { await draftStore('delete', draftKey); } catch {}
+    message(`已一次性提交 ${changes.length} 个文件，等待 GitHub Pages 发布…`); watchDeployment(result.commit);
   } catch (error) { message(error.message, true); }
   finally { busy = false; form.querySelectorAll('input,textarea,select,button').forEach(node => node.disabled = false); saveButton.disabled = !dirty; }
 });
 window.addEventListener('beforeunload', event => { if (dirty) event.preventDefault(); });
 
-function initializeIdentity() {
-  const identity = window.netlifyIdentity;
-  if (!identity) { message('登录组件未加载，请刷新页面重试。', true); return; }
-  const signedIn = nextUser => {
-    user = nextUser;
-    document.querySelector('#account').textContent = user ? '退出登录' : '登录后台';
-    document.querySelector('#login-panel').hidden = Boolean(user);
-    if (user) { identity.close(); load(); } else { form.hidden = true; message('请登录后编辑网站。'); }
-  };
-  identity.on('init', signedIn);
-  identity.on('login', signedIn);
-  identity.on('logout', () => { loaded = false; dirty = false; uploads.clear(); files.clear(); saveButton.disabled = true; signedIn(null); });
-  document.querySelector('#login').addEventListener('click', () => identity.open('login'));
-  document.querySelector('#account').addEventListener('click', () => {
-    if (user && dirty && !confirm('还有未发布的修改，确定退出吗？')) return;
-    if (user) identity.logout(); else identity.open('login');
-  });
-  // The standalone widget initializes itself; reuse it instead of creating a second modal.
-  signedIn(identity.currentUser());
+async function login(token) {
+  setCredential(token);
+  try {
+    const repo = await api('');
+    if (!repo.permissions?.push) throw new Error('此账号没有仓库写入权限。');
+    user = true;
+    document.querySelector('#account').textContent = '退出登录';
+    await load();
+  } catch (error) { setCredential(''); user = false; message(error.message, true); }
 }
-if (document.readyState === 'complete') initializeIdentity(); else window.addEventListener('load', initializeIdentity, { once: true });
-export {};
+document.querySelector('#token-login').addEventListener('submit', event => {
+  event.preventDefault();
+  const input = document.querySelector('#github-token');
+  const token = input.value; input.value = '';
+  if (token) login(token);
+});
+document.querySelector('#account').addEventListener('click', () => {
+  if (busy) return;
+  if (user && dirty && !confirm('退出会清除内存中的输入。需要保留时请先保存本地草稿。确定退出？')) return;
+  if (!user) { document.querySelector('#login-panel').scrollIntoView(); return; }
+  setCredential(''); user = false; loaded = false; dirty = false;
+  settings = cv = courses = undefined; uploads.clear(); files.clear(); posts.clear();
+  clearTimeout(pollTimer); form.replaceChildren(); form.hidden = true; nav.replaceChildren();
+  document.querySelector('#login-panel').hidden = false;
+  document.querySelector('#account').textContent = '登录后台';
+  saveButton.disabled = document.querySelector('#save-draft').disabled = document.querySelector('#discard-draft').disabled = true;
+  message('已退出；登录凭据已从内存清除。');
+});
+document.querySelector('#save-draft').addEventListener('click', async () => {
+  if (!loaded || busy) return;
+  try {
+    await draftStore('put', draftKey, { settings, cv, courses, files: [...files], posts: [...posts], uploads: [...uploads] });
+    message('草稿已保存在此浏览器（包含附件，不含登录凭据）；没有提交 GitHub，也没有部署。');
+  } catch (error) { message(error.message, true); }
+});
+document.querySelector('#discard-draft').addEventListener('click', async () => {
+  if (busy || !confirm('放弃此浏览器的全部未发布修改，并重新读取 GitHub？')) return;
+  try {
+    await draftStore('delete', draftKey); loaded = false; dirty = false; uploads.clear(); await load();
+  } catch (error) { message(error.message, true); }
+});
+message('使用 GitHub 授权登录。登录凭据不会写入仓库或浏览器存储。');
+initializeOAuth(login, message);
