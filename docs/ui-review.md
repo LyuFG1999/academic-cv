@@ -14,4 +14,4 @@ The settings dashboard at `/admin/` directly renders expanded fields. Chinese an
 
 ## Platform setting
 
-Netlify's injected badge remains controlled by Project configuration → General → Powered by Netlify badge. The dashboard includes a link to this setting. No Netlify account session is available to toggle it from this implementation environment.
+Live inspection confirmed that the current badge's outer iframe (`nl-badge-frame`) can be hidden even though its contents are isolated. Render-blocking styles now hide that specific iframe on public pages, the dashboard and the blog editor. The Identity modal is unaffected. The Netlify account-level injection setting itself has not been changed; the dashboard retains a link to it.

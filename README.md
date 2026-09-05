@@ -53,7 +53,7 @@ If you prefer to edit files, the same CMS-managed content is stored in:
 
 Disabled or empty contact fields are omitted from the public site.
 
-Opening `/admin/` displays a single settings dashboard with expanded fields and section links. Profile, CV, publications and courses all pair Chinese and English fields within each item. Only blog writing opens the dedicated Decap editor. Saves use Netlify Identity and Git Gateway, create one atomic Git commit, and report deployment progress. Maintenance takes effect after deployment; the admin remains available to turn it off. Netlify's platform-injected “Powered by Netlify” badge is controlled under **Project configuration → General → Powered by Netlify badge**; the dashboard links to that setting.
+Opening `/admin/` displays a single settings dashboard with expanded fields and section links. Profile, CV, publications and courses all pair Chinese and English fields within each item. Only blog writing opens the dedicated Decap editor. Saves use Netlify Identity and Git Gateway, create one atomic Git commit, and report deployment progress. Maintenance takes effect after deployment; the admin remains available to turn it off. Styles hide the current “Powered by Netlify” iframe on public and admin pages. To also disable platform injection, use **Project configuration → General → Powered by Netlify badge**; the dashboard links to that setting.
 
 ## Local development
 

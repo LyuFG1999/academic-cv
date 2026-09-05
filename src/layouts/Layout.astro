@@ -122,6 +122,7 @@ const languagePath = `${template.base}${switchedPath}`
 </script>
 
 <style is:global>
+	iframe#nl-badge-frame, iframe[title='Powered by Netlify'] { display: none !important; visibility: hidden !important; }
 	html { scroll-behavior: smooth; }
 	:focus-visible { outline: 2px solid var(--fallback-p, oklch(var(--p))); outline-offset: 4px; }
 	.site-main:focus { outline: none; }

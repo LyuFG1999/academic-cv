@@ -1,4 +1,5 @@
 :root { color-scheme: light; --ink:#202635; --muted:#616b7e; --line:#e2e6ee; --primary:#4338ca; font:15px/1.6 Inter,system-ui,-apple-system,"Segoe UI","Noto Sans SC",sans-serif; color:var(--ink); background:#f6f7fb; }
+iframe#nl-badge-frame,iframe[title="Powered by Netlify"] { display:none!important; visibility:hidden!important; }
 * { box-sizing:border-box; } body { margin:0; } [hidden] { display:none!important; }
 a { color:inherit; text-decoration:none; } button,input,textarea,select { font:inherit; }
 button,a,input,textarea,select { -webkit-tap-highlight-color:transparent; }

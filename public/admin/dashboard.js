@@ -147,7 +147,7 @@ function render() {
   section('courses', '课程', pairSchema(schema.courses), courses);
   section('appearance', '外观与配色', get('appearance').fields, settings.appearance);
   const maintenance = section('maintenance', '网站维护', get('maintenance').fields, settings.maintenance, '保存并发布后生效；后台保持可用。关闭此开关并再次发布即可恢复网站。');
-  const note = el('p', '关闭平台徽标：在 Netlify 项目设置中关闭 Powered by Netlify badge。', 'hint');
+  const note = el('p', '网站已默认隐藏平台徽标。如需同时关闭平台的徽标注入，可前往 Netlify 项目设置。', 'hint');
   const badge = el('a', '打开平台徽标设置 ↗', 'external-setting'); badge.href = 'https://app.netlify.com/projects/delicate-biscochitos-9061ae/configuration/general'; badge.target = '_blank'; badge.rel = 'noopener'; maintenance.append(note, badge);
 }
 async function load() {
@@ -229,7 +229,8 @@ function initializeIdentity() {
     if (user && dirty && !confirm('还有未发布的修改，确定退出吗？')) return;
     if (user) identity.logout(); else identity.open('login');
   });
-  identity.init();
+  // The standalone widget initializes itself; reuse it instead of creating a second modal.
+  signedIn(identity.currentUser());
 }
 if (document.readyState === 'complete') initializeIdentity(); else window.addEventListener('load', initializeIdentity, { once: true });
 export {};
