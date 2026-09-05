@@ -1,5 +1,6 @@
 ---
 import { copy, type Language } from '@/i18n'
+import SocialIcons from './SocialIcons.astro'
 
 type Props = {
 	lang: Language
@@ -13,9 +14,17 @@ const { lang, fullName, title, institute, intro } = Astro.props
 const t = copy[lang]
 ---
 
-<div class='max-w-4xl py-8 sm:py-12'>
+<div class='home-profile'>
 	<p class='mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-secondary'>{t.introPrefix}</p>
-	<h1 class='bg-gradient-to-br from-base-content via-base-content to-primary bg-clip-text text-5xl font-black leading-tight text-transparent sm:text-7xl'>{fullName}</h1>
-	<p class='mt-7 text-xl font-medium text-base-content/65'>{title}{institute ? ` · ${institute}` : ''}</p>
-	<p class='mt-8 max-w-2xl text-lg leading-8 text-base-content/80'>{intro}</p>
+	<h1 class='text-5xl font-bold text-base-content sm:text-6xl'>{fullName}</h1>
+	<p class='home-affiliation'>{title}{title && institute ? ' · ' : ''}{institute}</p>
+	<div class='home-contacts'><SocialIcons lang={lang} size='large' align='start' /></div>
+	{intro && <p class='home-intro'>{intro}</p>}
 </div>
+<style>
+  .home-profile { padding-block: .25rem 1rem; }
+  .home-affiliation { clear: both; padding-top: 1.35rem; color: color-mix(in srgb, currentColor 68%, transparent); font-size: 1.05rem; line-height: 1.8; }
+  .home-contacts { margin-top: 1.25rem; }
+  .home-contacts:empty { display: none; }
+  .home-intro { margin-top: 2rem; max-width: 43rem; font-size: 1.125rem; line-height: 1.95; color: color-mix(in srgb, currentColor 82%, transparent); }
+</style>

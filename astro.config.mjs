@@ -12,7 +12,7 @@ import remarkBase from './src/lib/remark-base.mjs';
 // https://astro.build/config
 export default defineConfig({
     markdown: { remarkPlugins: [[remarkBase, { base: template.base }]] },
-    integrations: [tailwind(), sitemap({ filter: (page) => !maintenance.enabled || /\/(zh|en)\/?$/.test(page) }), {
+    integrations: [tailwind({ applyBaseStyles: false }), sitemap({ filter: (page) => !page.includes('/admin/') && (!maintenance.enabled || /\/(zh|en)\/?$/.test(page)) }), {
         name: 'maintenance-media',
         hooks: {
             'astro:build:done': async ({ dir }) => {

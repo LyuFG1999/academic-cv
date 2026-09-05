@@ -12,8 +12,17 @@ const files = new Map();
 const uploads = new Map();
 const posts = new Map();
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const draftKey = `${repository}:draft-v1`;
+const draftKey = `${repository}:draft-v2`;
 let schema, settings, cv, courses, dirty = false, busy = false, loaded = false, user, pollTimer;
+let pendingUploads = 0;
+const previewURLs = new Set();
+function updateButtons() {
+  saveButton.disabled = !loaded || !dirty || busy || pendingUploads > 0;
+  document.querySelector('#save-draft').disabled = !loaded || busy || pendingUploads > 0;
+  document.querySelector('#discard-draft').disabled = !loaded || busy || pendingUploads > 0;
+}
+function uploading(delta) { pendingUploads += delta; updateButtons(); }
+function clearPreviews() { previewURLs.forEach(url => URL.revokeObjectURL(url)); previewURLs.clear(); }
 
 function el(tag, text, className) {
   const node = document.createElement(tag);
@@ -22,7 +31,7 @@ function el(tag, text, className) {
   return node;
 }
 function message(text, error = false) { statusMessage.textContent = text; statusMessage.dataset.error = String(error); }
-function changed() { dirty = true; saveButton.disabled = busy; message('有未发布的修改'); }
+function changed() { dirty = true; updateButtons(); message('有未发布的修改'); }
 function bytesToBase64(bytes) {
   let binary = '';
   for (let offset = 0; offset < bytes.length; offset += 8192) binary += String.fromCharCode(...bytes.subarray(offset, offset + 8192));
@@ -83,8 +92,9 @@ function fieldNode(field, owner, prefix) {
     }
     return group;
   }
-  const label = el('label', undefined, field.widget === 'boolean' ? 'toggle' : 'field'); label.htmlFor = id;
-  label.append(el('span', field.label));
+  const label = el('div', undefined, field.widget === 'boolean' ? 'switch-field' : 'field');
+  const caption = el('label', field.label); caption.htmlFor = id;
+  label.append(caption);
   let input;
   if (field.widget === 'text') input = el('textarea');
   else if (field.widget === 'select') {
@@ -92,7 +102,7 @@ function fieldNode(field, owner, prefix) {
     (field.options || []).forEach(option => { const node = el('option', typeof option === 'string' ? option : option.label); node.value = typeof option === 'string' ? option : option.value; input.append(node); });
   } else { input = el('input'); input.type = field.widget === 'boolean' ? 'checkbox' : field.widget === 'datetime' ? 'date' : 'text'; }
   input.id = id; input.name = id;
-  if (field.widget === 'boolean') input.checked = Boolean(owner[key]);
+  if (field.widget === 'boolean') { input.checked = Boolean(owner[key]); input.setAttribute('role', 'switch'); }
   else input.value = owner[key] ?? field.default ?? '';
   input.required = field.required !== false && !['boolean', 'color'].includes(field.widget);
   if (field.pattern && input.tagName === 'INPUT') { input.pattern = field.pattern[0]; input.title = field.pattern[1]; }
@@ -106,15 +116,27 @@ function fieldNode(field, owner, prefix) {
     row.append(picker, input); label.append(row);
   } else label.append(input);
   if (field.widget === 'image') {
-    const preview = el('img', undefined, 'avatar-preview'); preview.alt = '共用头像预览'; preview.src = base + (owner[key] || '/uploads/profile.jpg');
+    const preview = el('img', undefined, 'avatar-preview'); preview.alt = '头像预览';
+    const refreshPreview = () => {
+      const value = owner[key] || '/uploads/avatar.svg';
+      const staged = uploads.get('public' + value);
+      preview.src = staged ? `data:image/${value.split('.').pop()};base64,${staged}` : /^https?:\/\//.test(value) ? value : base + value;
+    };
+    refreshPreview(); input.addEventListener('change', refreshPreview);
     const upload = el('input'); upload.type = 'file'; upload.accept = 'image/png,image/jpeg,image/webp,image/gif'; upload.setAttribute('aria-label', '上传共用头像');
     upload.addEventListener('change', async () => {
       const file = upload.files[0]; if (!file) return;
       if (!['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(file.type) || file.size > 10 * 1024 * 1024) { message('请选择不超过 10 MB 的 PNG、JPG、WebP 或 GIF 图片。', true); return; }
-      const path = `public/uploads/avatar-${crypto.randomUUID()}.${file.type.split('/')[1]}`;
-      uploads.set(path, bytesToBase64(new Uint8Array(await file.arrayBuffer())));
-      owner[key] = '/' + path.slice('public/'.length); input.value = owner[key];
-      preview.src = URL.createObjectURL(file); changed();
+      uploading(1);
+      try {
+        const path = `public/uploads/avatar-${crypto.randomUUID()}.${file.type.split('/')[1]}`;
+        const content = bytesToBase64(new Uint8Array(await file.arrayBuffer()));
+        uploads.delete('public' + owner[key]);
+        uploads.set(path, content);
+        owner[key] = '/' + path.slice('public/'.length); input.value = owner[key];
+        const objectURL = URL.createObjectURL(file); previewURLs.add(objectURL); preview.src = objectURL; changed();
+      } catch { message('图片读取失败，请重新选择。', true); }
+      finally { uploading(-1); }
     });
     label.append(preview, upload);
   }
@@ -122,31 +144,46 @@ function fieldNode(field, owner, prefix) {
   return label;
 }
 function section(id, title, fields, owner, hint) {
-  const panel = el('section', undefined, 'settings-section'); panel.id = `section-${id}`;
+  const panel = el('section', undefined, 'settings-section'); panel.id = `section-${id}`; panel.hidden = true;
+  panel.dataset.title = title;
   const header = el('div', undefined, 'section-header'); header.append(el('h2', title)); if (hint) header.append(el('p', hint, 'hint')); panel.append(header);
   const content = el('div', undefined, 'fields'); fields.forEach(field => content.append(fieldNode(field, owner, id))); panel.append(content); form.append(panel);
-  const link = el('a', title); link.href = '#' + panel.id; nav.append(link);
+  const link = el('a', title); link.href = '#' + panel.id; link.setAttribute('aria-controls', panel.id); nav.append(link);
+  link.addEventListener('click', event => { event.preventDefault(); selectPanel(panel.id); history.replaceState(null, '', '#' + panel.id); window.scrollTo({ top: 0 }); });
   return panel;
 }
+function selectPanel(id) {
+  const panels = [...form.querySelectorAll('.settings-section')];
+  const selected = panels.find(panel => panel.id === id) || panels[0];
+  if (!selected) return;
+  panels.forEach(panel => panel.hidden = panel !== selected);
+  [...nav.children].forEach(link => {
+    if (link.getAttribute('aria-controls') === selected.id) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  });
+  document.querySelector('#panel-title').textContent = selected.dataset.title;
+}
+window.addEventListener('hashchange', () => { if (loaded) selectPanel(location.hash.slice(1)); });
 function render() {
   nav.replaceChildren(); form.replaceChildren();
   const get = name => schema.settings.find(field => field.name === name);
   section('profile', '个人资料', [get('avatar'), ...get('profile').fields.filter(f => !['projects', 'researchAreas'].includes(f.name))], new Proxy(settings.profile, {
     get(target, key) { return key === 'avatar' ? settings.avatar : target[key]; },
     set(target, key, value) { if (key === 'avatar') settings.avatar = value; else target[key] = value; return true; },
-  }), '同一个选项，中文在上，English 在下。头像由两种语言共用。');
+  }), '姓名、身份与机构。中英文共用一张头像。');
   section('research', '研究与项目', get('profile').fields.filter(f => ['projects', 'researchAreas'].includes(f.name)), settings.profile);
   section('navigation', '导航与论文分类', get('navigation').fields, settings.navigation, '开关控制导航是否显示。三类成果可以独立开关、任意组合。');
-  section('social', '联系方式', get('social').fields, settings.social, '已开启且填写有效链接的联系方式会出现在开场页和侧栏。');
+  section('social', '联系方式', get('social').fields, settings.social, '开启并填写链接后，显示在首页与开场页。');
   section('cv', '履历与成果', pairSchema(schema.cv), cv, '每条经历或成果只添加一次，在同一处填写中英文。');
   section('courses', '课程', pairSchema(schema.courses), courses);
   section('appearance', '外观与配色', get('appearance').fields, settings.appearance);
-  section('maintenance', '网站维护', get('maintenance').fields, settings.maintenance, '统一发布并完成 GitHub Pages 部署后生效；后台保持可用。这不是即时访问控制，也不会删除 Git 历史。');
-  renderBlog({ posts, uploads, section, fieldNode, el, changed, message, bytesToBase64 });
+  section('maintenance', '网站维护', get('maintenance').fields, settings.maintenance, '发布完成后生效，管理后台仍可使用。');
+  renderBlog({ posts, uploads, section, fieldNode, el, changed, message, bytesToBase64, uploading });
+  selectPanel(location.hash.slice(1));
 }
 async function load() {
   if (loaded || busy) return;
-  busy = true; message('正在读取最新设置…');
+  busy = true; updateButtons(); message('正在读取内容…');
   try {
     schema = await fetch('./schema.json', { cache: 'no-store' }).then(r => { if (!r.ok) throw new Error('设置表单加载失败，请刷新重试。'); return r.json(); });
     const head = (await api('git/ref/heads/main')).object.sha;
@@ -181,9 +218,9 @@ async function load() {
     document.querySelector('#save-draft').disabled = false;
     document.querySelector('#discard-draft').disabled = false;
     saveButton.disabled = !dirty;
-    message(restored ? '已恢复本地草稿，尚未发布。' : '已读取 GitHub 内容。可先保存本地草稿，最后统一发布。');
+    message(restored ? '已恢复本地草稿，尚未发布。' : '所有修改已同步。');
   } catch (error) { message(error.message, true); loaded = false; }
-  finally { busy = false; }
+  finally { busy = false; updateButtons(); }
 }
 async function watchDeployment(commit) {
   let attempts = 0;
@@ -199,10 +236,16 @@ async function watchDeployment(commit) {
   pollTimer = setTimeout(check, 5000);
 }
 form.addEventListener('submit', async event => {
-  event.preventDefault(); if (busy || !dirty) return;
-  form.querySelectorAll(':invalid').forEach(node => { const details = node.closest('details'); if (details) details.open = true; });
+  event.preventDefault(); if (busy || pendingUploads || !dirty) return;
+  const invalid = form.querySelector('input:invalid,textarea:invalid,select:invalid');
+  if (invalid) {
+    selectPanel(invalid.closest('.settings-section')?.id);
+    let ancestor = invalid.parentElement;
+    while (ancestor && ancestor !== form) { if (ancestor.tagName === 'DETAILS') ancestor.open = true; ancestor = ancestor.parentElement; }
+    message('请完成当前标记的字段后再发布。', true);
+  }
   if (!form.reportValidity()) return;
-  busy = true; saveButton.disabled = true; form.querySelectorAll('input,textarea,select,button').forEach(node => node.disabled = true);
+  busy = true; updateButtons(); form.querySelectorAll('input,textarea,select,button').forEach(node => node.disabled = true);
   message('正在保存…');
   try {
     const values = [settings, unpairData(schema.cv, cv, 'zh'), unpairData(schema.cv, cv, 'en'), unpairData(schema.courses, courses, 'zh'), unpairData(schema.courses, courses, 'en')];
@@ -212,9 +255,12 @@ form.addEventListener('submit', async event => {
       const content = post.deleted ? null : serializePost(post);
       if (content !== post.original && !(post.deleted && !post.sha)) changes.push({ path, originalSha: post.sha, content });
     }
-    for (const [path, content] of uploads) changes.push({ path, content, originalSha: null, encoding: 'base64' });
+    const usedContent = JSON.stringify(values) + [...posts.values()].filter(post => !post.deleted).map(serializePost).join('\n');
+    for (const [path, content] of uploads) {
+      if (usedContent.includes(path.slice('public'.length))) changes.push({ path, content, originalSha: null, encoding: 'base64' });
+    }
     const result = await publishBatch(changes);
-    if (!result) { dirty = false; message('没有需要发布的修改。'); return; }
+    if (!result) { dirty = false; uploads.clear(); await draftStore('delete', draftKey); message('没有需要发布的修改。'); return; }
     const treeEntries = new Map(result.entries.map(item => [item.path, item.sha]));
     changedFiles.forEach(file => files.set(file.path, { sha: treeEntries.get(file.path), data: structuredClone(file.data) }));
     for (const [path, post] of posts) {
@@ -223,11 +269,11 @@ form.addEventListener('submit', async event => {
     }
     uploads.clear(); dirty = false;
     try { await draftStore('delete', draftKey); } catch {}
-    message(`已一次性提交 ${changes.length} 个文件，等待 GitHub Pages 发布…`); watchDeployment(result.commit);
+    message('修改已提交，正在发布…'); watchDeployment(result.commit);
   } catch (error) { message(error.message, true); }
-  finally { busy = false; form.querySelectorAll('input,textarea,select,button').forEach(node => node.disabled = false); saveButton.disabled = !dirty; }
+  finally { busy = false; form.querySelectorAll('input,textarea,select,button').forEach(node => node.disabled = false); updateButtons(); }
 });
-window.addEventListener('beforeunload', event => { if (dirty) event.preventDefault(); });
+window.addEventListener('beforeunload', event => { if (dirty || pendingUploads) event.preventDefault(); });
 
 async function login(token) {
   setCredential(token);
@@ -246,29 +292,32 @@ document.querySelector('#token-login').addEventListener('submit', event => {
   if (token) login(token);
 });
 document.querySelector('#account').addEventListener('click', () => {
-  if (busy) return;
+  if (busy || pendingUploads) return;
   if (user && dirty && !confirm('退出会清除内存中的输入。需要保留时请先保存本地草稿。确定退出？')) return;
   if (!user) { document.querySelector('#login-panel').scrollIntoView(); return; }
   setCredential(''); user = false; loaded = false; dirty = false;
-  settings = cv = courses = undefined; uploads.clear(); files.clear(); posts.clear();
+  settings = cv = courses = undefined; uploads.clear(); files.clear(); posts.clear(); clearPreviews();
   clearTimeout(pollTimer); form.replaceChildren(); form.hidden = true; nav.replaceChildren();
   document.querySelector('#login-panel').hidden = false;
   document.querySelector('#account').textContent = '登录后台';
   saveButton.disabled = document.querySelector('#save-draft').disabled = document.querySelector('#discard-draft').disabled = true;
-  message('已退出；登录凭据已从内存清除。');
+  document.querySelector('#panel-title').textContent = '欢迎回来';
+  message('已安全退出。');
 });
 document.querySelector('#save-draft').addEventListener('click', async () => {
-  if (!loaded || busy) return;
+  if (!loaded || busy || pendingUploads) return;
+  busy = true; updateButtons();
   try {
-    await draftStore('put', draftKey, { settings, cv, courses, files: [...files], posts: [...posts], uploads: [...uploads] });
-    message('草稿已保存在此浏览器（包含附件，不含登录凭据）；没有提交 GitHub，也没有部署。');
+    await draftStore('put', draftKey, structuredClone({ settings, cv, courses, files: [...files], posts: [...posts], uploads: [...uploads] }));
+    message('草稿已保存到此浏览器，尚未发布。');
   } catch (error) { message(error.message, true); }
+  finally { busy = false; updateButtons(); }
 });
 document.querySelector('#discard-draft').addEventListener('click', async () => {
-  if (busy || !confirm('放弃此浏览器的全部未发布修改，并重新读取 GitHub？')) return;
+  if (busy || pendingUploads || !confirm('放弃全部未发布修改，恢复网站当前内容？')) return;
   try {
     await draftStore('delete', draftKey); loaded = false; dirty = false; uploads.clear(); await load();
   } catch (error) { message(error.message, true); }
 });
-message('使用 GitHub 授权登录。登录凭据不会写入仓库或浏览器存储。');
+message('请登录后编辑。');
 initializeOAuth(login, message);

@@ -4,6 +4,7 @@ import {template} from '@/settings';
 const getRobotsTxt = (sitemapURL: URL) => `
 User-agent: *
 Allow: /
+Disallow: ${template.base}/admin/
 
 Sitemap: ${sitemapURL.href}
 `;

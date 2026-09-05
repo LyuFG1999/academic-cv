@@ -10,8 +10,8 @@ import { copy, type Language } from '@/i18n'
 import { social } from '@/settings'
 import { safeHttpUrl } from '@/lib/utils'
 
-type Props = { lang: Language; size?: 'compact' | 'large' }
-const { lang, size = 'compact' } = Astro.props
+type Props = { lang: Language; size?: 'compact' | 'large'; align?: 'center' | 'start' }
+const { lang, size = 'compact', align = 'center' } = Astro.props
 const t = copy[lang]
 const contacts = [
 	{ key: 'email', label: t.email, item: social.email, Icon: Envelope },
@@ -31,7 +31,7 @@ const contacts = [
 
 {contacts.length > 0 && (
 <section aria-label={t.contact}>
-	<ul class:list={['flex flex-wrap items-center justify-center', size === 'large' ? 'gap-2 max-w-[16rem] sm:max-w-none' : 'gap-1']}>
+	<ul class:list={['flex flex-wrap items-center', align === 'start' ? 'justify-start' : 'justify-center', size === 'large' ? 'gap-2 max-w-[16rem] sm:max-w-none' : 'gap-1']}>
 		{contacts.map(({ label, href, Icon }) => (
 			<li>
 				<a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'me noopener noreferrer' : undefined} class:list={['tooltip grid place-items-center rounded-full border border-base-300/80 bg-base-100/80 text-base-content/75 shadow-sm backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-primary hover:text-primary-content hover:shadow-lg hover:shadow-primary/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary', size === 'large' ? 'size-12' : 'size-8']} data-tip={label} aria-label={label}>

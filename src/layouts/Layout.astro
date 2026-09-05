@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from 'astro:transitions'
+import '@/styles/site.css'
 import BetterIcon from '@/components/ui/BetterIcon.astro'
 import DarkLightController from '@/components/ui/DarkLightController.astro'
 import Navbar from '@/components/ui/Navbar.astro'
@@ -46,9 +47,9 @@ const languagePath = `${template.base}${switchedPath}`
 		<div class='min-h-screen bg-base-100 drawer lg:drawer-open' data-site-shell>
 			<input id='site-drawer' type='checkbox' class='drawer-toggle' />
 			<div class='drawer-content min-w-0 overflow-x-hidden bg-transparent'>
-				<div class='site-topbar sticky top-0 z-30 border-b border-base-300/60 bg-base-100/75 text-base-content backdrop-blur-xl'>
-					<nav class='navbar px-4 lg:px-8'>
-						<div class='navbar-start'>
+				<main tabindex='-1' class='site-main'>
+					<div class='main-flow'>
+					<nav class='page-tools' aria-label={lang === 'zh' ? '页面选项' : 'Page options'}>
 							<label for='site-drawer' class='btn btn-square btn-ghost lg:hidden' aria-label={lang === 'zh' ? '打开菜单' : 'Open menu'}>
 								<BetterIcon>
 									<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' class='size-6 stroke-current'>
@@ -56,19 +57,13 @@ const languagePath = `${template.base}${switchedPath}`
 									</svg>
 								</BetterIcon>
 							</label>
-						</div>
-						<div class='navbar-center lg:hidden text-base font-black'>{person.fullName}</div>
-						<div class='navbar-end gap-2'>
-							<a href={languagePath} class='btn btn-ghost rounded-full border border-base-300 bg-base-200/70 px-4' hreflang={otherLanguage} aria-label={copy[lang].language} title={copy[lang].language}>
-								<span aria-hidden='true' class='font-black'>文 / A</span>
-								<span class='hidden sm:inline'>{copy[lang].language}</span>
+							<a href={languagePath} class='btn btn-ghost language-control' hreflang={otherLanguage} aria-label={copy[lang].language} title={copy[lang].language}>
+								<span>{lang === 'zh' ? 'EN' : '中文'}</span>
 							</a>
 							<DarkLightController lang={lang} />
-						</div>
 					</nav>
-				</div>
-				<main tabindex='-1' class='site-main mx-auto flex min-h-[calc(100vh-4rem)] min-w-0 w-full max-w-6xl flex-col justify-between px-6 pb-4 pt-10 sm:px-10 lg:px-14 lg:pt-16'>
-					<div><slot /></div>
+					<div class='page-content'><slot /></div>
+					</div>
 					<Footer lang={lang} />
 				</main>
 			</div>
@@ -113,19 +108,28 @@ const languagePath = `${template.base}${switchedPath}`
 	html { scroll-behavior: smooth; }
 	:focus-visible { outline: 2px solid var(--fallback-p, oklch(var(--p))); outline-offset: 4px; }
 	.site-main:focus { outline: none; }
+	.site-main { width: 100%; max-width: 76rem; min-height: 100dvh; margin-inline: auto; padding: 3.5rem clamp(1.5rem, 5vw, 5rem) 1.5rem; display: flex; flex-direction: column; justify-content: space-between; }
+	.main-flow { display: flow-root; }
+	.page-tools { float: right; position: relative; z-index: 5; display: flex; align-items: center; gap: .45rem; margin: 0 0 1.5rem 1.5rem; }
+	.page-tools .btn { min-height: 2.5rem; height: 2.5rem; border: 1px solid var(--fallback-b3, oklch(var(--b3))); background: var(--fallback-b1, oklch(var(--b1))); box-shadow: none; }
+	.page-tools .btn-circle, .page-tools .btn-square { width: 2.5rem; }
+	.language-control { padding-inline: .85rem; font-size: .75rem; letter-spacing: .03em; }
+	.page-content > :first-child { min-height: 3rem; }
+	.page-content h1 { overflow-wrap: anywhere; line-height: 1.2; }
+	.page-content > :not(:first-child) { clear: both; }
+	@media(max-width: 640px) { .site-main { padding-top: 1.5rem; } .page-tools { gap: .3rem; margin-left: .75rem; } .page-tools .btn { min-height: 2.25rem; height: 2.25rem; } .page-tools .btn-circle, .page-tools .btn-square { width: 2.25rem; } .page-content h1 { font-size: 2rem; } }
 	.drawer-content { overflow: clip; }
 	@media (min-width: 1024px) {
-		[data-site-shell].drawer { display: block; padding-left: 18.5rem; }
-		[data-site-shell].drawer > .drawer-toggle ~ .drawer-side { position: fixed; inset: 0 auto 0 0; height: 100dvh; width: 18.5rem; overflow: hidden; }
+		[data-site-shell].drawer { display: block; padding-left: 16rem; }
+		[data-site-shell].drawer > .drawer-toggle ~ .drawer-side { position: fixed; inset: 0 auto 0 0; height: 100dvh; width: 16rem; overflow: hidden; }
 		.site-sidebar { height: 100dvh; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
 	}
 	body { margin: 0; min-height: 100%; overflow-x: hidden; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", sans-serif; background-color: var(--fallback-b1, oklch(var(--b1))); background-image: radial-gradient(circle at 78% 10%, color-mix(in oklab, var(--fallback-p, oklch(var(--p))) 9%, transparent), transparent 30rem), radial-gradient(circle at 20% 85%, color-mix(in oklab, var(--fallback-s, oklch(var(--s))) 7%, transparent), transparent 28rem); }
 	[data-site-shell] { transition: filter .9s ease, transform .9s cubic-bezier(.2,.75,.2,1); }
 	.intro-active [data-site-shell] { filter: blur(10px); transform: scale(.985); }
 	.intro-releasing [data-site-shell] { filter: none; transform: none; }
-	.site-topbar { box-shadow: 0 .5rem 2rem color-mix(in oklab, var(--fallback-bc, oklch(var(--bc))) 4%, transparent); }
 	.site-main h1, .site-main h2, .site-main h3 { letter-spacing: -.025em; }
-	.card { border-radius: 1.5rem; box-shadow: 0 1.1rem 3rem color-mix(in oklab, var(--fallback-bc, oklch(var(--bc))) 6%, transparent); backdrop-filter: blur(12px); transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease; }
+	.card { border-radius: 1rem; box-shadow: 0 .4rem 1.8rem color-mix(in oklab, var(--fallback-bc, oklch(var(--bc))) 3%, transparent); transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease; }
 	.card:hover { transform: translateY(-3px); border-color: color-mix(in oklab, var(--fallback-p, oklch(var(--p))) 35%, transparent); box-shadow: 0 1.4rem 3.4rem color-mix(in oklab, var(--fallback-p, oklch(var(--p))) 11%, transparent); }
 	.btn { border-radius: 999px; }
 	::selection { color: var(--fallback-pc, oklch(var(--pc))); background: var(--fallback-p, oklch(var(--p))); }

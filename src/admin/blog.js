@@ -1,10 +1,11 @@
 import { stringify } from 'yaml';
 export const serializePost = post => !post.edited && post.original ? post.original : `---\n${stringify(post.data)}---\n\n${post.body}\n`;
-export function renderBlog({ posts, uploads, section, fieldNode, el, changed, message, bytesToBase64 }) {
-  const panel = section('blog', '博客与附件', [], {}, '文章、设置和附件共同使用顶部的“统一发布”。保存本地草稿不会触发部署。');
+export function renderBlog({ posts, uploads, section, fieldNode, el, changed, message, bytesToBase64, uploading }) {
+  const panel = section('blog', '博客', [], {}, '写作、整理文章与添加下载附件。');
   const list = el('div'); panel.append(list);
   function renderList() {
     list.replaceChildren();
+    if (![...posts.values()].some(post => !post.deleted)) list.append(el('p', '还没有文章。创建第一篇博客，开始记录你的研究与思考。', 'empty'));
     for (const [path, post] of posts) {
       if (post.deleted) continue;
       const item = el('details', undefined, 'blog-entry');
@@ -35,6 +36,7 @@ export function renderBlog({ posts, uploads, section, fieldNode, el, changed, me
         if (!/^(pdf|docx?|xlsx?|pptx?|csv|txt|zip|png|jpe?g|webp|gif)$/.test(extension) || file.size > 20 * 1024 * 1024) {
           message('请选择不超过 20 MB 的常用文档、压缩包或图片；不接受 HTML、脚本或 SVG。', true); return;
         }
+        uploading(1);
         try {
           const uploadPath = `public/uploads/file-${crypto.randomUUID()}.${extension}`;
           uploads.set(uploadPath, bytesToBase64(new Uint8Array(await file.arrayBuffer())));
@@ -43,6 +45,7 @@ export function renderBlog({ posts, uploads, section, fieldNode, el, changed, me
           const text = /^(png|jpe?g|webp|gif)$/.test(extension) ? `![${label}](${url})` : `[下载：${label}](${url})`;
           body.setRangeText(text, body.selectionStart, body.selectionEnd, 'end'); post.body = body.value; mark(); body.focus();
         } catch { message('附件读取失败，请重新选择文件。', true); }
+        finally { uploading(-1); }
       });
       uploadLabel.append(upload); edit.append(uploadLabel);
       const attachments = fieldNode({ name: 'attachments', label: '文末附件下载区', widget: 'list', fields: [

@@ -13,57 +13,57 @@
   "appearance": {
     "introEnabled": true,
     "light": {
-      "primary": "#4338CA",
-      "secondary": "#1caf81",
-      "accent": "#0369A1",
-      "background": "#FBFCFE",
-      "surface": "#F0F3F8"
+      "primary": "#236B57",
+      "secondary": "#236B57",
+      "accent": "#9A7445",
+      "background": "#FAFCFB",
+      "surface": "#F0F5F2"
     },
     "dark": {
-      "primary": "#818CF8",
-      "secondary": "#1caf81",
-      "accent": "#38BDF8",
-      "background": "#0B1020",
-      "surface": "#151B2D"
+      "primary": "#7EC7AB",
+      "secondary": "#7EC7AB",
+      "accent": "#D7B17A",
+      "background": "#111B19",
+      "surface": "#1B2925"
     }
   },
-  "avatar": "/uploads/剪贴板图片.png",
+  "avatar": "/uploads/avatar.svg",
   "profile": {
     "fullName": {
       "zh": "你的姓名",
       "en": "Your Name"
     },
     "title": {
-      "zh": "社会学研究者",
-      "en": "Sociology Researcher"
+      "zh": "研究者",
+      "en": "Researcher"
     },
     "institute": {
-      "zh": "你的院校或研究机构",
-      "en": "Your University or Research Institute"
+      "zh": "院校或研究机构",
+      "en": "University or Research Institute"
     },
     "authorName": {
       "zh": "",
       "en": ""
     },
     "intro": {
-      "zh": "在这里用两三句话介绍你的研究主题、学术关切与代表性贡献。",
-      "en": "Introduce your research agenda, academic interests, and key contributions in two or three sentences."
+      "zh": "欢迎来到我的学术主页。这里记录我的研究、写作与教学。",
+      "en": "Welcome to my academic website. Explore my research, writing, and teaching."
     },
     "researchStatement": {
-      "zh": "请在这里介绍你的核心研究问题、理论视角、方法路径，以及这些工作希望回应的学术或现实议题。",
-      "en": "Describe your central research questions, theoretical perspective, methods, and the scholarly or practical problems your work addresses."
+      "zh": "",
+      "en": ""
     },
     "researchImpact": {
-      "zh": "请在这里概括你的研究贡献、学术影响或社会价值。",
-      "en": "Summarize the scholarly contribution, broader impact, or practical value of your research."
+      "zh": "",
+      "en": ""
     },
     "seoTitle": {
-      "zh": "学术简历",
-      "en": "Academic CV"
+      "zh": "个人学术主页",
+      "en": "Academic Profile"
     },
     "seoDescription": {
-      "zh": "个人学术主页、研究成果与履历。",
-      "en": "Personal academic profile, research outputs, and curriculum vitae."
+      "zh": "研究、写作与教学。",
+      "en": "Research, writing, and teaching."
     },
     "researchAreas": [],
     "projects": []
@@ -107,32 +107,32 @@
   },
   "social": {
     "email": {
-      "enabled": true,
-      "url": "lv@126.com"
+      "enabled": false,
+      "url": ""
     },
     "github": {
-      "enabled": true,
-      "url": "https://github.com/LyuFG1999"
+      "enabled": false,
+      "url": ""
     },
     "orcid": {
-      "enabled": true,
-      "url": "https://www.cnki.net/"
+      "enabled": false,
+      "url": ""
     },
     "cnki": {
-      "enabled": true,
-      "url": "https://www.cnki.net/"
+      "enabled": false,
+      "url": ""
     },
     "school": {
-      "enabled": true,
-      "url": "https://www.cnki.net/"
+      "enabled": false,
+      "url": ""
     },
     "x": {
-      "enabled": true,
-      "url": "https://www.cnki.net/"
+      "enabled": false,
+      "url": ""
     },
     "linkedin": {
-      "enabled": true,
-      "url": "https://www.cnki.net/"
+      "enabled": false,
+      "url": ""
     }
   }
 }

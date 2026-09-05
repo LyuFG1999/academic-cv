@@ -45,7 +45,9 @@ const otherLanguage: Language = lang === 'zh' ? 'en' : 'zh'
 		const gate = document.querySelector('[data-intro-gate]')
 		if (!(gate instanceof HTMLElement) || gate.dataset.ready === 'true') return
 		releaseIntro()
-		if (sessionStorage.getItem('academic-intro-seen') === 'true') {
+		let seen = false
+		try { seen = sessionStorage.getItem('academic-intro-seen') === 'true' } catch {}
+		if (seen) {
 			gate.remove()
 			return
 		}
@@ -72,7 +74,7 @@ const otherLanguage: Language = lang === 'zh' ? 'en' : 'zh'
 		const dismiss = () => {
 			if (dismissed) return
 			dismissed = true
-			sessionStorage.setItem('academic-intro-seen', 'true')
+			try { sessionStorage.setItem('academic-intro-seen', 'true') } catch {}
 			gate.classList.add('is-leaving')
 			document.documentElement.classList.add('intro-releasing')
 			document.body.style.overflow = ''

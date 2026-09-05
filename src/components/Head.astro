@@ -18,6 +18,7 @@ const imagePath = image.startsWith('http')
 	? image
 	: `${template.base}${image.startsWith('/') ? image : `/${image}`}`
 const socialImageURL = new URL(imagePath, Astro.site)
+const hasShareImage = !socialImageURL.pathname.toLowerCase().endsWith('.svg')
 const otherLanguage = lang === 'zh' ? 'en' : 'zh'
 const alternateURL = new URL(alternatePath, Astro.site)
 const defaultURL = new URL(`${template.base}/zh/`, Astro.site)
@@ -64,7 +65,7 @@ const personJsonLd = JSON.stringify({
 <meta property='og:url' content={Astro.url} />
 <meta property='og:title' content={title} />
 <meta property='og:description' content={description} />
-{!maintenance.enabled && <meta property='og:image' content={socialImageURL} />}
+{!maintenance.enabled && hasShareImage && <meta property='og:image' content={socialImageURL} />}
 <meta property='og:locale' content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
 
 <!-- Twitter -->
@@ -72,7 +73,7 @@ const personJsonLd = JSON.stringify({
 <meta name='twitter:url' content={Astro.url} />
 <meta name='twitter:title' content={title} />
 <meta name='twitter:description' content={description} />
-{!maintenance.enabled && <meta name='twitter:image' content={socialImageURL} />}
+{!maintenance.enabled && hasShareImage && <meta name='twitter:image' content={socialImageURL} />}
 
 {!maintenance.enabled && <script is:inline type='application/ld+json' set:html={personJsonLd} />}
 {maintenance.enabled && <meta name='robots' content='noindex,nofollow' />}

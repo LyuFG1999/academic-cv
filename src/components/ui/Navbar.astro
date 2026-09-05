@@ -1,5 +1,4 @@
 ---
-import SocialIcons from './SocialIcons.astro'
 import { localizedPath, type Language } from '@/i18n'
 import { profile, template } from '@/settings'
 import { navigation, navigationLabel, navigationOrder } from '@/data/navigation'
@@ -12,11 +11,11 @@ const navItems = navigationOrder
 	.map(({ key, path }) => ({ label: navigationLabel(key, lang), path: localizedPath(lang, path) }))
 ---
 
-<aside class='site-sidebar flex h-screen w-[18.5rem] flex-col overflow-y-auto border-r border-base-300/70 bg-base-100/88 px-5 py-6 text-base-content shadow-[1rem_0_4rem_rgba(0,0,0,.04)] backdrop-blur-xl'>
+<aside class='site-sidebar flex h-screen w-64 flex-col overflow-y-auto border-r border-base-300/70 bg-base-100 px-5 py-8 text-base-content'>
 	<div class='flex min-h-full flex-col'>
 		<div class='flex flex-col items-center pt-3'>
-			<div class='rounded-full bg-gradient-to-br from-primary/50 via-secondary/25 to-transparent p-[3px] shadow-xl shadow-primary/10'><img class='size-28 rounded-full border-4 border-base-100 object-cover' src={`${template.base}${person.avatar}`} alt={`${person.fullName} profile`} width='112' height='112' loading='eager' /></div>
-			<h1 class='mt-5 text-center text-xl font-black tracking-tight'>{person.fullName}</h1>
+			<div class='rounded-full border border-base-300 p-1.5'><img class='size-20 rounded-full object-cover' src={`${template.base}${person.avatar}`} alt={person.fullName} width='80' height='80' loading='eager' /></div>
+			<p class='mt-5 text-center text-xl font-bold tracking-tight'>{person.fullName}</p>
 			<p class='mt-1 text-center text-sm text-base-content/65'>{person.title}</p>
 		</div>
 
@@ -30,8 +29,5 @@ const navItems = navigationOrder
 			</ul>
 		</nav>
 
-		<div class='mt-auto border-t border-base-300/70 pt-5'>
-			<SocialIcons lang={lang} />
-		</div>
 	</div>
 </aside>

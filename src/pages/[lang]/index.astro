@@ -29,13 +29,9 @@ const publications = cv[lang].publications
 		<Hero lang={lang} fullName={person.fullName} title={person.title} institute={person.institute} intro={person.intro} />
 	</section>
 
-	{person.researchAreas.length > 0 ? (
+	{person.researchAreas.length > 0 && (
 		<section class='border-b border-base-300 py-14' data-reveal>
 			<Grid gridTitle={t.researchAreas} gridItems={person.researchAreas} />
-		</section>
-	) : (
-		<section class='py-12' data-reveal>
-			<div class='alert border border-base-300 bg-base-200/70'><span>{t.emptyProfile}</span></div>
 		</section>
 	)}
 

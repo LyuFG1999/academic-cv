@@ -3,6 +3,7 @@ import Layout from '@/layouts/Layout.astro'
 import { copy, isLanguage, languages } from '@/i18n'
 import { profile, template } from '@/settings'
 import { getCollection } from 'astro:content'
+import { assetUrl } from '@/lib/utils'
 
 export function getStaticPaths() {
 	return languages.map((lang) => ({ params: { lang } }))
@@ -28,7 +29,7 @@ const posts = (await getCollection('blog'))
 		<div class='grid gap-6'>
 			{posts.map((post) => (
 				<article class='card overflow-hidden border border-base-300 bg-base-200/70 shadow-sm' data-reveal>
-					{post.data.featuredImage && <img src={`${template.base}${post.data.featuredImage}`} alt='' class='h-52 w-full object-cover' loading='lazy' />}
+					{post.data.featuredImage && <img src={assetUrl(post.data.featuredImage, template.base)} alt='' class='h-52 w-full object-cover' loading='lazy' />}
 					<div class='card-body'>
 						<time class='text-sm text-base-content/60' datetime={post.data.date}>{new Date(post.data.date).toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
 						<h2 class='card-title text-2xl'><a class='hover:text-secondary' href={`${template.base}/${lang}/blog/${post.id}/`}>{post.data.title}</a></h2>

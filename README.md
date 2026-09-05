@@ -19,9 +19,9 @@ This repository contains a bilingual academic website for `LyuFG1999/academic-cv
 
 The settings dashboard lets you update the following content without editing code:
 
-- Chinese and English profile text paired vertically under each setting
+- Chinese and English profile text paired under each setting, side by side on desktop and stacked on mobile
 - Research areas and projects
-- Sidebar portrait and individually switchable profile links
+- Shared portrait and individually switchable contact icons on the homepage and opening screen
 - Light/dark color palettes and the opening animation switch
 - Independent visibility switches for all three publication categories
 - A temporary maintenance-mode switch
@@ -46,7 +46,9 @@ If you prefer to edit files, the same CMS-managed content is stored in:
 
 Disabled or empty contact fields are omitted from the public site.
 
-Opening `/admin/` displays expanded bilingual settings and collapsible Markdown blog editors. All sections share one publish action. Same-file conflicts block publication rather than overwriting concurrent changes. Maintenance takes effect after deployment; it is not immediate access control. The old `/admin/editor/` redirects to the consolidated dashboard. The YAML configuration remains as the settings schema, not an independently publishing Decap interface.
+Opening `/admin/` displays one settings panel at a time, selected through the highlighted sidebar. Switching panels preserves edits. Blog entries use collapsible Markdown editors. All sections share one publish action. Validation brings hidden invalid fields into view before publishing. Same-file conflicts block publication rather than overwriting concurrent changes. Maintenance takes effect after deployment; it is not immediate access control. The old `/admin/editor/` redirects to the consolidated dashboard. The YAML configuration remains as the settings schema, not an independently publishing Decap interface.
+
+The current content has been reset to an anonymous profile with an SVG avatar and empty research, CV, course and blog lists. Contact icons are hidden until a link is filled in and its switch enabled. The authentication service and repository configuration are not reset. See [the UI and functional audit](docs/redesign-audit.md) for verification details.
 
 ## Local development
 

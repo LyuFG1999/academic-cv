@@ -5,12 +5,12 @@ export async function initializeOAuth(login, message) {
     const config = await fetch('./auth-config.json', { cache: 'no-store' }).then(r => r.json());
     if (!config.authOrigin) {
       button.disabled = true;
-      help.textContent = '一键登录还差首次配置：部署认证 Worker 并填写 authOrigin。网站已不依赖 Netlify；请按仓库 docs/github-pages-migration.md 完成授权服务配置。';
+      help.textContent = '登录服务尚未配置，请联系网站管理员。';
       return;
     }
     const origin = new URL(config.authOrigin).origin;
     if (!origin.startsWith('https://')) throw new Error('认证服务必须使用 HTTPS。');
-    help.textContent = '通过 GitHub App 授权，仅访问安装时选择的仓库。刷新页面后需再次登录。';
+    help.textContent = '仅限已授权的网站管理员。';
     button.addEventListener('click', () => {
       const nonce = crypto.randomUUID();
       const popup = window.open(`${origin}/auth?nonce=${nonce}`, 'academic-github-login', 'width=620,height=740');

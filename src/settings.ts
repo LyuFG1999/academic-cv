@@ -45,7 +45,7 @@ const buildProfile = (lang: Language): Profile => ({
 	intro: localized(data.profile.intro, lang, ''),
 	researchStatement: localized(data.profile.researchStatement, lang, ''),
 	researchImpact: localized(data.profile.researchImpact, lang, ''),
-	avatar: data.avatar || '/uploads/profile.jpg',
+	avatar: data.avatar || '/uploads/avatar.svg',
 	seoTitle: localized(data.profile.seoTitle, lang, localized(data.profile.fullName, lang, '')),
 	seoDescription: localized(data.profile.seoDescription, lang, localized(data.profile.intro, lang, '')),
 	researchAreas: (data.profile.researchAreas ?? [])

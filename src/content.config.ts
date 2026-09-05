@@ -4,12 +4,13 @@ import { defineCollection, z } from "astro:content";
 // 2. Import loader(s)
 import { glob } from "astro/loaders";
 
+const blogLoader = glob({ pattern: '**/*.md', base: './src/content/BlogPosts' });
+
+// Clear only the generated collection cache before reload, including an empty directory.
+// Otherwise deleting the last post can leave stale articles in subsequent local builds.
 // 3. Define your collection(s)
 const blog = defineCollection({
-    loader: glob({
-        pattern: "**/*.md",
-        base: "./src/content/BlogPosts",
-    }),
+    loader: { ...blogLoader, load: async context => { context.store.clear(); await blogLoader.load(context); } },
     schema: z.object({
         title: z.string(),
         language: z.enum(['zh', 'en']).default('zh'),
