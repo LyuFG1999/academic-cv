@@ -1,0 +1,47 @@
+---
+import DarkLightController from './DarkLightController.astro'
+import { copy, type Language } from '@/i18n'
+import { maintenance, profile, template } from '@/settings'
+
+type Props = { lang: Language }
+const { lang } = Astro.props
+const otherLanguage: Language = lang === 'zh' ? 'en' : 'zh'
+---
+
+<main class='maintenance-screen'>
+	<div class='maintenance-controls'>
+		<a href={`${template.base}/${otherLanguage}/`} class='btn btn-ghost rounded-full border border-base-300 bg-base-100/70 px-4 backdrop-blur-xl' hreflang={otherLanguage}>
+			<span aria-hidden='true' class='font-black'>文 / A</span>
+			<span class='hidden sm:inline'>{copy[lang].language}</span>
+		</a>
+		<DarkLightController lang={lang} />
+	</div>
+	<div class='maintenance-aura maintenance-aura-one'></div>
+	<div class='maintenance-aura maintenance-aura-two'></div>
+	<section class='maintenance-card'>
+		<div class='maintenance-mark' aria-hidden='true'><span></span><span></span><span></span></div>
+		<p class='maintenance-kicker'>{lang === 'zh' ? 'MAINTENANCE' : 'MAINTENANCE'}</p>
+		<h1>{maintenance.title[lang]}</h1>
+		<p>{maintenance.message[lang]}</p>
+		<div class='maintenance-signature'>{profile[lang].fullName}</div>
+	</section>
+</main>
+
+<style>
+	.maintenance-screen { position: relative; display: grid; min-height: 100vh; place-items: center; overflow: hidden; padding: 2rem; background: var(--fallback-b1, oklch(var(--b1))); color: var(--fallback-bc, oklch(var(--bc))); }
+	.maintenance-controls { position: absolute; right: clamp(1rem, 3vw, 2.5rem); top: clamp(1rem, 3vw, 2rem); z-index: 3; display: flex; gap: .5rem; }
+	.maintenance-card { position: relative; z-index: 2; width: min(42rem, 100%); border: 1px solid color-mix(in oklab, currentColor 14%, transparent); border-radius: 2rem; padding: clamp(2rem, 7vw, 5rem); background: color-mix(in oklab, var(--fallback-b1, oklch(var(--b1))) 82%, transparent); text-align: center; box-shadow: 0 2rem 7rem color-mix(in oklab, var(--fallback-p, oklch(var(--p))) 13%, transparent); backdrop-filter: blur(22px); }
+	.maintenance-mark { display: flex; justify-content: center; gap: .45rem; margin-bottom: 2rem; }
+	.maintenance-mark span { width: .55rem; height: .55rem; border-radius: 999px; background: var(--fallback-p, oklch(var(--p))); animation: pulse 1.4s ease-in-out infinite; }
+	.maintenance-mark span:nth-child(2) { animation-delay: .18s; }
+	.maintenance-mark span:nth-child(3) { animation-delay: .36s; }
+	.maintenance-kicker { margin-bottom: 1rem; color: var(--fallback-p, oklch(var(--p))); font-size: .72rem; font-weight: 800; letter-spacing: .3em; }
+	h1 { font-size: clamp(2.5rem, 7vw, 5rem); font-weight: 900; letter-spacing: -.055em; line-height: 1; }
+	.maintenance-card > p:not(.maintenance-kicker) { margin: 1.5rem auto 0; max-width: 30rem; color: color-mix(in oklab, currentColor 68%, transparent); font-size: 1.08rem; line-height: 1.8; }
+	.maintenance-signature { margin-top: 2.2rem; font-size: .82rem; font-weight: 700; letter-spacing: .12em; opacity: .55; }
+	.maintenance-aura { position: absolute; width: 34rem; height: 34rem; border-radius: 999px; filter: blur(18px); opacity: .13; }
+	.maintenance-aura-one { left: -12rem; top: -14rem; background: var(--fallback-p, oklch(var(--p))); }
+	.maintenance-aura-two { right: -12rem; bottom: -14rem; background: var(--fallback-s, oklch(var(--s))); }
+	@keyframes pulse { 0%,100% { transform: translateY(0); opacity: .35; } 50% { transform: translateY(-.45rem); opacity: 1; } }
+	@media (prefers-reduced-motion: reduce) { .maintenance-mark span { animation: none; } }
+</style>

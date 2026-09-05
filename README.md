@@ -10,6 +10,7 @@ This repository contains a bilingual academic website for `LyuFG1999/academic-cv
 - An optional full-screen profile entrance that dismisses permanently for the current browser session
 - Seven independently controlled profile links: email, GitHub, ORCID, CNKI, school, X, and LinkedIn
 - Premium responsive UI, configurable light/dark palettes, and reduced-motion support
+- A one-switch bilingual maintenance page for temporarily hiding public content
 - Bilingual blog pages with file downloads
 - A Decap CMS editor at `/admin/`
 - Automatic path handling for both GitHub Pages and Netlify
@@ -18,10 +19,12 @@ This repository contains a bilingual academic website for `LyuFG1999/academic-cv
 
 The Decap CMS editor lets you update the following content without editing code:
 
-- Chinese and English profile text
+- Chinese and English profile text side by side in one main settings editor
 - Research areas and projects
 - Sidebar portrait and individually switchable profile links
 - Light/dark color palettes and the opening animation switch
+- Independent visibility switches for all three publication categories
+- A temporary maintenance-mode switch
 - Chinese and English CV entries
 - Navigation visibility and bilingual labels
 - Paper category visibility and bilingual courses
@@ -42,16 +45,15 @@ Each save in the editor creates a commit in the GitHub repository. Netlify then 
 
 If you prefer to edit files, the same CMS-managed content is stored in:
 
-- `src/data/site.zh.json` and `src/data/site.en.json`
-- `src/data/social.json`
-- `src/data/appearance.json`
+- `src/data/site-settings.json` (shared avatar, bilingual profile, navigation, social links, palettes, and maintenance mode)
 - `src/data/cv.zh.json` and `src/data/cv.en.json`
-- `src/data/navigation.json`
 - `src/data/courses.zh.json` and `src/data/courses.en.json`
 - `src/content/BlogPosts/`
 - `public/uploads/`
 
 Empty contact fields appear as “待填写 / Add link” instead of linking to a placeholder account.
+
+Opening `/admin/` sends authenticated editors directly to the unified main settings entry. Blog writing, CV entries, and courses remain separate content editors. Netlify's platform-injected “Powered by Netlify” badge is not part of this source tree; turn it off once for the project under **Project configuration → General → Powered by Netlify badge**.
 
 ## Local development
 

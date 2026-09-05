@@ -6,7 +6,8 @@ import Navbar from '@/components/ui/Navbar.astro'
 import Footer from '@/components/ui/Footer.astro'
 import Head from '@/components/Head.astro'
 import IntroGate from '@/components/ui/IntroGate.astro'
-import { appearance, seo, profile, template } from '@/settings'
+import MaintenanceScreen from '@/components/ui/MaintenanceScreen.astro'
+import { appearance, maintenance, seo, profile, template } from '@/settings'
 import { copy, type Language } from '@/i18n'
 
 type Props = {
@@ -41,6 +42,7 @@ const languagePath = `${template.base}${switchedPath}`
 		{template.base === '' && <script is:inline src='https://identity.netlify.com/v1/netlify-identity-widget.js'></script>}
 	</head>
 	<body>
+		{maintenance.enabled ? <MaintenanceScreen lang={lang} /> : <>
 		{immersiveIntro && appearance.introEnabled && <IntroGate lang={lang} />}
 		<div class='min-h-screen bg-base-100 drawer lg:drawer-open' data-site-shell>
 			<input id='site-drawer' type='checkbox' class='drawer-toggle' />
@@ -76,6 +78,7 @@ const languagePath = `${template.base}${switchedPath}`
 				<Navbar lang={lang} />
 			</div>
 		</div>
+		</>}
 	</body>
 </html>
 

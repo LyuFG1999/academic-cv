@@ -2,7 +2,8 @@ import fs from 'node:fs'
 import typography from '@tailwindcss/typography'
 import daisyui from 'daisyui'
 
-const appearance = JSON.parse(fs.readFileSync(new URL('./src/data/appearance.json', import.meta.url), 'utf8'))
+const siteSettings = JSON.parse(fs.readFileSync(new URL('./src/data/site-settings.json', import.meta.url), 'utf8'))
+const appearance = siteSettings.appearance
 
 /** @type {import('tailwindcss').Config} */
 export default {

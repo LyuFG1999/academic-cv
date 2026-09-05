@@ -10,7 +10,22 @@
       body { background: #f5f7fb; }
       button, input, textarea, select { border-radius: 8px !important; }
       [data-slate-editor="true"] { min-height: 22rem; }
+      [data-testid*="quick-add" i], [class*="QuickAdd"] { display: none !important; }
     </style>
+    <script>
+      // Open the unified settings editor immediately instead of the dashboard.
+      // Invitation and password-recovery hashes are deliberately left untouched.
+      (function () {
+        var settingsHash = '#/collections/settings/entries/site';
+        var openSettingsFromDashboard = function () {
+          if (!location.hash || location.hash === '#' || location.hash === '#/') {
+            location.replace(location.pathname + location.search + settingsHash);
+          }
+        };
+        openSettingsFromDashboard();
+        window.addEventListener('hashchange', openSettingsFromDashboard);
+      })();
+    </script>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
   <body>
@@ -37,8 +52,7 @@
         }
       });
 
-      // Decap does not expose a configuration switch for the dashboard Quick Add shortcut.
-      // Hide only that named shortcut; normal create/add controls remain available.
+      // Defense in depth if a future Decap route exposes the dashboard again.
       var hideQuickAdd = function () {
         document.querySelectorAll('button, a').forEach(function (element) {
           var label = (element.textContent || element.getAttribute('aria-label') || '').trim().toLowerCase();

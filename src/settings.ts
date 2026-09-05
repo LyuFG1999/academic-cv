@@ -1,8 +1,5 @@
 import type { Language } from './i18n'
-import siteZh from './data/site.zh.json'
-import siteEn from './data/site.en.json'
-import socialData from './data/social.json'
-import appearanceData from './data/appearance.json'
+import settingsData from './data/site-settings.json'
 
 export type ResearchArea = {
 	title: string
@@ -31,31 +28,35 @@ export type Profile = {
 	projects: Project[]
 }
 
-const normalizeProfile = (value: Partial<Profile>): Profile => ({
-	fullName: value.fullName ?? '',
-	title: value.title ?? '',
-	institute: value.institute ?? '',
-	authorName: value.authorName ?? '',
-	intro: value.intro ?? '',
-	researchStatement: value.researchStatement ?? '',
-	researchImpact: value.researchImpact ?? '',
-	avatar: value.avatar ?? '/uploads/profile.jpg',
-	seoTitle: value.seoTitle ?? value.fullName ?? '',
-	seoDescription: value.seoDescription ?? value.intro ?? '',
-	researchAreas: value.researchAreas ?? [],
-	projects: value.projects ?? [],
+const localized = <T>(value: Partial<Record<Language, T>> | undefined, lang: Language, fallback: T): T => value?.[lang] ?? fallback
+const data = settingsData as typeof settingsData
+
+const buildProfile = (lang: Language): Profile => ({
+	fullName: localized(data.profile.fullName, lang, ''),
+	title: localized(data.profile.title, lang, ''),
+	institute: localized(data.profile.institute, lang, ''),
+	authorName: localized(data.profile.authorName, lang, ''),
+	intro: localized(data.profile.intro, lang, ''),
+	researchStatement: localized(data.profile.researchStatement, lang, ''),
+	researchImpact: localized(data.profile.researchImpact, lang, ''),
+	avatar: data.avatar || '/uploads/profile.jpg',
+	seoTitle: localized(data.profile.seoTitle, lang, localized(data.profile.fullName, lang, '')),
+	seoDescription: localized(data.profile.seoDescription, lang, localized(data.profile.intro, lang, '')),
+	researchAreas: (data.profile.researchAreas ?? [])
+		.map((item) => ({ title: localized(item.title, lang, ''), description: localized(item.description, lang, ''), field: item.field }))
+		.filter((item) => item.title || item.description),
+	projects: (data.profile.projects ?? [])
+		.map((item) => ({ title: localized(item.title, lang, ''), description: localized(item.description, lang, ''), link: localized(item.link, lang, '') }))
+		.filter((item) => item.title || item.description),
 })
 
-export const profile: Record<Language, Profile> = {
-	zh: normalizeProfile(siteZh as Partial<Profile>),
-	en: normalizeProfile(siteEn as Partial<Profile>),
-}
+export const profile: Record<Language, Profile> = { zh: buildProfile('zh'), en: buildProfile('en') }
 
 export type SocialKey = 'email' | 'github' | 'orcid' | 'cnki' | 'school' | 'x' | 'linkedin'
 export type SocialLink = { enabled: boolean; url: string }
 export type SocialSettings = Record<SocialKey, SocialLink>
 
-const legacySocial = socialData as Partial<Record<SocialKey, SocialLink | string>>
+const legacySocial = data.social as Partial<Record<SocialKey, SocialLink | string>>
 const socialKeys: SocialKey[] = ['email', 'github', 'orcid', 'cnki', 'school', 'x', 'linkedin']
 export const social = Object.fromEntries(socialKeys.map((key) => {
 	const item = legacySocial[key]
@@ -64,8 +65,20 @@ export const social = Object.fromEntries(socialKeys.map((key) => {
 		: { enabled: item?.enabled ?? false, url: item?.url ?? '' }]
 })) as SocialSettings
 
-export type Appearance = typeof appearanceData
-export const appearance: Appearance = appearanceData
+export type Appearance = typeof data.appearance
+export const appearance: Appearance = data.appearance
+
+export const maintenance = {
+	enabled: data.maintenance?.enabled ?? false,
+	title: {
+		zh: data.maintenance?.title?.zh ?? '网站维护中',
+		en: data.maintenance?.title?.en ?? 'Site under maintenance',
+	},
+	message: {
+		zh: data.maintenance?.message?.zh ?? '网站正在更新，很快回来。',
+		en: data.maintenance?.message?.en ?? 'The site is being updated and will be back shortly.',
+	},
+}
 
 const isNetlify = process.env.NETLIFY === 'true'
 

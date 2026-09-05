@@ -19,7 +19,7 @@ const lang = rawLang
 const t = copy[lang]
 const person = profile[lang]
 const publications = cv[lang].publications
-	.filter((paper) => navigation.paperDisplay === 'all' || (paper.category ?? 'published') === navigation.paperDisplay)
+	.filter((paper) => navigation.paperVisibility[paper.category ?? 'published'])
 	.sort(compareByAcademicDate)
 	.slice(0, 3)
 ---

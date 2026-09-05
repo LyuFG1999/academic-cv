@@ -16,9 +16,8 @@ if (!isLanguage(rawLang)) throw new Error(`Unsupported language: ${rawLang}`)
 const lang = rawLang
 const t = copy[lang]
 const person = profile[lang]
-const display = navigation.paperDisplay
 const papers = cv[lang].publications
-	.filter((paper) => display === 'all' || (paper.category ?? 'published') === display)
+	.filter((paper) => navigation.paperVisibility[paper.category ?? 'published'])
 	.sort(compareByAcademicDate)
 const categories: Array<{ key: PaperCategory; label: string }> = [
 	{ key: 'published', label: t.publishedPapers },

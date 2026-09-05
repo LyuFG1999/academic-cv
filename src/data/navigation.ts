@@ -1,9 +1,9 @@
 import type { Language } from '@/i18n'
-import navigationData from './navigation.json'
+import settingsData from './site-settings.json'
 
 export type NavigationKey = 'home' | 'research' | 'papers' | 'courses' | 'blog' | 'cv'
 export type PaperCategory = 'published' | 'working' | 'book'
-export type PaperDisplay = 'all' | PaperCategory
+export type PaperVisibility = Record<PaperCategory, boolean>
 
 export type NavigationItem = {
 	enabled: boolean
@@ -12,7 +12,7 @@ export type NavigationItem = {
 }
 
 export type NavigationSettings = Record<NavigationKey, NavigationItem> & {
-	paperDisplay: PaperDisplay
+	paperVisibility: PaperVisibility
 }
 
 const defaults: NavigationSettings = {
@@ -22,12 +22,12 @@ const defaults: NavigationSettings = {
 	courses: { enabled: true, zh: '课程', en: 'Courses' },
 	blog: { enabled: true, zh: '博客', en: 'Blog' },
 	cv: { enabled: true, zh: '履历', en: 'CV' },
-	paperDisplay: 'all',
+	paperVisibility: { published: true, working: true, book: true },
 }
-const input = navigationData as Partial<NavigationSettings>
+const input = settingsData.navigation as Partial<NavigationSettings>
 export const navigation = Object.fromEntries([
 	...(['home', 'research', 'papers', 'courses', 'blog', 'cv'] as NavigationKey[]).map((key) => [key, { ...defaults[key], ...(input[key] ?? {}) }]),
-	['paperDisplay', input.paperDisplay ?? defaults.paperDisplay],
+	['paperVisibility', { ...defaults.paperVisibility, ...(input.paperVisibility ?? {}) }],
 ]) as NavigationSettings
 
 export const navigationOrder: Array<{ key: NavigationKey; path: string }> = [

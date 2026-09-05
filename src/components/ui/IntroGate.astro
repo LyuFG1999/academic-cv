@@ -2,14 +2,23 @@
 import { copy, type Language } from '@/i18n'
 import { profile, template } from '@/settings'
 import SocialIcons from './SocialIcons.astro'
+import DarkLightController from './DarkLightController.astro'
 
 type Props = { lang: Language }
 const { lang } = Astro.props
 const person = profile[lang]
 const t = copy[lang]
+const otherLanguage: Language = lang === 'zh' ? 'en' : 'zh'
 ---
 
 <section class='intro-gate' data-intro-gate aria-label={t.scrollToEnter}>
+	<div class='intro-controls'>
+		<a href={`${template.base}/${otherLanguage}/`} class='btn btn-ghost rounded-full border border-base-300 bg-base-100/70 px-4 backdrop-blur-xl' hreflang={otherLanguage} aria-label={t.language}>
+			<span aria-hidden='true' class='font-black'>文 / A</span>
+			<span class='hidden sm:inline'>{t.language}</span>
+		</a>
+		<DarkLightController lang={lang} />
+	</div>
 	<div class='intro-aura intro-aura-one'></div>
 	<div class='intro-aura intro-aura-two'></div>
 	<div class='intro-grid'></div>
@@ -97,6 +106,7 @@ const t = copy[lang]
 		clip-path: inset(0 0 0 0 round 0);
 	}
 	.intro-gate.is-leaving { opacity: 0; clip-path: inset(0 0 100% 0 round 0 0 50% 50%); pointer-events: none; }
+	.intro-controls { position: absolute; right: clamp(1rem, 3vw, 2.5rem); top: clamp(1rem, 3vw, 2rem); z-index: 4; display: flex; align-items: center; gap: .5rem; }
 	.intro-grid { position: absolute; inset: -20%; opacity: .13; background-image: linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px); background-size: 4rem 4rem; mask-image: radial-gradient(circle, black, transparent 68%); transform: perspective(700px) rotateX(58deg) translateY(20%); }
 	.intro-aura { position: absolute; border-radius: 999px; filter: blur(8px); opacity: .18; }
 	.intro-aura-one { width: 38rem; height: 38rem; left: -12rem; top: -16rem; background: var(--fallback-p, oklch(var(--p))); animation: drift 11s ease-in-out infinite alternate; }
