@@ -13,9 +13,9 @@ const { lang, fullName, title, institute, intro } = Astro.props
 const t = copy[lang]
 ---
 
-<div class='max-w-3xl py-6 sm:py-10'>
+<div class='max-w-4xl py-8 sm:py-12'>
 	<p class='mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-secondary'>{t.introPrefix}</p>
-	<h1 class='text-5xl font-black leading-tight sm:text-6xl'>{fullName}</h1>
-	<p class='mt-6 text-xl text-base-content/70'>{title}{institute ? ` · ${institute}` : ''}</p>
-	<p class='mt-7 max-w-2xl text-lg leading-8 text-base-content/85'>{intro}</p>
+	<h1 class='bg-gradient-to-br from-base-content via-base-content to-primary bg-clip-text text-5xl font-black leading-tight text-transparent sm:text-7xl'>{fullName}</h1>
+	<p class='mt-7 text-xl font-medium text-base-content/65'>{title}{institute ? ` · ${institute}` : ''}</p>
+	<p class='mt-8 max-w-2xl text-lg leading-8 text-base-content/80'>{intro}</p>
 </div>

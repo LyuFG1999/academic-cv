@@ -1,14 +1,47 @@
-import { template } from '../settings'
+export type AuthorToken = { text: string; highlighted: boolean }
 
-export function highlightAuthor(authors: string, authorName: string): string{
-	const author = authors.split(', ')
-	if (authorName && author.includes(authorName)){
-		return authors.replace(authorName, `<span class='font-medium underline'>${authorName}</span>`)
-	}
+export function tokenizeAuthors(authors: string, authorNames: string): AuthorToken[] {
+	const aliases = authorNames
+		.split('|')
+		.map((name) => name.trim())
+		.filter(Boolean)
+		.sort((a, b) => b.length - a.length)
+	if (!aliases.length) return [{ text: authors, highlighted: false }]
+
+	const escapedAliases = aliases.map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+	const matcher = new RegExp(`(${escapedAliases.join('|')})`, 'giu')
+	const normalizedAliases = aliases.map((name) => name.toLocaleLowerCase())
 	return authors
+		.split(matcher)
+		.filter((text) => text.length > 0)
+		.map((text) => ({
+			text,
+			highlighted: normalizedAliases.includes(text.toLocaleLowerCase()),
+		}))
 }
 
-export function trimExcerpt(excerpt: string): string {
-	const excerptLength = template.excerptLength
-	return excerpt.length > excerptLength ? `${excerpt.substring(0, excerptLength)}...` : excerpt
+export function safeHttpUrl(value?: string): string | undefined {
+	if (!value) return undefined
+	try {
+		const url = new URL(value)
+		return url.protocol === 'http:' || url.protocol === 'https:' ? url.toString() : undefined
+	} catch {
+		return undefined
+	}
+}
+
+type DatedItem = { time: string; sortDate?: string }
+
+function dateScore(item: DatedItem): number {
+	if (item.sortDate) {
+		const parsed = Date.parse(item.sortDate)
+		if (Number.isFinite(parsed)) return parsed
+	}
+	if (/(present|current|now|today|至今|现在)/i.test(item.time)) return Number.MAX_SAFE_INTEGER
+	const years = item.time.match(/(?:19|20)\d{2}/g)
+	return years?.length ? Number(years.at(-1)) : 0
+}
+
+export function compareByAcademicDate(a: DatedItem, b: DatedItem): number {
+	return dateScore(b) - dateScore(a)
 }

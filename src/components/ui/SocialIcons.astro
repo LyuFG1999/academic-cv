@@ -1,35 +1,44 @@
 ---
 import Envelope from '@/assets/social-icons/envelope.svg'
 import GitHub from '@/assets/social-icons/github.svg'
+import Orcid from '@/assets/social-icons/orcid.svg'
+import Cnki from '@/assets/social-icons/cnki.svg'
+import School from '@/assets/social-icons/school.svg'
+import X from '@/assets/social-icons/x-twitter.svg'
+import LinkedIn from '@/assets/social-icons/linkedin-in.svg'
 import { copy, type Language } from '@/i18n'
 import { social } from '@/settings'
+import { safeHttpUrl } from '@/lib/utils'
 
-type Props = { lang: Language }
-const { lang } = Astro.props
+type Props = { lang: Language; size?: 'compact' | 'large' }
+const { lang, size = 'compact' } = Astro.props
 const t = copy[lang]
 const contacts = [
-	{ key: 'email', label: t.email, value: social.email, href: social.email ? `mailto:${social.email}` : '', Icon: Envelope },
-	{ key: 'github', label: t.github, value: social.github, href: social.github, Icon: GitHub },
-]
+	{ key: 'email', label: t.email, item: social.email, Icon: Envelope },
+	{ key: 'github', label: t.github, item: social.github, Icon: GitHub },
+	{ key: 'orcid', label: t.orcid, item: social.orcid, Icon: Orcid },
+	{ key: 'cnki', label: t.cnki, item: social.cnki, Icon: Cnki },
+	{ key: 'school', label: t.school, item: social.school, Icon: School },
+	{ key: 'x', label: t.x, item: social.x, Icon: X },
+	{ key: 'linkedin', label: t.linkedin, item: social.linkedin, Icon: LinkedIn },
+].map((contact) => ({
+	...contact,
+	href: contact.key === 'email'
+		? (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.item.url) ? `mailto:${contact.item.url}` : '')
+		: (safeHttpUrl(contact.item.url) ?? ''),
+})).filter((contact) => contact.item.enabled && contact.href)
 ---
 
+{contacts.length > 0 && (
 <section aria-label={t.contact}>
-	<h2 class='mb-3 px-2 text-xs font-bold uppercase tracking-[0.18em] text-base-content/50'>{t.contact}</h2>
-	<ul class='space-y-1'>
-		{contacts.map(({ label, value, href, Icon }) => (
+	<ul class='flex flex-wrap items-center justify-center gap-2'>
+		{contacts.map(({ label, href, Icon }) => (
 			<li>
-				{value ? (
-					<a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'me noopener noreferrer' : undefined} class='group flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-primary/15' aria-label={label}>
-						<span class='grid size-8 place-items-center rounded-lg bg-base-100 shadow-sm'><Icon class='size-5' fill='currentColor' /></span>
-						<span class='text-sm font-medium'>{label}</span>
-					</a>
-				) : (
-					<div class='flex items-center gap-3 rounded-xl px-3 py-2.5 text-base-content/40' aria-label={`${label}: ${t.pending}`}>
-						<span class='grid size-8 place-items-center rounded-lg bg-base-100/60'><Icon class='size-5' fill='currentColor' /></span>
-						<span class='text-sm'>{label}</span><span class='ml-auto text-xs'>{t.pending}</span>
-					</div>
-				)}
+				<a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'me noopener noreferrer' : undefined} class:list={['tooltip grid place-items-center rounded-full border border-base-300/80 bg-base-100/80 text-base-content/75 shadow-sm backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-primary hover:text-primary-content hover:shadow-lg hover:shadow-primary/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary', size === 'large' ? 'size-12' : 'size-10']} data-tip={label} aria-label={label}>
+					<Icon class={size === 'large' ? 'size-5' : 'size-[1.1rem]'} fill='currentColor' />
+				</a>
 			</li>
 		))}
 	</ul>
 </section>
+)}

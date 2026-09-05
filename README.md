@@ -7,9 +7,9 @@ This repository contains a bilingual academic website for `LyuFG1999/academic-cv
 - Chinese and English routes: `/zh/` and `/en/`
 - A language switch that keeps the current section
 - Light and dark themes
-- A text-only Home hero; the portrait and contacts stay in the sidebar
-- Email and GitHub contact links
-- Scroll reveal effects with reduced-motion support
+- An optional full-screen profile entrance that dismisses permanently for the current browser session
+- Seven independently controlled profile links: email, GitHub, ORCID, CNKI, school, X, and LinkedIn
+- Premium responsive UI, configurable light/dark palettes, and reduced-motion support
 - Bilingual blog pages with file downloads
 - A Decap CMS editor at `/admin/`
 - Automatic path handling for both GitHub Pages and Netlify
@@ -20,7 +20,8 @@ The Decap CMS editor lets you update the following content without editing code:
 
 - Chinese and English profile text
 - Research areas and projects
-- Sidebar portrait, email, and GitHub link
+- Sidebar portrait and individually switchable profile links
+- Light/dark color palettes and the opening animation switch
 - Chinese and English CV entries
 - Navigation visibility and bilingual labels
 - Paper category visibility and bilingual courses
@@ -43,6 +44,7 @@ If you prefer to edit files, the same CMS-managed content is stored in:
 
 - `src/data/site.zh.json` and `src/data/site.en.json`
 - `src/data/social.json`
+- `src/data/appearance.json`
 - `src/data/cv.zh.json` and `src/data/cv.en.json`
 - `src/data/navigation.json`
 - `src/data/courses.zh.json` and `src/data/courses.en.json`

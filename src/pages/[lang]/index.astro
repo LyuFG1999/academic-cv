@@ -7,6 +7,7 @@ import { copy, isLanguage, languages } from '@/i18n'
 import { profile } from '@/settings'
 import { cv } from '@/data/cv'
 import { navigation } from '@/data/navigation'
+import { compareByAcademicDate } from '@/lib/utils'
 
 export function getStaticPaths() {
 	return languages.map((lang) => ({ params: { lang } }))
@@ -19,10 +20,11 @@ const t = copy[lang]
 const person = profile[lang]
 const publications = cv[lang].publications
 	.filter((paper) => navigation.paperDisplay === 'all' || (paper.category ?? 'published') === navigation.paperDisplay)
+	.sort(compareByAcademicDate)
 	.slice(0, 3)
 ---
 
-<Layout lang={lang}>
+<Layout lang={lang} immersiveIntro={true}>
 	<section class='border-b border-base-300 pb-12' data-reveal>
 		<Hero lang={lang} fullName={person.fullName} title={person.title} institute={person.institute} intro={person.intro} />
 	</section>

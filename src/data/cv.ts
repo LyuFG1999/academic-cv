@@ -10,7 +10,14 @@ export type LocalizedCv = {
 	publications: Publication[]
 }
 
+const normalizeCv = (value: Partial<LocalizedCv>): LocalizedCv => ({
+	experiences: value.experiences ?? [],
+	education: value.education ?? [],
+	skills: value.skills ?? [],
+	publications: value.publications ?? [],
+})
+
 export const cv: Record<Language, LocalizedCv> = {
-	zh: cvZh as LocalizedCv,
-	en: cvEn as LocalizedCv,
+	zh: normalizeCv(cvZh as Partial<LocalizedCv>),
+	en: normalizeCv(cvEn as Partial<LocalizedCv>),
 }

@@ -12,25 +12,25 @@ const navItems = navigationOrder
 	.map(({ key, path }) => ({ label: navigationLabel(key, lang), path: localizedPath(lang, path) }))
 ---
 
-<aside class='flex h-screen w-[20rem] flex-col overflow-y-auto border-r border-base-300 bg-base-200 px-5 py-6 text-base-content'>
+<aside class='site-sidebar flex h-screen w-[18.5rem] flex-col overflow-y-auto border-r border-base-300/70 bg-base-100/88 px-5 py-6 text-base-content shadow-[1rem_0_4rem_rgba(0,0,0,.04)] backdrop-blur-xl'>
 	<div class='flex min-h-full flex-col'>
-		<div class='flex flex-col items-center pt-4'>
-			<img class='mask mask-circle size-36 object-cover ring-4 ring-base-100 shadow-xl' src={`${template.base}${person.avatar}`} alt={`${person.fullName} profile`} width='144' height='144' loading='eager' />
-			<h1 class='mt-6 text-center text-xl font-black'>{person.fullName}</h1>
+		<div class='flex flex-col items-center pt-3'>
+			<div class='rounded-full bg-gradient-to-br from-primary/50 via-secondary/25 to-transparent p-[3px] shadow-xl shadow-primary/10'><img class='size-28 rounded-full border-4 border-base-100 object-cover' src={`${template.base}${person.avatar}`} alt={`${person.fullName} profile`} width='112' height='112' loading='eager' /></div>
+			<h1 class='mt-5 text-center text-xl font-black tracking-tight'>{person.fullName}</h1>
 			<p class='mt-1 text-center text-sm text-base-content/65'>{person.title}</p>
 		</div>
 
-		<nav class='mt-9' aria-label={lang === 'zh' ? '主导航' : 'Main navigation'}>
+		<nav class='mt-8' aria-label={lang === 'zh' ? '主导航' : 'Main navigation'}>
 			<ul class='menu gap-1 p-0 text-base'>
 				{navItems.map((item) => {
 					const href = `${template.base}${item.path}`
 					const active = Astro.url.pathname.replace(/\/$/, '') === href.replace(/\/$/, '')
-					return <li><a href={href} class:list={['rounded-xl px-4 py-3', { active }]} aria-current={active ? 'page' : undefined}>{item.label}</a></li>
+					return <li><a href={href} class:list={['group rounded-2xl px-4 py-3 font-medium transition-all duration-300', { active }]} aria-current={active ? 'page' : undefined}><span class:list={['mr-3 inline-block size-1.5 rounded-full transition-all', active ? 'bg-primary-content shadow-[0_0_0_.3rem_rgba(255,255,255,.13)]' : 'bg-base-content/20 group-hover:bg-primary']}></span>{item.label}</a></li>
 				})}
 			</ul>
 		</nav>
 
-		<div class='mt-auto pt-8'>
+		<div class='mt-auto border-t border-base-300/70 pt-5'>
 			<SocialIcons lang={lang} />
 		</div>
 	</div>

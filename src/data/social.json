@@ -1,4 +1,9 @@
 {
-  "email": "",
-  "github": "https://github.com/LyuFG1999"
+  "email": { "enabled": true, "url": "" },
+  "github": { "enabled": true, "url": "https://github.com/LyuFG1999" },
+  "orcid": { "enabled": false, "url": "" },
+  "cnki": { "enabled": false, "url": "" },
+  "school": { "enabled": false, "url": "" },
+  "x": { "enabled": false, "url": "" },
+  "linkedin": { "enabled": false, "url": "" }
 }

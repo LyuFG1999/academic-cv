@@ -1,5 +1,6 @@
 ---
 import { copy, type Language } from '@/i18n'
+import { template } from '@/settings'
 
 type Props = { lang: Language }
 const { lang } = Astro.props
@@ -15,13 +16,13 @@ const { lang } = Astro.props
 	</svg>
 </button>
 
-<script is:inline>
+<script is:inline define:vars={{ lightTheme: template.lightTheme, darkTheme: template.darkTheme }}>
 	const initializeThemeToggle = () => {
 		document.querySelectorAll('[data-theme-toggle]').forEach((element) => {
 			const button = element
 			if (!(button instanceof HTMLButtonElement)) return
 			const update = () => {
-				const isDark = document.documentElement.dataset.theme === 'dark'
+				const isDark = document.documentElement.dataset.themeMode === 'dark'
 				button.setAttribute('aria-pressed', String(isDark))
 				button.querySelector('[data-theme-icon="sun"]')?.classList.toggle('hidden', !isDark)
 				button.querySelector('[data-theme-icon="moon"]')?.classList.toggle('hidden', isDark)
@@ -30,9 +31,10 @@ const { lang } = Astro.props
 			if (button.dataset.themeReady === 'true') return
 			button.dataset.themeReady = 'true'
 			button.addEventListener('click', () => {
-				const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'
-				document.documentElement.dataset.theme = next
-				localStorage.setItem('site-theme', next)
+				const next = document.documentElement.dataset.themeMode === 'dark' ? 'light' : 'dark'
+				document.documentElement.dataset.themeMode = next
+				document.documentElement.dataset.theme = next === 'dark' ? darkTheme : lightTheme
+				localStorage.setItem('site-theme-mode', next)
 				update()
 			})
 		})

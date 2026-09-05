@@ -1,14 +1,38 @@
 ---
-import {template} from '@/settings'
+import { profile, social, template } from '@/settings'
+import { safeHttpUrl } from '@/lib/utils'
+import type { Language } from '@/i18n'
 interface Props {
+	lang: Language
 	title: string
 	description: string
 	image: string
+	alternatePath: string
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
-
-const { title, description, image } = Astro.props
+const { lang, title, description, image, alternatePath } = Astro.props
+const imagePath = image.startsWith('http')
+	? image
+	: `${template.base}${image.startsWith('/') ? image : `/${image}`}`
+const socialImageURL = new URL(imagePath, Astro.site)
+const otherLanguage = lang === 'zh' ? 'en' : 'zh'
+const alternateURL = new URL(alternatePath, Astro.site)
+const defaultURL = new URL(`${template.base}/zh/`, Astro.site)
+const sameAs = Object.entries(social)
+	.filter(([key, item]) => key !== 'email' && item.enabled)
+	.map(([, item]) => safeHttpUrl(item.url))
+	.filter((url): url is string => Boolean(url))
+const personJsonLd = JSON.stringify({
+	'@context': 'https://schema.org',
+	'@type': 'Person',
+	name: profile[lang].fullName,
+	jobTitle: profile[lang].title,
+	affiliation: profile[lang].institute ? { '@type': 'Organization', name: profile[lang].institute } : undefined,
+	url: canonicalURL.toString(),
+	image: socialImageURL.toString(),
+	sameAs,
+}).replace(/</g, '\\u003c')
 ---
 
 <meta charset='utf-8' />
@@ -23,6 +47,10 @@ const { title, description, image } = Astro.props
 
 <!-- Canonical URL -->
 <link rel='canonical' href={canonicalURL} />
+<link rel='alternate' hreflang={lang} href={canonicalURL} />
+<link rel='alternate' hreflang={otherLanguage} href={alternateURL} />
+<link rel='alternate' hreflang='x-default' href={defaultURL} />
+<link rel='alternate' type='application/rss+xml' title={`${title} RSS`} href={`${template.base}/${lang}/rss.xml`} />
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
@@ -34,20 +62,27 @@ const { title, description, image } = Astro.props
 <meta property='og:url' content={Astro.url} />
 <meta property='og:title' content={title} />
 <meta property='og:description' content={description} />
-<meta property='og:image' content={new URL(image, Astro.url)} />
+<meta property='og:image' content={socialImageURL} />
+<meta property='og:locale' content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
 
 <!-- Twitter -->
-<meta property='twitter:card' content='summary_large_image' />
-<meta property='twitter:url' content={Astro.url} />
-<meta property='twitter:title' content={title} />
-<meta property='twitter:description' content={description} />
-<meta property='twitter:image' content={new URL(image, Astro.url)} />
+<meta name='twitter:card' content='summary_large_image' />
+<meta name='twitter:url' content={Astro.url} />
+<meta name='twitter:title' content={title} />
+<meta name='twitter:description' content={description} />
+<meta name='twitter:image' content={socialImageURL} />
+
+<script is:inline type='application/ld+json' set:html={personJsonLd} />
 
 <!-- Restore the selected theme before first paint. -->
-<script is:inline>
-	const stored = localStorage.getItem('site-theme')
-	const theme = stored === 'light' || stored === 'dark'
-		? stored
-		: (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-	document.documentElement.dataset.theme = theme
+<script is:inline define:vars={{ lightTheme: template.lightTheme, darkTheme: template.darkTheme }}>
+	document.documentElement.classList.add('js')
+	const stored = localStorage.getItem('site-theme-mode') ?? localStorage.getItem('site-theme')
+	const mode = stored === 'dark' || stored === darkTheme
+		? 'dark'
+		: stored === 'light' || stored === lightTheme
+			? 'light'
+			: (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+	document.documentElement.dataset.themeMode = mode
+	document.documentElement.dataset.theme = mode === 'dark' ? darkTheme : lightTheme
 </script>

@@ -1,0 +1,119 @@
+---
+import { copy, type Language } from '@/i18n'
+import { profile, template } from '@/settings'
+import SocialIcons from './SocialIcons.astro'
+
+type Props = { lang: Language }
+const { lang } = Astro.props
+const person = profile[lang]
+const t = copy[lang]
+---
+
+<section class='intro-gate' data-intro-gate aria-label={t.scrollToEnter}>
+	<div class='intro-aura intro-aura-one'></div>
+	<div class='intro-aura intro-aura-two'></div>
+	<div class='intro-grid'></div>
+	<div class='intro-profile'>
+		<div class='intro-portrait-wrap'>
+			<div class='intro-portrait-halo'></div>
+			<img src={`${template.base}${person.avatar}`} alt={person.fullName} class='intro-portrait' width='184' height='184' />
+		</div>
+		<p class='intro-kicker'>{lang === 'zh' ? 'ACADEMIC PROFILE' : 'ACADEMIC PROFILE'}</p>
+		<h1>{person.fullName}</h1>
+		<p class='intro-role'>{person.title}</p>
+		{person.institute && <p class='intro-institute'>{person.institute}</p>}
+		<div class='mt-7'><SocialIcons lang={lang} size='large' /></div>
+	</div>
+	<button type='button' class='intro-scroll' data-intro-dismiss aria-label={t.scrollToEnter}>
+		<span>{t.scrollToEnter}</span>
+		<span class='intro-scroll-track'><span></span></span>
+	</button>
+</section>
+
+<script is:inline>
+	const initializeIntro = () => {
+		const gate = document.querySelector('[data-intro-gate]')
+		if (!(gate instanceof HTMLElement) || gate.dataset.ready === 'true') return
+		if (sessionStorage.getItem('academic-intro-seen') === 'true') {
+			gate.remove()
+			return
+		}
+		gate.dataset.ready = 'true'
+		gate.classList.add('is-ready')
+		document.documentElement.classList.add('intro-active')
+		document.body.style.overflow = 'hidden'
+		let touchStart = 0
+		let dismissed = false
+		const cleanup = () => {
+			window.removeEventListener('wheel', onWheel)
+			window.removeEventListener('touchstart', onTouchStart)
+			window.removeEventListener('touchend', onTouchEnd)
+			window.removeEventListener('keydown', onKeyDown)
+		}
+		const dismiss = () => {
+			if (dismissed) return
+			dismissed = true
+			sessionStorage.setItem('academic-intro-seen', 'true')
+			gate.classList.add('is-leaving')
+			document.documentElement.classList.add('intro-releasing')
+			document.body.style.overflow = ''
+			cleanup()
+			window.setTimeout(() => {
+				gate.remove()
+				document.documentElement.classList.remove('intro-active', 'intro-releasing')
+			}, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1050)
+		}
+		const onWheel = (event) => {
+			if (event.deltaY > 8) {
+				event.preventDefault()
+				dismiss()
+			}
+		}
+		const onTouchStart = (event) => { touchStart = event.touches[0]?.clientY ?? 0 }
+		const onTouchEnd = (event) => {
+			const end = event.changedTouches[0]?.clientY ?? touchStart
+			if (touchStart - end > 24) dismiss()
+		}
+		const onKeyDown = (event) => {
+			if (['ArrowDown', 'PageDown', ' ', 'Enter'].includes(event.key)) dismiss()
+		}
+		window.addEventListener('wheel', onWheel, { passive: false })
+		window.addEventListener('touchstart', onTouchStart, { passive: true })
+		window.addEventListener('touchend', onTouchEnd, { passive: true })
+		window.addEventListener('keydown', onKeyDown)
+		gate.querySelector('[data-intro-dismiss]')?.addEventListener('click', dismiss, { once: true })
+	}
+	initializeIntro()
+	document.addEventListener('astro:page-load', initializeIntro)
+</script>
+
+<style>
+	.intro-gate { display: none; }
+	.intro-gate.is-ready {
+		position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; overflow: hidden;
+		background: color-mix(in oklab, var(--fallback-b1, oklch(var(--b1))) 94%, transparent);
+		backdrop-filter: blur(24px); color: var(--fallback-bc, oklch(var(--bc)));
+		transition: opacity .9s ease, clip-path 1.05s cubic-bezier(.76,0,.24,1);
+		clip-path: inset(0 0 0 0 round 0);
+	}
+	.intro-gate.is-leaving { opacity: 0; clip-path: inset(0 0 100% 0 round 0 0 50% 50%); pointer-events: none; }
+	.intro-grid { position: absolute; inset: -20%; opacity: .13; background-image: linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px); background-size: 4rem 4rem; mask-image: radial-gradient(circle, black, transparent 68%); transform: perspective(700px) rotateX(58deg) translateY(20%); }
+	.intro-aura { position: absolute; border-radius: 999px; filter: blur(8px); opacity: .18; }
+	.intro-aura-one { width: 38rem; height: 38rem; left: -12rem; top: -16rem; background: var(--fallback-p, oklch(var(--p))); animation: drift 11s ease-in-out infinite alternate; }
+	.intro-aura-two { width: 32rem; height: 32rem; right: -10rem; bottom: -14rem; background: var(--fallback-s, oklch(var(--s))); animation: drift 13s ease-in-out -4s infinite alternate-reverse; }
+	.intro-profile { position: relative; z-index: 2; display: flex; max-width: min(90vw, 48rem); flex-direction: column; align-items: center; text-align: center; }
+	.intro-portrait-wrap { position: relative; margin-bottom: 2rem; }
+	.intro-portrait-halo { position: absolute; inset: -1rem; border: 1px solid color-mix(in oklab, var(--fallback-p, oklch(var(--p))) 42%, transparent); border-radius: 999px; animation: halo 3.2s ease-in-out infinite; }
+	.intro-portrait { position: relative; width: clamp(8.5rem, 18vw, 11.5rem); aspect-ratio: 1; border-radius: 999px; object-fit: cover; border: .35rem solid color-mix(in oklab, var(--fallback-b1, oklch(var(--b1))) 88%, transparent); box-shadow: 0 2rem 6rem color-mix(in oklab, var(--fallback-p, oklch(var(--p))) 25%, transparent); }
+	.intro-kicker { margin-bottom: .85rem; color: var(--fallback-p, oklch(var(--p))); font-size: .72rem; font-weight: 800; letter-spacing: .32em; }
+	.intro-profile h1 { font-size: clamp(2.8rem, 7vw, 5.8rem); font-weight: 900; letter-spacing: -.055em; line-height: .95; }
+	.intro-role { margin-top: 1.35rem; font-size: clamp(1.05rem, 2.2vw, 1.45rem); font-weight: 650; }
+	.intro-institute { margin-top: .45rem; color: color-mix(in oklab, currentColor 58%, transparent); font-size: clamp(.95rem, 1.8vw, 1.1rem); }
+	.intro-scroll { position: absolute; z-index: 3; bottom: 2.2rem; display: flex; flex-direction: column; align-items: center; gap: .75rem; color: color-mix(in oklab, currentColor 58%, transparent); font-size: .72rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+	.intro-scroll-track { display: block; width: 1px; height: 2.8rem; overflow: hidden; background: color-mix(in oklab, currentColor 16%, transparent); }
+	.intro-scroll-track span { display: block; width: 100%; height: 45%; background: var(--fallback-p, oklch(var(--p))); animation: scrollcue 1.8s ease-in-out infinite; }
+	@keyframes scrollcue { 0% { transform: translateY(-120%); } 65%,100% { transform: translateY(240%); } }
+	@keyframes halo { 50% { transform: scale(1.055); opacity: .45; } }
+	@keyframes drift { to { transform: translate3d(3rem, 2rem, 0) scale(1.08); } }
+	@media (prefers-reduced-motion: reduce) { .intro-aura, .intro-portrait-halo, .intro-scroll-track span { animation: none; } .intro-gate.is-ready { transition: none; } }
+</style>

@@ -1,4 +1,7 @@
 ---
+import RedirectPage from '@/components/RedirectPage.astro'
 import { template } from '@/settings'
-return Astro.redirect(`${template.base}/zh/research`)
+const to = `${template.base}/zh/research/`
 ---
+
+<RedirectPage {to} />

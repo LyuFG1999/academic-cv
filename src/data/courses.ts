@@ -16,7 +16,12 @@ export type CourseData = {
 	courses: Course[]
 }
 
+const normalizeCourses = (value: Partial<CourseData>): CourseData => ({
+	intro: value.intro ?? '',
+	courses: value.courses ?? [],
+})
+
 export const courses: Record<Language, CourseData> = {
-	zh: coursesZh as CourseData,
-	en: coursesEn as CourseData,
+	zh: normalizeCourses(coursesZh as Partial<CourseData>),
+	en: normalizeCourses(coursesEn as Partial<CourseData>),
 }

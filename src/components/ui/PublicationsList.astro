@@ -1,44 +1,36 @@
 ---
-import { isSkill } from '@/types/cv';
-import type { Skill, Publication } from '@/types/cv';
-import { highlightAuthor } from '@/lib/utils'
+import type { Publication } from '@/types/cv'
+import type { Language } from '@/i18n'
+import { copy } from '@/i18n'
+import { safeHttpUrl } from '@/lib/utils'
+import AuthorNames from './AuthorNames.astro'
 
 interface Props {
-	elements: (Skill | Publication)[]
+	elements: Publication[]
+	lang: Language
+	authorName: string
 }
 
-const { elements } = Astro.props
+const { elements, lang, authorName } = Astro.props
+const t = copy[lang]
 ---
 <ul class='space-y-8'>
-  {elements.map((element, index) => (
+  {elements.map((element) => {
+    const link = safeHttpUrl(element.link)
+    return (
     <li class='group'>
-      { isSkill(element)
-        ? <>
-        <h3 class='text-lg font-bold mb-2'>{element.title}</h3>
-        <p>{element.description}</p>
-        </> : <>
-      <a
-        href={element.link as string}
-        class='block hover:text-accent transition-colors duration-200'
-        target='_blank'
-      >
-        <h3 class='text-lg font-bold mb-2'>{element.title}</h3>
-      </a>
+      {link
+        ? <a href={link} class='block transition-colors duration-200 hover:text-accent' target='_blank' rel='noopener noreferrer'><h3 class='mb-2 text-lg font-bold'>{element.title}</h3></a>
+        : <h3 class='mb-2 text-lg font-bold'>{element.title}</h3>}
       <p class='text-base mb-2'>
-        <span class='font-medium'>Authors:</span>{' '}
-        <span
-          set:html={highlightAuthor(element.authors as string)}
-        />
+        <span class='font-medium'>{t.authors}:</span>{' '}
+        <AuthorNames authors={element.authors} authorName={authorName} />
       </p>
       <p class='text-sm mb-3'>
         <span class='italic'>{element.journal}</span> •{' '}
         {element.time}
       </p>
-      <p>{element.abstract}</p>
-      </>
-    }
-    {/* Uncomment this line to add a small border bottom for each element
-    {index !== elements.length -1 && <hr class="mt-6 border-primary/40" />}  */}
+      {element.abstract && <p>{element.abstract}</p>}
     </li>
-  ))}
+  )})}
 </ul>

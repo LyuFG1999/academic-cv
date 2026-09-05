@@ -4,6 +4,7 @@ export interface Experience {
   title: string;
   location?: string;
   description?: string;
+  sortDate?: string;
 }
 
 export interface Education {
@@ -12,6 +13,7 @@ export interface Education {
   degree: string;
   location?: string;
   description?: string;
+  sortDate?: string;
 }
 
 export interface Skill {
@@ -24,6 +26,7 @@ export interface Publication {
   authors: string;
   journal: string;
   time: string;
+  sortDate?: string;
   category?: 'published' | 'working' | 'book';
   link?: string;
   abstract?: string;

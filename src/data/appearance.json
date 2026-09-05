@@ -1,0 +1,17 @@
+{
+  "introEnabled": true,
+  "light": {
+    "primary": "#4338CA",
+    "secondary": "#A21CAF",
+    "accent": "#0369A1",
+    "background": "#FBFCFE",
+    "surface": "#F0F3F8"
+  },
+  "dark": {
+    "primary": "#818CF8",
+    "secondary": "#E879F9",
+    "accent": "#38BDF8",
+    "background": "#0B1020",
+    "surface": "#151B2D"
+  }
+}

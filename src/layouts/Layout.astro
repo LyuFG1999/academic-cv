@@ -5,7 +5,8 @@ import DarkLightController from '@/components/ui/DarkLightController.astro'
 import Navbar from '@/components/ui/Navbar.astro'
 import Footer from '@/components/ui/Footer.astro'
 import Head from '@/components/Head.astro'
-import { seo, profile, template } from '@/settings'
+import IntroGate from '@/components/ui/IntroGate.astro'
+import { appearance, seo, profile, template } from '@/settings'
 import { copy, type Language } from '@/i18n'
 
 type Props = {
@@ -13,13 +14,15 @@ type Props = {
 	title?: string
 	description?: string
 	image?: string
+	immersiveIntro?: boolean
 }
 
-const { lang = 'zh', title, description, image = seo.defaultImage } = Astro.props
+const { lang = 'zh', title, description, image, immersiveIntro = false } = Astro.props
 const localizedSeo = seo[lang]
 const pageTitle = title ?? localizedSeo.defaultTitle
 const pageDescription = description ?? localizedSeo.defaultDescription
 const person = profile[lang]
+const pageImage = image ?? person.avatar
 const otherLanguage: Language = lang === 'zh' ? 'en' : 'zh'
 const currentWithoutBase = Astro.url.pathname.startsWith(template.base)
 	? Astro.url.pathname.slice(template.base.length)
@@ -34,14 +37,15 @@ const languagePath = `${template.base}${switchedPath}`
 <html lang={lang}>
 	<head>
 		{template.transitions && <ClientRouter />}
-		<Head title={pageTitle} description={pageDescription} image={image} />
+		<Head lang={lang} title={pageTitle} description={pageDescription} image={pageImage} alternatePath={languagePath} />
 		{template.base === '' && <script is:inline src='https://identity.netlify.com/v1/netlify-identity-widget.js'></script>}
 	</head>
 	<body>
-		<div class={`min-h-screen bg-base-100 drawer lg:drawer-open ${template.menuLeft ? 'drawer-end' : ''}`}>
+		{immersiveIntro && appearance.introEnabled && <IntroGate lang={lang} />}
+		<div class='min-h-screen bg-base-100 drawer lg:drawer-open' data-site-shell>
 			<input id='site-drawer' type='checkbox' class='drawer-toggle' />
-			<div class='drawer-content min-w-0 overflow-x-hidden bg-base-100'>
-				<div class='sticky top-0 z-30 border-b border-base-300/70 bg-base-100/85 text-base-content backdrop-blur'>
+			<div class='drawer-content min-w-0 overflow-x-hidden bg-transparent'>
+				<div class='site-topbar sticky top-0 z-30 border-b border-base-300/60 bg-base-100/75 text-base-content backdrop-blur-xl'>
 					<nav class='navbar px-4 lg:px-8'>
 						<div class='navbar-start'>
 							<label for='site-drawer' class='btn btn-square btn-ghost lg:hidden' aria-label={lang === 'zh' ? '打开菜单' : 'Open menu'}>
@@ -62,7 +66,7 @@ const languagePath = `${template.base}${switchedPath}`
 						</div>
 					</nav>
 				</div>
-				<main class='mx-auto flex min-h-[calc(100vh-4rem)] min-w-0 w-full max-w-5xl flex-col justify-between overflow-x-hidden px-6 pb-4 pt-10 sm:px-8 lg:px-12 lg:pt-16'>
+				<main class='site-main mx-auto flex min-h-[calc(100vh-4rem)] min-w-0 w-full max-w-6xl flex-col justify-between overflow-x-hidden px-6 pb-4 pt-10 sm:px-10 lg:px-14 lg:pt-16'>
 					<div><slot /></div>
 					<Footer lang={lang} />
 				</main>
@@ -94,6 +98,10 @@ const languagePath = `${template.base}${switchedPath}`
 			elements.forEach((element) => element.classList.add('is-visible'))
 			return
 		}
+		if (!('IntersectionObserver' in window)) {
+			elements.forEach((element) => element.classList.add('is-visible'))
+			return
+		}
 		const observer = new IntersectionObserver((entries) => {
 			entries.forEach((entry) => {
 				if (entry.isIntersecting) {
@@ -110,14 +118,24 @@ const languagePath = `${template.base}${switchedPath}`
 
 <style is:global>
 	html { scroll-behavior: smooth; }
-	body { margin: 0; min-height: 100%; overflow-x: hidden; }
+	body { margin: 0; min-height: 100%; overflow-x: hidden; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", sans-serif; background-color: var(--fallback-b1, oklch(var(--b1))); background-image: radial-gradient(circle at 78% 10%, color-mix(in oklab, var(--fallback-p, oklch(var(--p))) 9%, transparent), transparent 30rem), radial-gradient(circle at 20% 85%, color-mix(in oklab, var(--fallback-s, oklch(var(--s))) 7%, transparent), transparent 28rem); }
+	[data-site-shell] { transition: filter .9s ease, transform .9s cubic-bezier(.2,.75,.2,1); }
+	.intro-active [data-site-shell] { filter: blur(10px); transform: scale(.985); }
+	.intro-releasing [data-site-shell] { filter: none; transform: none; }
+	.site-topbar { box-shadow: 0 .5rem 2rem color-mix(in oklab, var(--fallback-bc, oklch(var(--bc))) 4%, transparent); }
+	.site-main h1, .site-main h2, .site-main h3 { letter-spacing: -.025em; }
+	.card { border-radius: 1.5rem; box-shadow: 0 1.1rem 3rem color-mix(in oklab, var(--fallback-bc, oklch(var(--bc))) 6%, transparent); backdrop-filter: blur(12px); transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease; }
+	.card:hover { transform: translateY(-3px); border-color: color-mix(in oklab, var(--fallback-p, oklch(var(--p))) 35%, transparent); box-shadow: 0 1.4rem 3.4rem color-mix(in oklab, var(--fallback-p, oklch(var(--p))) 11%, transparent); }
+	.btn { border-radius: 999px; }
+	::selection { color: var(--fallback-pc, oklch(var(--pc))); background: var(--fallback-p, oklch(var(--p))); }
 	.alert > span { min-width: 0; overflow-wrap: anywhere; }
 	[data-reveal] {
-		opacity: 0;
-		transform: translateY(1.25rem);
+		opacity: 1;
+		transform: none;
 		transition: opacity 650ms ease, transform 650ms cubic-bezier(.2,.7,.2,1);
 	}
-	[data-reveal].is-visible { opacity: 1; transform: none; }
+	.js [data-reveal]:not(.is-visible) { opacity: 0; transform: translateY(1.25rem); }
+	.js [data-reveal].is-visible { opacity: 1; transform: none; }
 	@media (prefers-reduced-motion: reduce) {
 		html { scroll-behavior: auto; }
 		[data-reveal] { opacity: 1; transform: none; transition: none; }
