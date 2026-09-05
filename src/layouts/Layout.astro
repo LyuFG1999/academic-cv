@@ -27,6 +27,7 @@ const person = profile[lang]
 	<head>
 		{template.transitions && <ClientRouter />}
 		<Head title={pageTitle} description={pageDescription} image={image} />
+		{template.base === '' && <script is:inline src='https://identity.netlify.com/v1/netlify-identity-widget.js'></script>}
 	</head>
 	<body>
 		<div class={`min-h-screen bg-base-100 drawer lg:drawer-open ${template.menuLeft ? 'drawer-end' : ''}`}>
@@ -59,6 +60,18 @@ const person = profile[lang]
 		</div>
 	</body>
 </html>
+
+<script is:inline>
+	if (window.netlifyIdentity) {
+		window.netlifyIdentity.on('init', (user) => {
+			if (!user) {
+				window.netlifyIdentity.on('login', () => {
+					document.location.href = '/admin/'
+				})
+			}
+		})
+	}
+</script>
 
 <script is:inline>
 	const initializeReveal = () => {
