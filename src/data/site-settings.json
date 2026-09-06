@@ -27,43 +27,43 @@
       "surface": "#1B2925"
     }
   },
-  "avatar": "/uploads/avatar.svg",
+  "avatar": "/uploads/avatar-c7e34e97-3fc4-47a8-993f-43781f364bc7.png",
   "profile": {
     "fullName": {
-      "zh": "你的姓名",
-      "en": "Your Name"
+      "zh": "这里是姓名",
+      "en": "This is Your Name"
     },
     "title": {
-      "zh": "研究者",
-      "en": "Researcher"
+      "zh": "博士候选人",
+      "en": "Researcher 123"
     },
     "institute": {
-      "zh": "院校或研究机构",
-      "en": "University or Research Institute"
+      "zh": "这里是院校或研究机构",
+      "en": "这里是University or Research Institute"
     },
     "authorName": {
       "zh": "",
       "en": ""
     },
     "intro": {
-      "zh": "欢迎来到我的学术主页。这里记录我的研究、写作与教学。",
-      "en": "Welcome to my academic website. Explore my research, writing, and teaching."
+      "zh": "这里是欢迎来到我的学术主页。这里记录我的研究、写作与教学。这里是欢迎来到我的学术主页。这里记录我的研究、写作与教学。这里是欢迎来到我的学术主页。这里记录我的研究、写作与教学。",
+      "en": "Welcome to my academic website. Explore my research, writing, and teaching.Welcome to my academic website. Explore my research, writing, and teaching.Welcome to my academic website. Explore my research, writing, and teaching."
     },
     "researchStatement": {
-      "zh": "",
-      "en": ""
+      "zh": "1111111111111111222222222222这里是研究陈述",
+      "en": "1111111111111111222222222222"
     },
     "researchImpact": {
-      "zh": "",
-      "en": ""
+      "zh": "qqqqqqqqqqqqqqqqqqqq",
+      "en": "xxxxxxxxxxxxxxxxxxxxxxxxxxx"
     },
     "seoTitle": {
-      "zh": "个人学术主页",
-      "en": "Academic Profile"
+      "zh": "xxx的学术主页",
+      "en": "xxx'sAcademic Profile"
     },
     "seoDescription": {
-      "zh": "研究、写作与教学。",
-      "en": "Research, writing, and teaching."
+      "zh": "研究、写作与教学。研究、写作与教学。研究、写作与教学。研究、写作与教学。研究、写作与教学。",
+      "en": "Research, writing, and teaching.Research, writing, and teaching.Research, writing, and teaching.Research, writing, and teaching."
     },
     "researchAreas": [
       {
