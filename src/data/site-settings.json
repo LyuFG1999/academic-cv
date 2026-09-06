@@ -27,7 +27,7 @@
       "surface": "#1B2925"
     }
   },
-  "avatar": "/uploads/avatar.svg",
+  "avatar": "/uploads/avatar-49e1f7bb-353d-469c-9ea4-e75c3f1797b6.png",
   "profile": {
     "fullName": {
       "zh": "吕风光",
@@ -45,18 +45,18 @@
       "zh": "吕风光",
       "en": "Fengguang Lyu"
     },
-    "siteIcon": "",
+    "siteIcon": "/uploads/avatar-60d86a41-bc00-41eb-9b37-047c18eae706.png",
     "intro": {
-      "zh": "吕风光，西安交通大学社会学系博士候选人。研究兴趣集中于社会分层与流动、劳动力市场、经济社会学、组织社会学与定量研究，重点关注数字化与人工智能背景下的就业风险、主观阶层认同，以及机构投资者、公司治理与企业创新等问题，同时从事年龄—时期—世代模型及其扩展方法研究。",
-      "en": "Fengguang Lyu is a PhD Candidate in Sociology at Xi'an Jiaotong University. His research focuses on social stratification and mobility, labor markets, economic sociology, organizational sociology, and quantitative methods, with particular interests in employment risks and subjective class identification in the digital and AI era, institutional investors, corporate governance and innovation, and methodological extensions of age-period-cohort analysis."
+      "zh": "吕风光，西安交通大学社会学系博士候选人。研究兴趣集中于社会分层与流动、劳动力市场、经济社会学、组织社会学与定量研究，重点关注数智时代的劳动力市场变迁、社会心态研究，以及组织层面的公司治理与企业创新等问题，同时从事APC模型及其扩展方法研究。",
+      "en": "Fengguang Lyu is a PhD candidate in the Department of Sociology at Xi'an Jiaotong University. His research interests center on social stratification and mobility, labor markets, economic sociology, organizational sociology, and quantitative research, with a particular focus on labor market change in the digital-intelligence era, social mentality, and organization-level questions such as corporate governance and firm innovation. He also works on age-period-cohort (APC) models and their methodological extensions."
     },
     "researchStatement": {
-      "zh": "我的研究围绕数字技术、制度结构与社会分层之间的关系展开。第一条主线关注劳动力市场与社会分层，考察数字化、人工智能、就业风险以及人力资本、政治资本和社会资本等制度性资源如何塑造劳动者的风险暴露与主观阶层认同。第二条主线关注组织与资本市场，研究共同或连锁机构投资者、异质性大股东等治理主体如何影响企业创新、环境绩效与并购价值。在方法上，我关注年龄—时期—世代分析及其在回归关系时间异质性研究中的扩展，并提出年龄—时期—世代变系数模型（APC-VC）作为相应的方法框架。",
-      "en": "My research examines how digital technologies and institutional structures shape social stratification. One strand focuses on labor markets and inequality, studying how digitalization, artificial intelligence, employment risks, and institutional resources such as human, political, and social capital affect workers' risk exposure and subjective class identification. A second strand studies organizations and capital markets, especially how common or multiple-shareholding institutional investors and heterogeneous blockholders influence innovation, environmental performance, and M&A value. Methodologically, I work on age-period-cohort analysis and its extension to temporal heterogeneity in regression relationships, including the age-period-cohort varying-coefficient (APC-VC) model."
+      "zh": "我的研究围绕数字技术、制度结构与社会分层之间的关系展开。第一条主线关注劳动力市场与社会分层，考察数字化、人工智能如何导致劳动力市场变迁，以及如何进一步对居民社会心态产生影响；第二条主线关注制度与组织的关系，围绕社会网络与社会资本如何在组织间起作用，以及组织的外部环境变化如何影响企业用人决策等；第三条是在方法领域上，是我最近开始关注的一个方面，目前集中于年龄—时期—世代分析及其扩展，相关的方法驱动来自我对社会变迁、劳动力市场的关注。",
+      "en": "My research examines the relationships among digital technologies, institutional structures, and social stratification. It follows three main strands. The first focuses on labor markets and social stratification, examining how digitalization and artificial intelligence reshape labor markets and, in turn, influence social attitudes. The second explores the relationship between institutions and organizations, focusing on how social networks and social capital operate across organizations and how changes in the external environment shape firms’ employment decisions. The third, a more recent interest, concerns quantitative methods, particularly age–period–cohort (APC) analysis and its extensions. My methodological interests grow out of substantive questions about social change and labor markets."
     },
     "researchImpact": {
-      "zh": "现有研究在三个方面形成了较为连贯的贡献：一是从风险与制度主义视角解释数字时代就业风险的分配及其对主观阶层认同的影响；二是从治理、咨询与知识流动机制解释机构投资者和异质性大股东对企业创新、绿色治理与并购价值的作用；三是将年龄—时期—世代分析从结果水平扩展到回归关系，提出用于描述和检验关系时间异质性的 APC-VC 模型。这些工作共同连接了社会分层、劳动力市场、组织治理与定量方法研究。",
-      "en": "My work makes three connected contributions. First, it develops risk-based and institutional explanations of how employment risks are distributed in the digital era and how they shape subjective class identification. Second, it identifies governance, advisory, and knowledge-flow mechanisms through which institutional investors and heterogeneous blockholders affect innovation, green governance, and M&A value. Third, it extends age-period-cohort analysis from outcome levels to regression relationships through the APC-VC model for describing and testing temporal heterogeneity. Together, these studies connect social stratification, labor markets, organizational governance, and quantitative methodology."
+      "zh": "现有研究在三个方面形成了较为连贯的贡献：一是在劳动力市场研究中，从风险与制度主义视角解释数字时代就业风险的分配及其对主观阶层认同的影响；二是在社会网络与社会资本研究中，从治理、咨询与知识流动机制解释机构投资者和异质性大股东对企业创新、绿色治理与并购价值的作用；三是将年龄—时期—世代分析从结果水平扩展到回归关系，提出用于描述和检验关系时间异质性的 APC-VC 模型。这些工作共同连接了社会分层、劳动力市场、组织治理与定量方法研究。",
+      "en": "My work to date has made three interconnected contributions. First, in labor market research, I draw on risk and institutionalist perspectives to explain the distribution of employment risks in the digital age and their implications for subjective class identification. Second, in research on social networks and social capital, I examine how institutional investors and different types of large shareholders influence corporate innovation, environmental governance, and value creation through mergers and acquisitions, focusing on mechanisms of governance, advice, and knowledge flows. Third, I extend age–period–cohort analysis from outcome levels to regression relationships, proposing the APC-VC model to describe and test temporal heterogeneity in these relationships. Together, these contributions connect research on social stratification, labor markets, organizational governance, and quantitative methods."
     },
     "seoTitle": {
       "zh": "吕风光｜学术主页",
