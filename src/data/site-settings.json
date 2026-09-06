@@ -128,11 +128,11 @@
     },
     "orcid": {
       "enabled": true,
-      "url": ""
+      "url": "https://www.apple.com.cn/"
     },
     "cnki": {
       "enabled": true,
-      "url": ""
+      "url": "https://www.apple.com.cn/"
     },
     "school": {
       "enabled": false,
