@@ -3,7 +3,7 @@ main = "worker.js"
 compatibility_date = "2026-09-01"
 
 [vars]
-ADMIN_ORIGIN = "https://lyufg1999.github.io"
+ADMIN_ORIGIN = "https://fengguanglyu.com"
 ALLOWED_USER = "LyuFG1999"
 REPOSITORY = "LyuFG1999/academic-cv"
 # Add GITHUB_CLIENT_ID as a variable and GITHUB_CLIENT_SECRET as an encrypted secret.
