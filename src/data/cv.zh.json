@@ -1,136 +1,16 @@
 {
-  "experiences": [
-    {
-      "company": "11",
-      "time": "2012 至今",
-      "sortDate": "",
-      "title": "22",
-      "location": "22",
-      "description": ""
-    }
-  ],
+  "experiences": [],
   "education": [
     {
-      "school": "22",
-      "time": "22",
-      "sortDate": "",
-      "degree": "管理",
-      "location": "威海",
+      "school": "山东大学",
+      "time": "2017.09 - 2021.07",
+      "sortDate": "2017-09-01",
+      "degree": "会计学",
+      "location": "山东·威海",
       "description": ""
     }
   ],
   "skills": [],
-  "publications": [
-    {
-      "category": "published",
-      "title": "Convergence or Divergence? The Impact of Common Institutional Ownership on Firms' Innovation Trajectories",
-      "authors": "Yuhan He; Fengguang Lyu; Shougui Luo",
-      "doi": "10.1016/j.ribaf.2025.103137",
-      "journal": "Research in International Business and Finance, 80, 103137",
-      "time": "2025",
-      "sortDate": "2025-08-01",
-      "link": "https://doi.org/10.1016/j.ribaf.2025.103137",
-      "abstract": ""
-    },
-    {
-      "category": "published",
-      "title": "中国劳动者失业风险感知变迁——基于APC模型的动态分析",
-      "authors": "吕风光; 张顺",
-      "doi": "",
-      "journal": "人口与经济, (6), 44-58",
-      "time": "2025",
-      "sortDate": "2025-01-01",
-      "link": "",
-      "abstract": ""
-    },
-    {
-      "category": "published",
-      "title": "The Age-Period-Cohort Varying-Coefficient Model: Describing and Testing Temporal Heterogeneity in Regression Relationships",
-      "authors": "Fengguang Lyu",
-      "doi": "10.2139/ssrn.7380278",
-      "journal": "Social Science Research Network",
-      "time": "2026",
-      "sortDate": "2026-08-01",
-      "link": "https://doi.org/10.2139/ssrn.7380278",
-      "abstract": ""
-    },
-    {
-      "category": "published",
-      "title": "Multiple Shareholding Institutional Investors and Green Governance of Heavy-Polluting Industries",
-      "authors": "Fengguang Lyu; Zhiping Zhang; Guangxin Fu; Zhangxin (Frank) Liu; Sirimon Treepongkaruna",
-      "doi": "10.1002/bse.3667",
-      "journal": "Business Strategy and The Environment, 33(4), 3569-3587",
-      "time": "2024",
-      "sortDate": "2024-01-01",
-      "link": "https://doi.org/10.1002/bse.3667",
-      "abstract": ""
-    },
-    {
-      "category": "published",
-      "title": "The Distribution of Employment Risks in the Digital Era: An Institutionalism Perspective",
-      "authors": "Shun Zhang; Fengguang Lyu",
-      "doi": "https://shxyj.ajcass.com/magazine/show?id=97015",
-      "journal": "Sociological Studies, 39(5), 90-112, 228",
-      "time": "2024",
-      "sortDate": "2024-01-01",
-      "link": "https://doi.org/https://shxyj.ajcass.com/magazine/show?id=97015",
-      "abstract": ""
-    },
-    {
-      "category": "published",
-      "title": "Multiple shareholding institutional investors' dual function and M&A value",
-      "authors": "Zhiping Zhang; Ailing Pan; Fengguang Lyu",
-      "doi": "10.19616/j.cnki.bmj.2022.11.008",
-      "journal": "Business and Management Journal, 44(11), 148-166",
-      "time": "2022",
-      "sortDate": "2022-01-01",
-      "link": "https://doi.org/10.19616/j.cnki.bmj.2022.11.008",
-      "abstract": ""
-    },
-    {
-      "category": "published",
-      "title": "企业数字化对劳动力市场就业风险的影响",
-      "authors": "张顺; 吕风光",
-      "doi": "10.20069/j.cnki.djkx.202404002",
-      "journal": "当代经济科学, 46(4), 14-26",
-      "time": "2024",
-      "sortDate": "2024-01-01",
-      "link": "https://doi.org/10.20069/j.cnki.djkx.202404002",
-      "abstract": ""
-    },
-    {
-      "category": "published",
-      "title": "数字时代的就业风险分配:制度主义的视角",
-      "authors": "张顺; 吕风光",
-      "doi": "",
-      "journal": "社会学研究, 39(5), 90-112, 228",
-      "time": "2024",
-      "sortDate": "2024-01-01",
-      "link": "",
-      "abstract": ""
-    },
-    {
-      "category": "published",
-      "title": "新冠疫情的资本市场冲击效应研究",
-      "authors": "张志平; 朱思颖; 吕风光",
-      "doi": "",
-      "journal": "会计之友, (18), 131-137",
-      "time": "2020",
-      "sortDate": "2020-01-01",
-      "link": "",
-      "abstract": ""
-    },
-    {
-      "category": "published",
-      "title": "Study on heterogeneous shareholders\\prime governance effect of mixed-ownership reform: An empirical analysis based on the perspective of M&A value",
-      "authors": "Zhiping Zhang; Shixian Ling; Fengguang Lyu",
-      "doi": "10.19559/j.cnki.12-1387.2021.09.006",
-      "journal": "Modern Finance and Economics (Journal of Tianjin University of Finance and Economics), 41(9), 78-95",
-      "time": "2021",
-      "sortDate": "2021-01-01",
-      "link": "https://doi.org/10.19559/j.cnki.12-1387.2021.09.006",
-      "abstract": ""
-    }
-  ],
-  "content": ""
+  "publications": [],
+  "content": "# 123\ndde\ndee\n得得\n# 也一样\ndde\ndee\n得得\n\n\n"
 }
