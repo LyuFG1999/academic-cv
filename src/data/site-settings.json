@@ -120,11 +120,11 @@
   "social": {
     "email": {
       "enabled": true,
-      "url": ""
+      "url": "123@123.com"
     },
     "github": {
       "enabled": true,
-      "url": ""
+      "url": "https://www.apple.com.cn/"
     },
     "orcid": {
       "enabled": true,
