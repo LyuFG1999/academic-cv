@@ -34,19 +34,13 @@ const isEmpty = !experiences.length && !education.length && !data.content.trim()
 	{isEmpty && <div class='alert border border-base-300 bg-base-200/70' data-reveal><span>{t.emptyCv}</span></div>}
 	{education.length > 0 && (
 		<section class='mb-14' data-reveal>
-			<div class='mb-7 flex items-center gap-3'>
-				<div class='h-px w-8 bg-secondary/55'></div>
-				<h2 class='text-2xl font-bold'>{t.education}</h2>
-			</div>
+			<h2 class='mb-7 text-2xl font-bold'>{t.education}</h2>
 			<CvTimeline elements={education} colored={true} />
 		</section>
 	)}
 	{experiences.length > 0 && (
 		<section class='mb-14' data-reveal>
-			<div class='mb-7 flex items-center gap-3'>
-				<div class='h-px w-8 bg-secondary/55'></div>
-				<h2 class='text-2xl font-bold'>{t.experiences}</h2>
-			</div>
+			<h2 class='mb-7 text-2xl font-bold'>{t.experiences}</h2>
 			<CvTimeline elements={experiences} colored={true} />
 		</section>
 	)}
