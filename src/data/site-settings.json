@@ -65,7 +65,19 @@
       "zh": "研究、写作与教学。",
       "en": "Research, writing, and teaching."
     },
-    "researchAreas": [],
+    "researchAreas": [
+      {
+        "field": "computer-science",
+        "title": {
+          "zh": "",
+          "en": ""
+        },
+        "description": {
+          "zh": "",
+          "en": ""
+        }
+      }
+    ],
     "projects": []
   },
   "navigation": {
@@ -85,7 +97,7 @@
       "en": "Papers"
     },
     "courses": {
-      "enabled": true,
+      "enabled": false,
       "zh": "课程",
       "en": "Courses"
     },
