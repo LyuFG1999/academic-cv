@@ -1,14 +1,10 @@
 name: Deploy to GitHub Pages
 
 on:
-  # Trigger the workflow every time you push to the `main` branch
-  # Using a different branch name? Replace `main` with your branch’s name
   push:
     branches: [main]
-  # Allows you to run this workflow manually from the Actions tab on GitHub.
   workflow_dispatch:
 
-# Allow this job to clone the repo and create a page deployment
 permissions:
   contents: read
   pages: write
@@ -25,7 +21,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout your repository using git
+      - name: Checkout repository
         uses: actions/checkout@v5
       - name: Read Pages domain and base path
         id: pages
@@ -35,21 +31,19 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Install locked dependencies and run regression tests
-        run: |
-          npm install --no-audit --no-fund
-          npm test
-      - name: Install, build, and upload your site output
-        uses: withastro/action@v6
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Run regression tests
+        run: npm test
+      - name: Build Astro site
         env:
           SITE_ORIGIN: ${{ steps.pages.outputs.origin }}
           SITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+        run: npm run build
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          node-version: 24
-        # with:
-              # path: . # The root location of your Astro project inside the repository. (optional)
-              # node-version: 22 # The specific version of Node that should be used to build your site. Defaults to 22. (optional)
-              # package-manager: pnpm@latest # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
+          path: dist
 
   deploy:
     needs: build
