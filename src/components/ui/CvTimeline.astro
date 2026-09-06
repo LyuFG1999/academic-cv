@@ -7,23 +7,18 @@ interface Props {
 	colored: boolean
 }
 
-const { elements, colored } = Astro.props
+const { elements } = Astro.props
 ---
 
-<ol class='relative space-y-5 pl-8 sm:pl-10'>
-	<div class:list={['absolute bottom-4 left-[0.72rem] top-4 w-px sm:left-[0.9rem]', colored ? 'bg-secondary/35' : 'bg-base-300']} aria-hidden='true'></div>
+<ol class='relative space-y-5 pl-7 sm:pl-8'>
+	<div class='absolute bottom-4 left-[0.34rem] top-4 w-[2px] rounded-full bg-secondary/40' aria-hidden='true'></div>
 	{elements.map((element) => {
 		const experience = isExperience(element)
 		const title = experience ? element.title : element.degree
 		const organization = experience ? element.company : element.school
 		return (
 			<li class='relative'>
-				<div class:list={[
-					'absolute -left-8 top-6 grid size-6 place-items-center rounded-full border text-xs shadow-sm sm:-left-10 sm:size-7',
-					colored ? 'border-secondary/25 bg-secondary/12 text-secondary' : 'border-base-300 bg-base-100 text-base-content/65',
-				]} aria-hidden='true'>
-					<span>{experience ? '💼' : '🎓'}</span>
-				</div>
+				<span class='absolute -left-7 top-7 block size-[0.8rem] rounded-full border-[3px] border-base-100 bg-secondary shadow-[0_0_0_2px_color-mix(in_oklab,var(--fallback-s,oklch(var(--s)))_38%,transparent)] sm:-left-8' aria-hidden='true'></span>
 				<article class='rounded-2xl border border-base-300 bg-base-200/55 p-5 transition duration-300 hover:-translate-y-0.5 hover:border-secondary/30 hover:bg-base-200 sm:p-6'>
 					<div class='flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between'>
 						<div class='min-w-0'>
@@ -33,7 +28,16 @@ const { elements, colored } = Astro.props
 						<time class='w-fit shrink-0 rounded-full border border-base-300 bg-base-100 px-3 py-1 text-sm font-medium text-base-content/65'>{element.time}</time>
 					</div>
 					{(element.location || element.description) && <div class='mt-4 border-t border-base-300/80 pt-4'>
-						{element.location && <p class='text-sm text-base-content/55'>📍 {element.location}</p>}
+						{element.location && (
+							<p class='flex items-center gap-2 text-sm text-base-content/55'>
+								<span class='inline-grid size-5 shrink-0 place-items-center rounded-full bg-secondary' aria-hidden='true'>
+									<svg viewBox='0 0 24 24' class='size-3.5 fill-white' role='img'>
+										<path d='M12 22s7-6.2 7-13a7 7 0 1 0-14 0c0 6.8 7 13 7 13Zm0-9.25A3.75 3.75 0 1 1 12 5a3.75 3.75 0 0 1 0 7.75Z'></path>
+									</svg>
+								</span>
+								<span>{element.location}</span>
+							</p>
+						)}
 						{element.description && <p class='mt-2 leading-relaxed text-base-content/72'>{element.description}</p>}
 					</div>}
 				</article>
