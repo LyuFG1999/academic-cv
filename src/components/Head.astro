@@ -1,5 +1,5 @@
 ---
-import { maintenance, profile, social, template } from '@/settings'
+import { maintenance, profile, siteIcon, social, template } from '@/settings'
 import { safeHttpUrl } from '@/lib/utils'
 import type { Language } from '@/i18n'
 interface Props {
@@ -19,6 +19,10 @@ const imagePath = image.startsWith('http')
 	: `${template.base}${image.startsWith('/') ? image : `/${image}`}`
 const socialImageURL = new URL(imagePath, Astro.site)
 const hasShareImage = !socialImageURL.pathname.toLowerCase().endsWith('.svg')
+const iconPath = siteIcon
+	? (siteIcon.startsWith('http') ? siteIcon : `${template.base}${siteIcon.startsWith('/') ? siteIcon : `/${siteIcon}`}`)
+	: ''
+const faviconHref = iconPath || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>'
 const otherLanguage = lang === 'zh' ? 'en' : 'zh'
 const alternateURL = new URL(alternatePath, Astro.site)
 const defaultURL = new URL(`${template.base}/zh/`, Astro.site)
@@ -40,11 +44,8 @@ const personJsonLd = JSON.stringify({
 
 <meta charset='utf-8' />
 <meta name='viewport' content='width=device-width,initial-scale=1' />
-<link
-	rel='icon'
-	type='image/svg+xml'
-	href='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>'
-/>
+<link rel='icon' href={faviconHref} />
+<link rel='apple-touch-icon' href={faviconHref} />
 <!-- Sitemap -->
 <link rel="sitemap" href={`${template.base}/sitemap-index.xml`} />
 
