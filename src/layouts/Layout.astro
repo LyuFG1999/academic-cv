@@ -55,7 +55,7 @@ const languagePath = `${template.base}${switchedPath}`
 								<BetterIcon>
 									<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' class='size-6 stroke-current'>
 										<path stroke-linecap='round' stroke-linejoin='round' d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'></path>
-									</svg>
+								</svg>
 								</BetterIcon>
 							</label>
 							<a href={languagePath} class='btn btn-ghost language-control' hreflang={otherLanguage} aria-label={copy[lang].language} title={copy[lang].language}>
@@ -114,22 +114,39 @@ const languagePath = `${template.base}${switchedPath}`
 	html { scroll-behavior: smooth; }
 	:focus-visible { outline: 2px solid var(--fallback-p, oklch(var(--p))); outline-offset: 4px; }
 	.site-main:focus { outline: none; }
-	.site-main { width: 100%; max-width: 76rem; min-height: 100dvh; margin-inline: auto; padding: 3.5rem clamp(1.5rem, 5vw, 5rem) 1.5rem; display: flex; flex-direction: column; justify-content: space-between; }
-	.main-flow { display: flow-root; }
-	.page-tools { float: right; position: relative; z-index: 5; display: flex; align-items: center; gap: .45rem; margin: 0 0 1.5rem 1.5rem; }
-	.page-tools .btn { min-height: 2.5rem; height: 2.5rem; border: 1px solid var(--fallback-b3, oklch(var(--b3))); background: var(--fallback-b1, oklch(var(--b1))); box-shadow: none; }
+	.site-main { width: 100%; max-width: 76rem; min-height: 100dvh; margin-inline: auto; padding: 3.5rem clamp(1.5rem, 5vw, 5rem) 1.5rem; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
+	.main-flow { display: flow-root; min-width: 0; }
+	.page-tools { float: right; position: relative; z-index: 5; display: flex; align-items: center; gap: .45rem; margin: 0 0 1.5rem 1.5rem; max-width: 100%; }
+	.page-tools .btn { min-height: 2.5rem; height: 2.5rem; border: 1px solid var(--fallback-b3, oklch(var(--b3))); background: var(--fallback-b1, oklch(var(--b1))); box-shadow: none; flex: 0 0 auto; }
 	.page-tools .btn-circle, .page-tools .btn-square { width: 2.5rem; }
 	.language-control { padding-inline: .85rem; font-size: .75rem; letter-spacing: .03em; }
 	.page-content > :first-child { min-height: 3rem; }
 	.page-content h1 { overflow-wrap: anywhere; line-height: 1.2; }
-	.page-content { overflow-wrap: anywhere; }
+	.page-content { overflow-wrap: anywhere; min-width: 0; width: 100%; }
+	.page-content :where(section, article, div, ul, ol, li, p, h1, h2, h3, h4, a) { min-width: 0; }
+	.page-content .card-body { min-width: 0; }
+	.page-content .card-title { min-width: 0; white-space: normal; overflow-wrap: anywhere; word-break: normal; }
+	.page-content a { overflow-wrap: anywhere; }
 	.page-content .prose :where(pre, table) { max-width: 100%; overflow-x: auto; }
 	.page-content .prose table { display: block; }
-	.page-content .prose img { border-radius: .85rem; }
+	.page-content .prose img { max-width: 100%; height: auto; border-radius: .85rem; }
 	.page-content .prose .katex-display { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding-block: .2rem; }
 	.page-content > :not(:first-child) { clear: both; }
-	@media(max-width: 640px) { .site-main { padding-top: 1.5rem; } .page-tools { gap: .3rem; margin-left: .75rem; } .page-tools .btn { min-height: 2.25rem; height: 2.25rem; } .page-tools .btn-circle, .page-tools .btn-square { width: 2.25rem; } .page-content h1 { font-size: 2rem; } }
-	.drawer-content { overflow: clip; }
+	.drawer-content { overflow: clip; min-width: 0; }
+	@media(max-width: 640px) {
+		.site-main { padding: 1rem max(1rem, env(safe-area-inset-right)) 1.25rem max(1rem, env(safe-area-inset-left)); }
+		.main-flow { display: block; }
+		.page-tools { float: none; width: 100%; justify-content: flex-end; gap: .4rem; margin: 0 0 1.25rem; }
+		.page-tools .btn { min-height: 2.35rem; height: 2.35rem; }
+		.page-tools .btn-circle, .page-tools .btn-square { width: 2.35rem; }
+		.language-control { padding-inline: .75rem; }
+		.page-content > :first-child { min-height: 0; }
+		.page-content h1 { font-size: 2rem; }
+		.page-content h2 { overflow-wrap: anywhere; }
+		.page-content .card-body { padding: 1rem; }
+		.page-content .card-actions { justify-content: flex-start; }
+		.page-content .btn { max-width: 100%; }
+	}
 	@media (min-width: 1024px) {
 		[data-site-shell].drawer { display: block; padding-left: 16rem; }
 		[data-site-shell].drawer > .drawer-toggle ~ .drawer-side { position: fixed; inset: 0 auto 0 0; height: 100dvh; width: 16rem; overflow: hidden; }
