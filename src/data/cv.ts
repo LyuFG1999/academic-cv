@@ -14,7 +14,7 @@ const normalizeCv = (value: Partial<LocalizedCv>): LocalizedCv => ({
 	experiences: value.experiences ?? [],
 	education: value.education ?? [],
 	skills: value.skills ?? [],
-	publications: value.publications ?? [],
+	publications: (value.publications ?? []).filter(item => item.title?.trim()),
 })
 
 export const cv: Record<Language, LocalizedCv> = {

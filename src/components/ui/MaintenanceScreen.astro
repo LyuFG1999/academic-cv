@@ -1,6 +1,6 @@
 ---
 import DarkLightController from './DarkLightController.astro'
-import { copy, type Language } from '@/i18n'
+import { type Language } from '@/i18n'
 import { maintenance, template } from '@/settings'
 
 type Props = { lang: Language }
@@ -10,9 +10,9 @@ const otherLanguage: Language = lang === 'zh' ? 'en' : 'zh'
 
 <main class='maintenance-screen'>
 	<div class='maintenance-controls'>
-		<a href={`${template.base}/${otherLanguage}/`} class='btn btn-ghost rounded-full border border-base-300 bg-base-100/70 px-4 backdrop-blur-xl' hreflang={otherLanguage}>
+		<a data-maintenance-language data-astro-reload href={`${template.base}/${otherLanguage}/?v=${process.env.GITHUB_SHA ?? 'local'}`} class='btn btn-ghost rounded-full border border-base-300 bg-base-100/70 px-4 backdrop-blur-xl' hreflang={otherLanguage}>
 			<span aria-hidden='true' class='font-black'>文 / A</span>
-			<span class='hidden sm:inline'>{copy[lang].language}</span>
+			<span data-maintenance-language-label>{lang === 'zh' ? 'English' : '中文'}</span>
 		</a>
 		<DarkLightController lang={lang} />
 	</div>
@@ -21,13 +21,36 @@ const otherLanguage: Language = lang === 'zh' ? 'en' : 'zh'
 	<section class='maintenance-card'>
 		<div class='maintenance-mark' aria-hidden='true'><span></span><span></span><span></span></div>
 		<p class='maintenance-kicker'>{lang === 'zh' ? 'MAINTENANCE' : 'MAINTENANCE'}</p>
-		<h1>{maintenance.title[lang]}</h1>
-		<p>{maintenance.message[lang]}</p>
+		{(['zh', 'en'] as const).map(language => <div data-maintenance-copy={language} hidden={language !== lang} lang={language}><h1>{maintenance.title[language]}</h1><p class='maintenance-message'>{maintenance.message[language]}</p></div>)}
 	</section>
 </main>
 
+<script is:inline define:vars={{ base: template.base }}>
+(() => {
+  const button = document.querySelector('[data-maintenance-language]');
+  if (!button || button.dataset.ready) return;
+  button.dataset.ready = 'true';
+  button.addEventListener('click', event => {
+    event.preventDefault();
+    const lang = document.documentElement.lang === 'zh' ? 'en' : 'zh';
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-maintenance-copy]').forEach(node => { node.hidden = node.dataset.maintenanceCopy !== lang; });
+    const visible = document.querySelector(`[data-maintenance-copy="${lang}"]`);
+    document.title = visible.querySelector('h1').textContent;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', visible.querySelector('p').textContent);
+    const url = new URL(`${base}/${lang}/`, location.origin);
+    history.replaceState(history.state, '', url);
+    document.querySelector('link[rel="canonical"]')?.setAttribute('href', url.href);
+    const other = lang === 'zh' ? 'en' : 'zh';
+    button.href = `${base}/${other}/`;
+    button.hreflang = other;
+    button.querySelector('[data-maintenance-language-label]').textContent = lang === 'zh' ? 'English' : '中文';
+  });
+})();
+</script>
+
 <style>
-	.maintenance-screen { position: relative; display: grid; min-height: 100vh; place-items: center; overflow: hidden; padding: 2rem; background: var(--fallback-b1, oklch(var(--b1))); color: var(--fallback-bc, oklch(var(--bc))); }
+	.maintenance-screen { position: relative; display: grid; min-height: 100dvh; place-items: center; overflow: clip; padding: 2rem; background: var(--fallback-b1, oklch(var(--b1))); color: var(--fallback-bc, oklch(var(--bc))); }
 	.maintenance-controls { position: absolute; right: clamp(1rem, 3vw, 2.5rem); top: clamp(1rem, 3vw, 2rem); z-index: 3; display: flex; gap: .5rem; }
 	.maintenance-card { position: relative; z-index: 2; width: min(42rem, 100%); border: 1px solid color-mix(in oklab, currentColor 14%, transparent); border-radius: 2rem; padding: clamp(2rem, 7vw, 5rem); background: color-mix(in oklab, var(--fallback-b1, oklch(var(--b1))) 82%, transparent); text-align: center; box-shadow: 0 2rem 7rem color-mix(in oklab, var(--fallback-p, oklch(var(--p))) 13%, transparent); backdrop-filter: blur(22px); }
 	.maintenance-mark { display: flex; justify-content: center; gap: .45rem; margin-bottom: 2rem; }
@@ -36,7 +59,10 @@ const otherLanguage: Language = lang === 'zh' ? 'en' : 'zh'
 	.maintenance-mark span:nth-child(3) { animation-delay: .36s; }
 	.maintenance-kicker { margin-bottom: 1rem; color: var(--fallback-p, oklch(var(--p))); font-size: .72rem; font-weight: 800; letter-spacing: .3em; }
 	h1 { font-size: clamp(2.5rem, 7vw, 5rem); font-weight: 900; letter-spacing: -.055em; line-height: 1; }
-	.maintenance-card > p:not(.maintenance-kicker) { margin: 1.5rem auto 0; max-width: 30rem; color: color-mix(in oklab, currentColor 68%, transparent); font-size: 1.08rem; line-height: 1.8; }
+	.maintenance-message { margin: 1.5rem auto 0; max-width: 30rem; color: color-mix(in oklab, currentColor 68%, transparent); font-size: 1.08rem; line-height: 1.8; }
+	[data-maintenance-copy][hidden] { display: none !important; }
+	.maintenance-card { overflow-wrap: anywhere; }
+	@media(max-width: 600px) { .maintenance-screen { padding: 6rem 1rem 2rem; } .maintenance-card { padding: 2rem 1.25rem; } }
 	.maintenance-signature { margin-top: 2.2rem; font-size: .82rem; font-weight: 700; letter-spacing: .12em; opacity: .55; }
 	.maintenance-aura { position: absolute; width: 34rem; height: 34rem; border-radius: 999px; filter: blur(18px); opacity: .13; }
 	.maintenance-aura-one { left: -12rem; top: -14rem; background: var(--fallback-p, oklch(var(--p))); }

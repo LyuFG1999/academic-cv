@@ -45,7 +45,7 @@ function dateScore(item: DatedItem): number {
 	}
 	if (/(present|current|now|today|至今|现在)/i.test(item.time)) return Number.MAX_SAFE_INTEGER
 	const years = item.time.match(/(?:19|20)\d{2}/g)
-	return years?.length ? Number(years.at(-1)) : 0
+	return years?.length ? Date.UTC(Number(years.at(-1)), 0, 1) : 0
 }
 
 export function compareByAcademicDate(a: DatedItem, b: DatedItem): number {

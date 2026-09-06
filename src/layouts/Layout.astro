@@ -121,6 +121,10 @@ const languagePath = `${template.base}${switchedPath}`
 	.language-control { padding-inline: .85rem; font-size: .75rem; letter-spacing: .03em; }
 	.page-content > :first-child { min-height: 3rem; }
 	.page-content h1 { overflow-wrap: anywhere; line-height: 1.2; }
+	.page-content { overflow-wrap: anywhere; }
+	.page-content .prose :where(pre, table) { max-width: 100%; overflow-x: auto; }
+	.page-content .prose table { display: block; }
+	.page-content .prose img { border-radius: .85rem; }
 	.page-content > :not(:first-child) { clear: both; }
 	@media(max-width: 640px) { .site-main { padding-top: 1.5rem; } .page-tools { gap: .3rem; margin-left: .75rem; } .page-tools .btn { min-height: 2.25rem; height: 2.25rem; } .page-tools .btn-circle, .page-tools .btn-square { width: 2.25rem; } .page-content h1 { font-size: 2rem; } }
 	.drawer-content { overflow: clip; }

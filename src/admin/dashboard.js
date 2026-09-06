@@ -3,6 +3,8 @@ import { renderBlog, serializePost } from './blog.js';
 import { api, publishBatch, repository, setCredential } from './github.js';
 import { draftStore } from './drafts.js';
 import { initializeOAuth } from './oauth.js';
+import { renderCitationImport } from './citation-ui.js';
+import { renderDomainPanel } from './domain-ui.js';
 const form = document.querySelector('#settings-form');
 const statusMessage = document.querySelector('#status');
 const saveButton = document.querySelector('#save');
@@ -38,7 +40,7 @@ function bytesToBase64(bytes) {
   return btoa(binary);
 }
 function decode(content) { return new TextDecoder().decode(Uint8Array.from(atob(content.replace(/\s/g, '')), c => c.charCodeAt(0))); }
-const sharedFields = new Set(['category', 'sortDate', 'field']);
+const sharedFields = new Set(['category', 'sortDate', 'field', 'doi']);
 function pairSchema(fields) {
   return fields.map(field => field.widget === 'list' ? { ...field, fields: pairSchema(field.fields || []) } : sharedFields.has(field.name) ? field : {
     name: field.name, label: field.label, widget: 'object', fields: ['zh', 'en'].map(lang => ({ ...field, name: lang, label: lang === 'zh' ? '中文' : 'English' })),
@@ -174,10 +176,12 @@ function render() {
   section('research', '研究与项目', get('profile').fields.filter(f => ['projects', 'researchAreas'].includes(f.name)), settings.profile);
   section('navigation', '导航与论文分类', get('navigation').fields, settings.navigation, '开关控制导航是否显示。三类成果可以独立开关、任意组合。');
   section('social', '联系方式', get('social').fields, settings.social, '开启并填写链接后，显示在首页与开场页。');
-  section('cv', '履历与成果', pairSchema(schema.cv), cv, '每条经历或成果只添加一次，在同一处填写中英文。');
+  const cvPanel = section('cv', '履历与成果', pairSchema(schema.cv), cv, '每条经历或成果只添加一次，在同一处填写中英文。');
+  renderCitationImport({panel: cvPanel, cv, el, changed, message, uploading, rerender: render});
   section('courses', '课程', pairSchema(schema.courses), courses);
   section('appearance', '外观与配色', get('appearance').fields, settings.appearance);
   section('maintenance', '网站维护', get('maintenance').fields, settings.maintenance, '发布完成后生效，管理后台仍可使用。');
+  renderDomainPanel({ settings, section, el, base });
   renderBlog({ posts, uploads, section, fieldNode, el, changed, message, bytesToBase64, uploading, base });
   selectPanel(location.hash.slice(1));
 }

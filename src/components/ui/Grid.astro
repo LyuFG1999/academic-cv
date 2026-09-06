@@ -14,10 +14,10 @@ const {gridTitle, gridItems} = Astro.props;
 <h2 class="text-3xl font-bold mb-8">{gridTitle}</h2>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
   {gridItems.map((item) => (
-    <div class="p-6 rounded-lg text-base-content bg-base-200">
+    <div class="p-6 rounded-2xl border border-base-300/70 text-base-content bg-base-100">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" class="mb-5 size-8 text-secondary" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d={RESEARCH_ICONS[item.field as keyof typeof RESEARCH_ICONS]?.path || RESEARCH_ICONS.sociology.path} /></svg>
       <h3 class="text-xl font-semibold mb-3">{item.title}</h3>
-      <p>{item.description}</p>
+      <p class="leading-relaxed text-base-content/70">{item.description}</p>
     </div>
   ))}
 </div>

@@ -255,7 +255,8 @@ collections:
                   - { label: 书籍 / Book, value: book }
               - { label: 标题 / Title, name: title, widget: string }
               - { label: 作者 / Authors, name: authors, widget: string }
-              - { label: 期刊或出版物 / Journal or publisher, name: journal, widget: string }
+              - { label: DOI, name: doi, widget: string, required: false }
+              - { label: 期刊或出版物 / Journal or publisher, name: journal, widget: string, required: false }
               - { label: 时间 / Date, name: time, widget: string }
               - { label: 排序日期 / Sort date, name: sortDate, widget: datetime, required: false, date_format: YYYY-MM-DD, time_format: false, format: YYYY-MM-DD }
               - { label: 链接 / URL, name: link, widget: string, required: false, pattern: ['^https?://.+', '请输入完整的网址'] }

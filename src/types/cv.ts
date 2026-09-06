@@ -22,6 +22,7 @@ export interface Skill {
 }
 
 export interface Publication {
+  doi?: string;
   title: string;
   authors: string;
   journal: string;

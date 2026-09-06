@@ -126,3 +126,17 @@ input[type=color] { display:block; flex:0 0 44px; width:44px; height:44px; margi
   .file-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
   .file-actions button { font-size: 11px; padding: 7px 5px; }
 }
+.citation-import { margin: 0 0 28px; padding: 22px; border: 1px solid var(--line); border-radius: 12px; background: #f8fbf9; }
+.citation-import h3 { margin: 0 0 10px; }
+.citation-preview { display: grid; gap: 10px; max-height: 440px; overflow: auto; }
+.citation-row { display: flex; align-items: flex-start; gap: 14px; padding: 14px; background: white; border: 1px solid var(--line); border-radius: 9px; cursor: pointer; }
+.citation-row input { flex: 0 0 18px; width: 18px; height: 18px; margin-top: 4px; accent-color: var(--primary); }
+.citation-row span { min-width: 0; display: grid; gap: 5px; overflow-wrap: anywhere; }
+.citation-row small { color: var(--muted); }
+.citation-row .citation-warning { color: #956119; }
+.domain-guide { line-height: 1.9; }
+.domain-guide li { margin: 14px 0; }
+.domain-guide a { display: inline-block; margin: 12px 20px 0 0; color: var(--primary); text-decoration: underline; }
+.domain-guide table { width: 100%; border-collapse: collapse; margin: 18px 0; }
+.domain-guide th, .domain-guide td { border-bottom: 1px solid var(--line); padding: 10px; text-align: left; }
+@media(max-width: 600px) { .citation-import { padding: 12px; } .citation-row { padding: 10px; } }

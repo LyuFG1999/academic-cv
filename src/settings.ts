@@ -89,11 +89,11 @@ export const maintenance = {
 const isNetlify = process.env.NETLIFY === 'true'
 
 export const template = {
-	websiteUrl: isNetlify ? (process.env.URL ?? 'https://example.netlify.app') : 'https://lyufg1999.github.io',
+	websiteUrl: process.env.SITE_ORIGIN || (isNetlify ? (process.env.URL ?? 'https://example.netlify.app') : 'https://lyufg1999.github.io'),
 	transitions: true,
 	lightTheme: 'academic-light',
 	darkTheme: 'academic-dark',
-	base: isNetlify ? '' : '/academic-cv',
+	base: process.env.SITE_BASE_PATH ?? (isNetlify ? '' : '/academic-cv'),
 }
 
 export const seo = {

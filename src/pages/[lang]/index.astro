@@ -25,12 +25,12 @@ const publications = cv[lang].publications
 ---
 
 <Layout lang={lang} immersiveIntro={true}>
-	<section class='border-b border-base-300 pb-12' data-reveal>
+	<section class='pb-8' data-reveal>
 		<Hero lang={lang} fullName={person.fullName} title={person.title} institute={person.institute} intro={person.intro} />
 	</section>
 
 	{person.researchAreas.length > 0 && (
-		<section class='border-b border-base-300 py-14' data-reveal>
+		<section class='py-10' data-reveal>
 			<Grid gridTitle={t.researchAreas} gridItems={person.researchAreas} />
 		</section>
 	)}
