@@ -1,23 +1,28 @@
 ---
-import { RESEARCH_ICONS } from '@/data/researchIcons';
+import { RESEARCH_ICONS } from '@/data/researchIcons'
 interface Props {
-  gridTitle: string;
+  gridTitle: string
   gridItems: {
-    title: string;
-    description: string;
-    field?: string;
-  }[];
+    title: string
+    description: string
+    field?: string
+  }[]
 }
 
-const {gridTitle, gridItems} = Astro.props;
+const { gridTitle, gridItems } = Astro.props
 ---
-<h2 class="text-3xl font-bold mb-8">{gridTitle}</h2>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-  {gridItems.map((item) => (
-    <div class="p-6 rounded-2xl border border-base-300/70 text-base-content bg-base-100">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" class="mb-5 size-8 text-secondary" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d={RESEARCH_ICONS[item.field as keyof typeof RESEARCH_ICONS]?.path || RESEARCH_ICONS.sociology.path} /></svg>
-      <h3 class="text-xl font-semibold mb-3">{item.title}</h3>
-      <p class="leading-relaxed text-base-content/70">{item.description}</p>
-    </div>
-  ))}
+<h2 class="mb-8 text-3xl font-bold">{gridTitle}</h2>
+<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+  {gridItems.map((item) => {
+    const icon = RESEARCH_ICONS[item.field as keyof typeof RESEARCH_ICONS] || RESEARCH_ICONS.sociology
+    return (
+      <div class="group rounded-2xl border border-base-300/70 bg-base-100 p-6 text-base-content transition hover:-translate-y-1 hover:border-secondary/35">
+        <div class="mb-5 grid size-12 place-items-center rounded-2xl border border-secondary/15 bg-secondary/10 text-2xl shadow-sm transition group-hover:scale-105" aria-hidden="true">
+          <span>{icon.emoji}</span>
+        </div>
+        <h3 class="mb-3 text-xl font-semibold">{item.title}</h3>
+        <p class="leading-relaxed text-base-content/70">{item.description}</p>
+      </div>
+    )
+  })}
 </div>

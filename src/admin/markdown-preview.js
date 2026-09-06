@@ -12,7 +12,13 @@ export function renderPreview(frame, post, uploads, base) {
   const article = doc.querySelector('article');
   const title = doc.createElement('h1'); title.textContent = post.data.title || '未命名文章'; article.append(title);
   const meta = doc.createElement('p'); meta.className = 'meta'; meta.textContent = `${post.data.date || ''} · ${post.data.draft ? '草稿预览 · 不会公开' : '公开文章 · 发布完成后生效'}`; article.append(meta);
-  const content = doc.createElement('div'); content.innerHTML = renderMarkdown(post.body, { base }); article.append(content);
+  const content = doc.createElement('div');
+  content.innerHTML = renderMarkdown(post.body, { base });
+  // KaTeX includes a MathML accessibility copy beside its visual HTML output.
+  // The isolated preview iframe strips that duplicate layer so a delayed/blocked
+  // stylesheet cannot expose a second textual copy after the rendered formula.
+  content.querySelectorAll('.katex-mathml').forEach(node => node.remove());
+  article.append(content);
   if (post.data.attachments?.length) {
     const heading = doc.createElement('h2'); heading.textContent = post.data.language === 'en' ? 'Downloads' : '附件下载'; article.append(heading);
     for (const item of post.data.attachments) {

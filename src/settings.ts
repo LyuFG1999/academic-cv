@@ -34,6 +34,7 @@ const data = settingsData as Omit<typeof settingsData, 'profile'> & {
 	profile: Omit<typeof settingsData.profile, 'researchAreas' | 'projects'> & {
 		researchAreas: { title: BilingualText; description: BilingualText; field: string }[]
 		projects: { title: BilingualText; description: BilingualText; link?: BilingualText }[]
+		siteIcon?: string
 	}
 }
 
@@ -57,6 +58,7 @@ const buildProfile = (lang: Language): Profile => ({
 })
 
 export const profile: Record<Language, Profile> = { zh: buildProfile('zh'), en: buildProfile('en') }
+export const siteIcon = data.profile.siteIcon?.trim() || ''
 
 export type SocialKey = 'email' | 'github' | 'orcid' | 'cnki' | 'school' | 'x' | 'linkedin'
 export type SocialLink = { enabled: boolean; url: string }
