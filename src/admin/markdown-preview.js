@@ -7,7 +7,8 @@ export function renderPreview(frame, post, uploads, base) {
   const csp = doc.createElement('meta'); csp.httpEquiv = 'Content-Security-Policy';
   csp.content = "default-src 'none'; img-src https: http: data: blob:; style-src https: http:; base-uri 'none'; form-action 'none'";
   const css = doc.createElement('link'); css.rel = 'stylesheet'; css.href = new URL(base + '/admin/preview.css', location.origin).href;
-  doc.head.append(csp, css);
+  const katexCss = doc.createElement('link'); katexCss.rel = 'stylesheet'; katexCss.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css';
+  doc.head.append(csp, css, katexCss);
   const article = doc.querySelector('article');
   const title = doc.createElement('h1'); title.textContent = post.data.title || '未命名文章'; article.append(title);
   const meta = doc.createElement('p'); meta.className = 'meta'; meta.textContent = `${post.data.date || ''} · ${post.data.draft ? '草稿预览 · 不会公开' : '公开文章 · 发布完成后生效'}`; article.append(meta);
