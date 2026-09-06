@@ -11,6 +11,117 @@
     }
   ],
   "skills": [],
-  "publications": [],
+  "publications": [
+    {
+      "category": "published",
+      "title": "Convergence or Divergence? The Impact of Common Institutional Ownership on Firms' Innovation Trajectories",
+      "authors": "Yuhan He; Fengguang Lyu; Shougui Luo",
+      "doi": "10.1016/j.ribaf.2025.103137",
+      "journal": "Research in International Business and Finance, 80, 103137",
+      "time": "2025",
+      "sortDate": "2025-08-01",
+      "link": "https://doi.org/10.1016/j.ribaf.2025.103137",
+      "abstract": "Understanding how innovation trajectories are shaped is a central concern in innovation management research. This paper investigates whether common institutional ownership (CIO) drives convergence or divergence in the innovation trajectories of firms. Using a large sample of Chinese A-share listed firm-pairs from 2010 to 2022, we find that CIO significantly enhances innovation similarity among invested firms, highlighting the knowledge spillover effect in innovation governance. The results are robust across various model specifications and robustness checks. Further analysis reveals that CIO facilitates inter-firm patent collaboration and patent citation, and site visits play a positive moderating role, thereby fostering innovation convergence. We also find that intra-industry relationships and heterogeneous ownership structures amplify inter-firm knowledge flows, reinforcing the role of CIO in facilitating knowledge transfer. Overall, our study provides new insights into the governance effect of CIO, examining its role in inter-firm innovation behavior and advancing the understanding of innovation convergence at the micro level."
+    },
+    {
+      "category": "published",
+      "title": "中国劳动者失业风险感知变迁——基于APC模型的动态分析",
+      "authors": "吕风光; 张顺",
+      "doi": "",
+      "journal": "人口与经济, (6), 44-58",
+      "time": "2025",
+      "sortDate": "2025-01-01",
+      "link": "",
+      "abstract": "劳动者的失业风险感知是客观就业处境的主观映射及预测指标。结合多重变迁趋势理论构建动态分析框架，基于2013—2021年中国社会状况综合调查（CSS）数据，使用“年龄-时期-世代”（APC）模型分解劳动者失业风险感知的年龄、时期和世代效应，得到以下核心结论：第一，在年龄效应上，失业风险感知随着年龄增长而下降，且下降趋势集中于劳动者就业初期；进一步分析发现，专用性人力资本和社会资本累积是失业风险感知在就业初期大幅下降的重要因素。第二，在时期效应上，2013—2021年失业风险感知逐年上升，这一趋势主要由数字经济推动就业形态快速变化所致，而劳动力成本上升和国际贸易形势的相对贡献较小。第三，在世代效应上，1960年左右世代群体的失业风险感知较低，而1975—1985年世代群体相对偏高；原因在于，1960年左右世代在就业初期失业率低，同辈竞争压力低，且劳动力素质与产业结构相匹配，因而具有较低的失业风险感知，而1975—1985年世代群体在就业初期失业率偏高，劳动力素质与产业结构出现分离，造成结构性失业与较高的失业风险感知。以上发现为治理失业风险提供了实证依据，对实现新时代高质量充分就业具有重要政策意义。"
+    },
+    {
+      "category": "published",
+      "title": "The Age-Period-Cohort Varying-Coefficient Model: Describing and Testing Temporal Heterogeneity in Regression Relationships",
+      "authors": "Fengguang Lyu",
+      "doi": "10.2139/ssrn.7380278",
+      "journal": "Social Science Research Network",
+      "time": "2026",
+      "sortDate": "2026-08-01",
+      "link": "https://doi.org/10.2139/ssrn.7380278",
+      "abstract": "Age-period-cohort (APC) research typically examines variation in outcome levels across age, historical period, and birth cohort. Many sociological questions, however, concern whether the relationship between two variables changes over time. We propose the age-period-cohort varying-coefficient (APC-VC) model, which treats the regression slope of a focal predictor as the object of APC analysis. Because the linear dependency among the three dimensions constrains slopes exactly as it constrains levels, we adopt the identification strategy of the ageperiod-cohort interaction (APC-I) model: the slope surface is estimated in age-by-period space and partitioned into an overall mean slope, an age component, a period component, and a nonadditive age-by-period slope component. Cohort differentiation is characterized by the pattern of the non-additive residual along Lexis diagonals and is summarized using a cohort-specific joint test, an average cohort deviation, and an intra-cohort linear trend. Moreover, given that the recovered surface is sensitive to non-additive structure and the treatment of covariates, we develop a diagnostic protocol comparing nested specifications on statistical support, overall fit, slope-surface stability, and estimation precision. The model is then illustrated through an analysis of temporal heterogeneity in the returns to education in China."
+    },
+    {
+      "category": "published",
+      "title": "Multiple Shareholding Institutional Investors and Green Governance of Heavy-Polluting Industries",
+      "authors": "Fengguang Lyu; Zhiping Zhang; Guangxin Fu; Zhangxin (Frank) Liu; Sirimon Treepongkaruna",
+      "doi": "10.1002/bse.3667",
+      "journal": "Business Strategy and The Environment, 33(4), 3569-3587",
+      "time": "2024",
+      "sortDate": "2024-01-01",
+      "link": "https://doi.org/10.1002/bse.3667",
+      "abstract": "Green governance in heavily polluting industries is crucial for achieving sustainable economic growth. By analyzing Chinese A-share listed companies from these industries between of 2010 and 2021, we assess the influence of multiple shareholding institutional investors (MSII) on a company's environmental performance. We find that MSIIs can improve environmental performance, highlighting their positive role in green governance. Further analyses reveal that this green influence stems from three key effects: supervisory oversight by principal shareholders, managerial incentives, and knowledge transfer. Consistent with the risk-averse hypothesis, our study also suggests that MSIIs could drive the green transformation of heavy-polluting industries out of risk aversion."
+    },
+    {
+      "category": "published",
+      "title": "The Distribution of Employment Risks in the Digital Era: An Institutionalism Perspective",
+      "authors": "Shun Zhang; Fengguang Lyu",
+      "doi": "",
+      "journal": "Sociological Studies, 39(5), 90-112, 228",
+      "time": "2024",
+      "sortDate": "2024-01-01",
+      "link": "https://shxyj.ajcass.com/Magazine/Show?id=97015",
+      "abstract": "本文以风险社会的制度主义视角,从失业风险和收入风险两个维度衡量就业风险,构建数字时代就业风险分配的理论模型并进行实证研究。研究发现,数字时代影响就业风险存在两种路径:一是数字技术系统通过创造就业和扩大竞争,促使失业风险向收入风险转化;二是在制度系统路径中,人力资本、政治资本和社会资本分别作为市场机制、组织体制机制与关系机制产生相异的分配效应,三者均能降低失业风险,政治资本和社会资本降低收入风险,而人力资本扩大收入风险。本研究进一步显示,数字技术重构了制度路径的作用空间。随着数字技术的发展,风险分配的制度性作用空间下降,使得失业风险趋于收敛,而收入风险加剧分化。"
+    },
+    {
+      "category": "published",
+      "title": "Multiple shareholding institutional investors' dual function and M&A value",
+      "authors": "Zhiping Zhang; Ailing Pan; Fengguang Lyu",
+      "doi": "10.19616/j.cnki.bmj.2022.11.008",
+      "journal": "Business and Management Journal, 44(11), 148-166",
+      "time": "2022",
+      "sortDate": "2022-01-01",
+      "link": "https://doi.org/10.19616/j.cnki.bmj.2022.11.008",
+      "abstract": "连锁机构投资者作为同时持有多家企业股权的特殊机构投资者，在企业并购过程中除了传统意义上的治理功能外，还扮演着作为专业投资者的咨询角色，其双重功能和角色对于企业并购价值具有重要影响。本文以中国资本市场2008—2018年发生并购事件的A股上市公司为样本，基于咨询和治理的双重功能视角，考察连锁机构投资者对企业并购价值的影响。研究发现，连锁机构投资者有利于企业并购价值的创造；机制检验发现，连锁机构投资者利用并购经验机制和行业信息机制在并购价值创造中发挥了咨询功能；利用对大股东的监督机制和对管理层的激励机制，在并购价值创造中发挥了积极的治理功能。进一步检验表明，在民营上市公司、以稳定型机构投资者为主的..."
+    },
+    {
+      "category": "published",
+      "title": "企业数字化对劳动力市场就业风险的影响",
+      "authors": "张顺; 吕风光",
+      "doi": "10.20069/j.cnki.djkx.202404002",
+      "journal": "当代经济科学, 46(4), 14-26",
+      "time": "2024",
+      "sortDate": "2024-01-01",
+      "link": "https://doi.org/10.20069/j.cnki.djkx.202404002",
+      "abstract": "企业数字化是数字经济的微观形态，对劳动力市场将产生深刻影响。在劳动力价格不断上涨的背景下，探讨企业数字化如何影响就业风险具有重要意义。采用劳动力需求弹性衡量劳动力市场就业风险，基于2010—2020年中国A股上市企业数据考察企业数字化对就业风险的影响，发现企业数字化能够降低劳动力市场的就业风险，总体上具有积极的就业效应。从作用机制来看，企业数字化通过生产力机制与资源机制对劳动力市场就业风险产生影响，前者表现为替代效应与规模效应，后者表现为融资效应，其中替代效应深化就业风险，而规模效应与融资效应缓解就业风险。实证结果表明，生产力机制的规模效应与资源机制的融资效应占据主导地位，这两个效应均显著存在。在数字经济所催生的企业数字化过程中，借助数字化转型推动企业发展，进而改善经营状况，对化解劳动者就业风险，实现更加充分更高质量就业具有积极意义。"
+    },
+    {
+      "category": "published",
+      "title": "数字时代的就业风险分配:制度主义的视角",
+      "authors": "张顺; 吕风光",
+      "doi": "",
+      "journal": "社会学研究, 39(5), 90-112, 228",
+      "time": "2024",
+      "sortDate": "2024-01-01",
+      "link": "",
+      "abstract": "本文以风险社会的制度主义视角,从失业风险和收入风险两个维度衡量就业风险,构建数字时代就业风险分配的理论模型并进行实证研究。研究发现,数字时代影响就业风险存在两种路径:一是数字技术系统通过创造就业和扩大竞争,促使失业风险向收入风险转化;二是在制度系统路径中,人力资本、政治资本和社会资本分别作为市场机制、组织体制机制与关系机制产生相异的分配效应,三者均能降低失业风险,政治资本和社会资本降低收入风险,而人力资本扩大收入风险。本研究进一步显示,数字技术重构了制度路径的作用空间。随着数字技术的发展,风险分配的制度性作用空间下降,使得失业风险趋于收敛,而收入风险加剧分化。"
+    },
+    {
+      "category": "published",
+      "title": "新冠疫情的资本市场冲击效应研究",
+      "authors": "张志平; 朱思颖; 吕风光",
+      "doi": "",
+      "journal": "会计之友, (18), 131-137",
+      "time": "2020",
+      "sortDate": "2020-01-01",
+      "link": "",
+      "abstract": "新冠肺炎疫情作为重大突发公共卫生事件,短期内对经济发展以及资本市场都带来巨大冲击。文章以中国资本市场相关股票交易数据为样本,通过行业异质性分析、拐点分析与事件研究法探讨了新冠疫情对资本市场的冲击效应。研究结果表明:新冠疫情对资本市场的短期冲击剧烈,这种冲击具有明显的行业异质性特征,受疫情影响较大的行业凸显更强的冲击效应;机制分析发现投资者情绪是新冠疫情存在资本市场冲击效应的重要传导路径。研究新冠疫情对资本市场的冲击效应及其路径于促进我国经济发展以及稳定资本市场都具有重要意义。"
+    },
+    {
+      "category": "published",
+      "title": "Study on heterogeneous shareholders\\prime governance effect of mixed-ownership reform: An empirical analysis based on the perspective of M&A value",
+      "authors": "Zhiping Zhang; Shixian Ling; Fengguang Lyu",
+      "doi": "10.19559/j.cnki.12-1387.2021.09.006",
+      "journal": "Modern Finance and Economics (Journal of Tianjin University of Finance and Economics), 41(9), 78-95",
+      "time": "2021",
+      "sortDate": "2021-01-01",
+      "link": "https://doi.org/10.19559/j.cnki.12-1387.2021.09.006",
+      "abstract": "随着混合所有制改革的持续深入,异质性大股东治理效应成为亟需研究的重要问题。本文以2008—2017年发生并购交易的A股上市公司为样本,从并购价值的视角,实证检验异质性大股东的治理效应及作用路径。研究发现,异质性大股东具有积极的治理效应,能显著提高企业并购价值;机制检验发现,异质性大股东通过监督控股股东、激励管理层、为非国有企业提供异质股权\"扶持效应\"三种路径来提升并购价值;进一步研究发现,当异质性大股东的数量越多、累计持股比例越高、控股股东股权越集中时,异质性大股东对并购价值的治理效应越强。"
+    }
+  ],
   "content": "# 123\ndde\ndee\n得得\n# 也一样\ndde\ndee\n得得\n\n\n"
 }
