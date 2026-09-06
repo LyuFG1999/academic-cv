@@ -32,9 +32,9 @@ The settings dashboard lets you update the following content without editing cod
 
 The blog editor includes an article file library, URL/Markdown copy actions, shared end-of-post downloads, and local Markdown/ZIP import. See [the file and import guide](docs/blog-files.md) for supported layouts and limits.
 
-Production hosting is **GitHub Pages**. The dashboard uses **GitHub App OAuth**, not Netlify Identity or Git Gateway. The small authentication service is supplied in `auth-worker/` and needs one-time owner configuration; see [migration and setup instructions](docs/github-pages-migration.md).
+Production hosting is **GitHub Pages**. The dashboard uses **GitHub App OAuth**, not Netlify Identity or Git Gateway. The small authentication service is supplied in `auth-worker/` and needs one-time owner configuration; configure the GitHub App and `auth-worker/` variables before first use.
 
-Open https://lyufg1999.github.io/academic-cv/admin/ . Edit settings, blog posts and attachments together. **Save local draft** stores only in this browser and does not deploy. **Publish all** creates one atomic commit and starts GitHub Actions. Wait for deployment confirmation before expecting public changes. Local drafts do not sync between devices. Credentials are never saved in drafts.
+Open https://fengguanglyu.com/admin/ . Edit settings, blog posts and attachments together. **Save local draft** stores only in this browser and does not deploy. **Publish all** creates one atomic commit and starts GitHub Actions. Wait for deployment confirmation before expecting public changes. Local drafts do not sync between devices. Credentials are never saved in drafts.
 
 ## Edit content directly
 
@@ -48,7 +48,7 @@ If you prefer to edit files, the same CMS-managed content is stored in:
 
 Disabled or empty contact fields are omitted from the public site.
 
-Opening `/admin/` displays one settings panel at a time, selected through the highlighted sidebar. Switching panels preserves edits. Blog entries use collapsible Markdown editors. All sections share one publish action. Validation brings hidden invalid fields into view before publishing. Same-file conflicts block publication rather than overwriting concurrent changes. Maintenance takes effect after deployment; it is not immediate access control. The old `/admin/editor/` redirects to the consolidated dashboard. The YAML configuration remains as the settings schema, not an independently publishing Decap interface.
+Opening `/admin/` displays one settings panel at a time, selected through the highlighted sidebar. Switching panels preserves edits. Blog entries use collapsible Markdown editors. All sections share one publish action. Validation brings hidden invalid fields into view before publishing. Same-file conflicts block publication rather than overwriting concurrent changes. Maintenance takes effect after deployment; it is not immediate access control. The YAML configuration is retained only as the field schema consumed by the consolidated dashboard.
 
 Contact icons are hidden until a link is filled in and its switch enabled. See [the current editing and audit notes](docs/editor-reliability.md) for publication states, Markdown previews, CV content and security boundaries.
 
@@ -60,10 +60,8 @@ npm test
 npm run dev
 ```
 
-The local and GitHub Pages base path is `/academic-cv`, so open `http://localhost:4321/academic-cv/`.
+The production site uses the custom-domain root path. For local development, open `http://localhost:4321/`.
 
 ## GitHub Pages deployment
 
 The included `.github/workflows/deploy.yml` builds and deploys every push to `main`. In GitHub, set **Settings → Pages → Build and deployment → Source** to **GitHub Actions**.
-
-The old Netlify site is retained but automatic builds are ignored by `netlify.toml`. Dashboard commits also contain `[skip netlify]`. Do not continue editing with the old Netlify dashboard. No paid plan changes or domain changes are made by this migration.
