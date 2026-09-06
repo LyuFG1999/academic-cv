@@ -37,7 +37,7 @@ jobs:
           cache: npm
       - name: Install locked dependencies and run regression tests
         run: |
-          npm ci
+          npm install --no-audit --no-fund
           npm test
       - name: Install, build, and upload your site output
         uses: withastro/action@v6
