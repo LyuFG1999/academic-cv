@@ -14,23 +14,40 @@ interface Props {
 const { elements, lang, authorName } = Astro.props
 const t = copy[lang]
 ---
-<ul class='space-y-8'>
+<ul class='publication-list space-y-8'>
   {elements.map((element) => {
     const link = safeHttpUrl(element.link)
     return (
-    <li class='group'>
+    <li class='group min-w-0'>
       {link
-        ? <a href={link} class='block transition-colors duration-200 hover:text-accent' target='_blank' rel='noopener noreferrer'><h3 class='mb-2 text-lg font-bold'>{element.title}</h3></a>
-        : <h3 class='mb-2 text-lg font-bold'>{element.title}</h3>}
-      <p class='text-base mb-2'>
+        ? <a href={link} class='publication-link block min-w-0 transition-colors duration-200 hover:text-accent' target='_blank' rel='noopener noreferrer'><h3 class='mb-2 min-w-0 text-lg font-bold'>{element.title}</h3></a>
+        : <h3 class='mb-2 min-w-0 text-lg font-bold'>{element.title}</h3>}
+      <p class='mb-2 min-w-0 text-base publication-authors'>
         <span class='font-medium'>{t.authors}:</span>{' '}
         <AuthorNames authors={element.authors} authorName={authorName} />
       </p>
-      <p class='text-sm mb-3'>
+      <p class='mb-3 min-w-0 text-sm publication-meta'>
         <span class='italic'>{element.journal}</span> •{' '}
         {element.time}
       </p>
-      {element.abstract && <p>{element.abstract}</p>}
+      {element.abstract && <p class='min-w-0 publication-abstract'>{element.abstract}</p>}
     </li>
   )})}
 </ul>
+
+<style>
+  .publication-list,
+  .publication-list :global(li),
+  .publication-link,
+  .publication-link :global(h3),
+  .publication-authors,
+  .publication-meta,
+  .publication-abstract { max-width: 100%; min-width: 0; overflow-wrap: anywhere; white-space: normal; }
+  @media (max-width: 640px) {
+    .publication-list { width: 100%; }
+    .publication-link :global(h3) { font-size: 1.02rem; line-height: 1.55; }
+    .publication-authors { font-size: .93rem; line-height: 1.65; }
+    .publication-meta { line-height: 1.6; }
+    .publication-abstract { line-height: 1.7; }
+  }
+</style>
