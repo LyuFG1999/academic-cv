@@ -27,51 +27,95 @@
       "surface": "#1B2925"
     }
   },
-  "avatar": "/uploads/avatar-c7e34e97-3fc4-47a8-993f-43781f364bc7.png",
+  "avatar": "/uploads/avatar.svg",
   "profile": {
     "fullName": {
-      "zh": "这里是姓名",
-      "en": "This is Your Name"
+      "zh": "吕风光",
+      "en": "Fengguang Lyu"
     },
     "title": {
       "zh": "博士候选人",
-      "en": "Researcher 123"
+      "en": "PhD Candidate"
     },
     "institute": {
-      "zh": "这里是院校或研究机构",
-      "en": "这里是University or Research Institute"
+      "zh": "西安交通大学社会学系",
+      "en": "Department of Sociology, Xi'an Jiaotong University"
     },
     "authorName": {
-      "zh": "",
-      "en": ""
+      "zh": "吕风光",
+      "en": "Fengguang Lyu"
     },
     "siteIcon": "",
     "intro": {
-      "zh": "这里是欢迎来到我的学术主页。这里记录我的研究、写作与教学。这里是欢迎来到我的学术主页。这里记录我的研究、写作与教学。这里是欢迎来到我的学术主页。这里记录我的研究、写作与教学。",
-      "en": "Welcome to my academic website. Explore my research, writing, and teaching.Welcome to my academic website. Explore my research, writing, and teaching.Welcome to my academic website. Explore my research, writing, and teaching."
+      "zh": "吕风光，西安交通大学社会学系博士候选人。研究兴趣集中于社会分层与流动、劳动力市场、经济社会学、组织社会学与定量研究，重点关注数字化与人工智能背景下的就业风险、主观阶层认同，以及机构投资者、公司治理与企业创新等问题，同时从事年龄—时期—世代模型及其扩展方法研究。",
+      "en": "Fengguang Lyu is a PhD Candidate in Sociology at Xi'an Jiaotong University. His research focuses on social stratification and mobility, labor markets, economic sociology, organizational sociology, and quantitative methods, with particular interests in employment risks and subjective class identification in the digital and AI era, institutional investors, corporate governance and innovation, and methodological extensions of age-period-cohort analysis."
     },
     "researchStatement": {
-      "zh": "1111111111111111222222222222这里是研究陈述",
-      "en": "1111111111111111222222222222"
+      "zh": "我的研究围绕数字技术、制度结构与社会分层之间的关系展开。第一条主线关注劳动力市场与社会分层，考察数字化、人工智能、就业风险以及人力资本、政治资本和社会资本等制度性资源如何塑造劳动者的风险暴露与主观阶层认同。第二条主线关注组织与资本市场，研究共同或连锁机构投资者、异质性大股东等治理主体如何影响企业创新、环境绩效与并购价值。在方法上，我关注年龄—时期—世代分析及其在回归关系时间异质性研究中的扩展，并提出年龄—时期—世代变系数模型（APC-VC）作为相应的方法框架。",
+      "en": "My research examines how digital technologies and institutional structures shape social stratification. One strand focuses on labor markets and inequality, studying how digitalization, artificial intelligence, employment risks, and institutional resources such as human, political, and social capital affect workers' risk exposure and subjective class identification. A second strand studies organizations and capital markets, especially how common or multiple-shareholding institutional investors and heterogeneous blockholders influence innovation, environmental performance, and M&A value. Methodologically, I work on age-period-cohort analysis and its extension to temporal heterogeneity in regression relationships, including the age-period-cohort varying-coefficient (APC-VC) model."
     },
     "researchImpact": {
-      "zh": "qqqqqqqqqqqqqqqqqqqq",
-      "en": "xxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      "zh": "现有研究在三个方面形成了较为连贯的贡献：一是从风险与制度主义视角解释数字时代就业风险的分配及其对主观阶层认同的影响；二是从治理、咨询与知识流动机制解释机构投资者和异质性大股东对企业创新、绿色治理与并购价值的作用；三是将年龄—时期—世代分析从结果水平扩展到回归关系，提出用于描述和检验关系时间异质性的 APC-VC 模型。这些工作共同连接了社会分层、劳动力市场、组织治理与定量方法研究。",
+      "en": "My work makes three connected contributions. First, it develops risk-based and institutional explanations of how employment risks are distributed in the digital era and how they shape subjective class identification. Second, it identifies governance, advisory, and knowledge-flow mechanisms through which institutional investors and heterogeneous blockholders affect innovation, green governance, and M&A value. Third, it extends age-period-cohort analysis from outcome levels to regression relationships through the APC-VC model for describing and testing temporal heterogeneity. Together, these studies connect social stratification, labor markets, organizational governance, and quantitative methodology."
     },
     "seoTitle": {
-      "zh": "xxx的学术主页",
-      "en": "xxx'sAcademic Profile"
+      "zh": "吕风光｜学术主页",
+      "en": "Fengguang Lyu | Academic Profile"
     },
     "seoDescription": {
-      "zh": "研究、写作与教学。研究、写作与教学。研究、写作与教学。研究、写作与教学。研究、写作与教学。",
-      "en": "Research, writing, and teaching.Research, writing, and teaching.Research, writing, and teaching.Research, writing, and teaching."
+      "zh": "吕风光，西安交通大学社会学系博士候选人。研究社会分层与流动、劳动力市场、经济社会学、组织社会学与定量研究。",
+      "en": "Fengguang Lyu, PhD Candidate in Sociology at Xi'an Jiaotong University. Research on social stratification and mobility, labor markets, economic sociology, organizational sociology, and quantitative methods."
     },
     "researchAreas": [
       {
         "field": "sociology",
         "title": {
           "zh": "社会分层与流动",
+          "en": "Social Stratification and Mobility"
+        },
+        "description": {
+          "zh": "",
           "en": ""
+        }
+      },
+      {
+        "field": "economics",
+        "title": {
+          "zh": "劳动力市场",
+          "en": "Labor Markets"
+        },
+        "description": {
+          "zh": "",
+          "en": ""
+        }
+      },
+      {
+        "field": "sociology",
+        "title": {
+          "zh": "经济社会学",
+          "en": "Economic Sociology"
+        },
+        "description": {
+          "zh": "",
+          "en": ""
+        }
+      },
+      {
+        "field": "sociology",
+        "title": {
+          "zh": "组织社会学",
+          "en": "Organizational Sociology"
+        },
+        "description": {
+          "zh": "",
+          "en": ""
+        }
+      },
+      {
+        "field": "data",
+        "title": {
+          "zh": "定量研究",
+          "en": "Quantitative Methods"
         },
         "description": {
           "zh": "",
@@ -103,7 +147,7 @@
       "en": "Courses"
     },
     "blog": {
-      "enabled": true,
+      "enabled": false,
       "zh": "博客",
       "en": "Blog"
     },
@@ -120,20 +164,20 @@
   },
   "social": {
     "email": {
-      "enabled": false,
-      "url": ""
+      "enabled": true,
+      "url": "lvfg1999@126.com"
     },
     "github": {
-      "enabled": false,
-      "url": ""
+      "enabled": true,
+      "url": "https://github.com/LyuFG1999"
     },
     "orcid": {
-      "enabled": false,
-      "url": ""
+      "enabled": true,
+      "url": "https://orcid.org/0000-0002-1943-4226"
     },
     "cnki": {
-      "enabled": false,
-      "url": ""
+      "enabled": true,
+      "url": "https://au.cnki.net/author/personalInfo/000042896940"
     },
     "school": {
       "enabled": false,
