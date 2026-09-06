@@ -1,11 +1,17 @@
 ---
 import { localizedPath, type Language } from '@/i18n'
 import { profile, template } from '@/settings'
+import { cv } from '@/data/cv'
 import { navigation, navigationLabel, navigationOrder } from '@/data/navigation'
+import { compareByAcademicDate } from '@/lib/utils'
 
 type Props = { lang: Language }
 const { lang } = Astro.props
 const person = profile[lang]
+const data = cv[lang]
+const latestExperience = [...data.experiences].sort(compareByAcademicDate)[0]
+const latestEducation = [...data.education].sort(compareByAcademicDate)[0]
+const currentInstitution = latestExperience?.company?.trim() || latestEducation?.school?.trim() || person.institute?.trim()
 const navItems = navigationOrder
 	.filter(({ key }) => navigation[key].enabled)
 	.map(({ key, path }) => ({ label: navigationLabel(key, lang), path: localizedPath(lang, path) }))
@@ -17,6 +23,7 @@ const navItems = navigationOrder
 			<div class='rounded-full border border-base-300 p-1.5'><img class='size-20 rounded-full object-cover' src={`${template.base}${person.avatar}`} alt={person.fullName} width='80' height='80' loading='eager' /></div>
 			<p class='mt-5 text-center text-xl font-bold tracking-tight'>{person.fullName}</p>
 			<p class='mt-1 text-center text-sm text-base-content/65'>{person.title}</p>
+			{currentInstitution && <p class='mt-1.5 max-w-[12rem] text-center text-xs leading-relaxed text-base-content/50'>{currentInstitution}</p>}
 		</div>
 
 		<nav class='mt-8' aria-label={lang === 'zh' ? '主导航' : 'Main navigation'}>
@@ -24,7 +31,7 @@ const navItems = navigationOrder
 				{navItems.map((item) => {
 					const href = `${template.base}${item.path}`
 					const active = Astro.url.pathname.replace(/\/$/, '') === href.replace(/\/$/, '')
-					return <li><a href={href} class:list={['group rounded-2xl px-4 py-3 font-medium transition-colors duration-150', { active }]} aria-current={active ? 'page' : undefined}><span class:list={['mr-3 inline-block size-1.5 rounded-full transition-colors', active ? 'bg-primary-content shadow-[0_0_0_.3rem_rgba(255,255,255,.13)]' : 'bg-base-content/20 group-hover:bg-primary']}></span>{item.label}</a></li>
+					return <li><a href={href} class:list={['group rounded-2xl px-4 py-[0.9rem] font-medium transition-colors duration-150', { active }]} aria-current={active ? 'page' : undefined}><span class:list={['mr-3 inline-block size-1.5 rounded-full transition-colors', active ? 'bg-primary-content shadow-[0_0_0_.3rem_rgba(255,255,255,.13)]' : 'bg-base-content/20 group-hover:bg-primary']}></span>{item.label}</a></li>
 				})}
 			</ul>
 		</nav>

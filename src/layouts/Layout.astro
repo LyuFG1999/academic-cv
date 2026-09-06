@@ -2,7 +2,6 @@
 import DeploymentGuard from '@/components/DeploymentGuard.astro'
 import '@/styles/site.css'
 import 'katex/dist/katex.min.css'
-import BetterIcon from '@/components/ui/BetterIcon.astro'
 import DarkLightController from '@/components/ui/DarkLightController.astro'
 import Navbar from '@/components/ui/Navbar.astro'
 import Footer from '@/components/ui/Footer.astro'
@@ -51,12 +50,10 @@ const languagePath = `${template.base}${switchedPath}`
 				<main tabindex='-1' class='site-main'>
 					<div class='main-flow'>
 					<nav class='page-tools' aria-label={lang === 'zh' ? '页面选项' : 'Page options'}>
-							<label for='site-drawer' class='btn btn-square btn-ghost lg:hidden' aria-label={lang === 'zh' ? '打开菜单' : 'Open menu'}>
-								<BetterIcon>
-									<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' class='size-6 stroke-current'>
-										<path stroke-linecap='round' stroke-linejoin='round' d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'></path>
+							<label for='site-drawer' class='btn btn-square btn-ghost menu-control lg:hidden' aria-label={lang === 'zh' ? '打开菜单' : 'Open menu'}>
+								<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' class='size-5 stroke-current' aria-hidden='true'>
+									<path stroke-linecap='round' stroke-linejoin='round' d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'></path>
 								</svg>
-								</BetterIcon>
 							</label>
 							<a href={languagePath} class='btn btn-ghost language-control' hreflang={otherLanguage} aria-label={copy[lang].language} title={copy[lang].language}>
 								<span>{lang === 'zh' ? 'EN' : '中文'}</span>
@@ -119,6 +116,7 @@ const languagePath = `${template.base}${switchedPath}`
 	.page-tools { float: right; position: relative; z-index: 5; display: flex; align-items: center; gap: .45rem; margin: 0 0 1.5rem 1.5rem; max-width: 100%; }
 	.page-tools .btn { min-height: 2.5rem; height: 2.5rem; border: 1px solid var(--fallback-b3, oklch(var(--b3))); background: var(--fallback-b1, oklch(var(--b1))); box-shadow: none; flex: 0 0 auto; }
 	.page-tools .btn-circle, .page-tools .btn-square { width: 2.5rem; }
+	.menu-control { overflow: hidden; padding: 0; border-radius: 999px; box-shadow: none !important; }
 	.language-control { padding-inline: .85rem; font-size: .75rem; letter-spacing: .03em; }
 	.page-content > :first-child { min-height: 3rem; }
 	.page-content h1 { overflow-wrap: anywhere; line-height: 1.2; }
@@ -137,8 +135,9 @@ const languagePath = `${template.base}${switchedPath}`
 		.site-main { padding: 1rem max(1rem, env(safe-area-inset-right)) 1.25rem max(1rem, env(safe-area-inset-left)); }
 		.main-flow { display: block; }
 		.page-tools { float: none; width: 100%; justify-content: flex-end; gap: .4rem; margin: 0 0 1.25rem; }
-		.page-tools .btn { min-height: 2.35rem; height: 2.35rem; }
+		.page-tools .btn { min-height: 2.35rem; height: 2.35rem; box-shadow: none !important; }
 		.page-tools .btn-circle, .page-tools .btn-square { width: 2.35rem; }
+		.menu-control { width: 2.35rem; min-width: 2.35rem; border-radius: 999px; }
 		.language-control { padding-inline: .75rem; }
 		.page-content > :first-child { min-height: 0; }
 		.page-content h1 { font-size: 2rem; }
