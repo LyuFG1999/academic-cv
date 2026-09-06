@@ -1,6 +1,5 @@
 ---
 import Layout from '@/layouts/Layout.astro'
-import BetterIcon from '@/components/ui/BetterIcon.astro'
 import { RESEARCH_ICONS } from '@/data/researchIcons'
 import { copy, isLanguage, languages } from '@/i18n'
 import { profile } from '@/settings'
@@ -27,17 +26,23 @@ const person = profile[lang]
 	<section class='mt-14' data-reveal>
 		<h2 class='mb-8 text-3xl font-bold'>{t.researchAreas}</h2>
 		{person.researchAreas.length > 0 ? (
-			<div class='grid gap-5'>
-				{person.researchAreas.map((area) => (
-					<div class='flex items-start gap-5 rounded-2xl border border-base-300 bg-base-200/70 p-6'>
-						<BetterIcon>
-							<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke-width='2' class='size-6 stroke-secondary'>
-								<path stroke-linecap='round' stroke-linejoin='round' d={RESEARCH_ICONS[area.field as keyof typeof RESEARCH_ICONS]?.path || RESEARCH_ICONS['computer-science'].path} />
-							</svg>
-						</BetterIcon>
-						<div><h3 class='text-xl font-semibold'>{area.title}</h3><p class='mt-2 text-base-content/75'>{area.description}</p></div>
-					</div>
-				))}
+			<div class='grid gap-5 sm:grid-cols-2'>
+				{person.researchAreas.map((area) => {
+					const icon = RESEARCH_ICONS[area.field as keyof typeof RESEARCH_ICONS] || RESEARCH_ICONS['computer-science']
+					return (
+						<article class='group rounded-2xl border border-base-300 bg-base-200/65 p-6 transition hover:-translate-y-1 hover:border-secondary/35 hover:bg-base-200'>
+							<div class='flex items-start gap-5'>
+								<div class='grid size-14 shrink-0 place-items-center rounded-2xl border border-secondary/15 bg-secondary/10 text-3xl shadow-sm transition group-hover:scale-105' aria-hidden='true'>
+									<span>{icon.emoji}</span>
+								</div>
+								<div class='min-w-0'>
+									<h3 class='text-xl font-semibold'>{area.title}</h3>
+									{area.description && <p class='mt-2 leading-relaxed text-base-content/72'>{area.description}</p>}
+								</div>
+							</div>
+						</article>
+					)
+				})}
 			</div>
 		) : (
 			<div class='alert border border-base-300 bg-base-200/70'><span>{t.emptyResearch}</span></div>
