@@ -1,6 +1,6 @@
 {
   "maintenance": {
-    "enabled": true,
+    "enabled": false,
     "title": {
       "zh": "网站维护中",
       "en": "Site under maintenance"
