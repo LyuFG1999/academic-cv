@@ -23,7 +23,7 @@ export async function api(path, body, method = body ? 'POST' : 'GET') {
 }
 export const editablePath = path => /^src\/data\/(site-settings|cv\.(zh|en)|courses\.(zh|en))\.json$/.test(path)
   || /^src\/content\/BlogPosts\/[a-zA-Z0-9_/-]+\.md$/.test(path) && !path.includes('..')
-  || /^public\/uploads\/[a-zA-Z0-9_-]+\.[a-zA-Z0-9]+$/.test(path);
+  || /^public\/uploads\/(?:blog\/[a-zA-Z0-9_-]+\/)?[a-zA-Z0-9_-]+\.[a-zA-Z0-9]+$/.test(path);
 
 // Verify every modified path against the original snapshot; unrelated edits survive.
 // One non-force ref update publishes the complete batch, including file deletions.

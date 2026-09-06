@@ -14,10 +14,11 @@ const blog = defineCollection({
     schema: z.object({
         title: z.string(),
         language: z.enum(['zh', 'en']).default('zh'),
-        date: z.string(),
+        date: z.preprocess(value => value instanceof Date ? value.toISOString().slice(0, 10) : value, z.string().refine(value => !Number.isNaN(Date.parse(value)), 'Invalid blog date')),
         excerpt: z.string(),
         tags: z.array(z.string()).optional(),
         featuredImage: z.string().optional(),
+        files: z.array(z.object({ name: z.string(), url: z.string() })).optional(),
         attachments: z.array(z.object({
             label: z.string(),
             file: z.string(),

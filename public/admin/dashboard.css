@@ -102,3 +102,27 @@ input[type=color] { display:block; flex:0 0 44px; width:44px; height:44px; margi
   .welcome { margin:20px auto; }
 }
 @media(prefers-reduced-motion:reduce) { *,*::before { transition:none!important; } }
+:root { --file-border: #dbe6e0; }
+.blog-fields { border: 0; min-width: 0; margin: 0; }
+.file-manager, .attachment-manager { margin: 24px 0; border: 1px solid var(--file-border); border-radius: 14px; padding: 22px; min-width: 0; }
+.file-manager h3, .attachment-manager h3 { margin: 0 0 12px; }
+.file-list { display: grid; gap: 12px; margin-top: 18px; }
+.file-card { display: grid; gap: 10px; padding: 16px; border: 1px solid var(--file-border); border-radius: 10px; min-width: 0; }
+.file-card strong, .attachment-row code { overflow-wrap: anywhere; }
+.file-card input { width: 100%; min-width: 0; font-size: 12px; }
+.file-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.file-actions button { font-size: 12px; padding: 8px 11px; }
+.external-file, .attachment-row { display: grid; gap: 10px; margin-top: 16px; }
+.external-file { grid-template-columns: 1fr 2fr auto; }
+.external-file input, .attachment-row input { min-width: 0; width: 100%; }
+.attachment-row { padding: 14px; border: 1px solid var(--file-border); border-radius: 10px; }
+.import-field { padding: 16px; background: #f1f7f4; border-radius: 10px; }
+@media(max-width: 600px) { .external-file { grid-template-columns: 1fr; } .file-manager, .attachment-manager { padding: 12px; } }
+@media(max-width: 600px) {
+  #section-blog { padding: 18px 10px; }
+  .blog-fields { padding: 12px 8px; }
+  .file-manager, .attachment-manager { padding: 12px 8px; }
+  .file-card { padding: 12px 8px; }
+  .file-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .file-actions button { font-size: 11px; padding: 7px 5px; }
+}

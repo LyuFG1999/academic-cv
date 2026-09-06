@@ -101,7 +101,19 @@ collections:
                     name: field
                     widget: select
                     default: computer-science
-                    options: [computer-science, physics, biology, chemistry, mathematics, law, engineering]
+                    options:
+                      - { label: 社会学 / Sociology, value: sociology }
+                      - { label: 经济学 / Economics, value: economics }
+                      - { label: 教育 / Education, value: education }
+                      - { label: 数据与方法 / Data, value: data }
+                      - { label: 人口与社会 / Population, value: globe }
+                      - { label: 计算机 / Computer science, value: computer-science }
+                      - { label: 物理 / Physics, value: physics }
+                      - { label: 生物 / Biology, value: biology }
+                      - { label: 化学 / Chemistry, value: chemistry }
+                      - { label: 数学 / Mathematics, value: mathematics }
+                      - { label: 法律 / Law, value: law }
+                      - { label: 工程 / Engineering, value: engineering }
                   - { label: 名称 / Title, name: title, widget: object, fields: *bilingual_string_fields }
                   - { label: 简介 / Description, name: description, widget: object, fields: *bilingual_text_fields }
               - label: 研究项目（每项同时填写中英文）

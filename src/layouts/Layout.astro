@@ -1,5 +1,5 @@
 ---
-import { ClientRouter } from 'astro:transitions'
+import { ClientRouter, fade } from 'astro:transitions'
 import '@/styles/site.css'
 import BetterIcon from '@/components/ui/BetterIcon.astro'
 import DarkLightController from '@/components/ui/DarkLightController.astro'
@@ -41,7 +41,7 @@ const languagePath = `${template.base}${switchedPath}`
 		{template.transitions && <ClientRouter />}
 		<Head lang={lang} title={pageTitle} description={pageDescription} image={pageImage} alternatePath={languagePath} />
 	</head>
-	<body>
+	<body transition:animate={fade({ duration: '90ms' })}>
 		{maintenance.enabled ? <MaintenanceScreen lang={lang} /> : <>
 		{immersiveIntro && appearance.introEnabled && <IntroGate lang={lang} />}
 		<div class='min-h-screen bg-base-100 drawer lg:drawer-open' data-site-shell>
@@ -78,7 +78,11 @@ const languagePath = `${template.base}${switchedPath}`
 
 <script is:inline>
 	(() => {
+	if (window.__academicRevealInstalled) return
+	window.__academicRevealInstalled = true
+	let currentObserver
 	const initializeReveal = () => {
+		currentObserver?.disconnect()
 		const elements = document.querySelectorAll('[data-reveal]')
 		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
 			elements.forEach((element) => element.classList.add('is-visible'))
@@ -96,6 +100,7 @@ const languagePath = `${template.base}${switchedPath}`
 				}
 			})
 		}, { threshold: 0.12 })
+		currentObserver = observer
 		elements.forEach((element) => observer.observe(element))
 	}
 	initializeReveal()
@@ -137,9 +142,9 @@ const languagePath = `${template.base}${switchedPath}`
 	[data-reveal] {
 		opacity: 1;
 		transform: none;
-		transition: opacity 650ms ease, transform 650ms cubic-bezier(.2,.7,.2,1);
+		transition: opacity 150ms ease, transform 150ms ease;
 	}
-	.js [data-reveal]:not(.is-visible) { opacity: 0; transform: translateY(1.25rem); }
+	.js [data-reveal]:not(.is-visible) { opacity: 0; transform: translateY(.3rem); }
 	.js [data-reveal].is-visible { opacity: 1; transform: none; }
 	@media (prefers-reduced-motion: reduce) {
 		html { scroll-behavior: auto; }

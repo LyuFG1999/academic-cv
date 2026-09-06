@@ -178,7 +178,7 @@ function render() {
   section('courses', '课程', pairSchema(schema.courses), courses);
   section('appearance', '外观与配色', get('appearance').fields, settings.appearance);
   section('maintenance', '网站维护', get('maintenance').fields, settings.maintenance, '发布完成后生效，管理后台仍可使用。');
-  renderBlog({ posts, uploads, section, fieldNode, el, changed, message, bytesToBase64, uploading });
+  renderBlog({ posts, uploads, section, fieldNode, el, changed, message, bytesToBase64, uploading, base });
   selectPanel(location.hash.slice(1));
 }
 async function load() {
@@ -255,7 +255,7 @@ form.addEventListener('submit', async event => {
       const content = post.deleted ? null : serializePost(post);
       if (content !== post.original && !(post.deleted && !post.sha)) changes.push({ path, originalSha: post.sha, content });
     }
-    const usedContent = JSON.stringify(values) + [...posts.values()].filter(post => !post.deleted).map(serializePost).join('\n');
+    const usedContent = JSON.stringify(values) + [...posts.values()].filter(post => !post.deleted).map(post => JSON.stringify(post.data) + post.body).join('\n');
     for (const [path, content] of uploads) {
       if (usedContent.includes(path.slice('public'.length))) changes.push({ path, content, originalSha: null, encoding: 'base64' });
     }

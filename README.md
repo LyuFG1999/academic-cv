@@ -30,6 +30,8 @@ The settings dashboard lets you update the following content without editing cod
 - Paper category visibility and bilingual courses
 - Bilingual blog posts, images, and downloadable files
 
+The blog editor includes an article file library, URL/Markdown copy actions, shared end-of-post downloads, and local Markdown/ZIP import. See [the file and import guide](docs/blog-files.md) for supported layouts and limits.
+
 Production hosting is **GitHub Pages**. The dashboard uses **GitHub App OAuth**, not Netlify Identity or Git Gateway. The small authentication service is supplied in `auth-worker/` and needs one-time owner configuration; see [migration and setup instructions](docs/github-pages-migration.md).
 
 Open https://lyufg1999.github.io/academic-cv/admin/ . Edit settings, blog posts and attachments together. **Save local draft** stores only in this browser and does not deploy. **Publish all** creates one atomic commit and starts GitHub Actions. Wait for deployment confirmation before expecting public changes. Local drafts do not sync between devices. Credentials are never saved in drafts.
