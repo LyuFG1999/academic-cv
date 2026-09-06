@@ -15,8 +15,21 @@ const lang = rawLang
 const t = copy[lang]
 const person = profile[lang]
 const posts = (await getCollection('blog'))
-	.filter((post) => post.data.language === lang && !post.data.draft)
+	.filter((post) => !post.data.draft)
 	.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+
+const labels = lang === 'zh'
+	? { zh: '中文', en: 'English', image: '图片', download: '下载', formula: '公式' }
+	: { zh: '中文', en: 'English', image: 'Image', download: 'Download', formula: 'Formula' }
+
+const postFeatures = (post: (typeof posts)[number]) => {
+	const body = String(post.body ?? '')
+	return {
+		hasImage: Boolean(post.data.featuredImage) || /!\[[^\]]*\]\([^)]*\)|<img\b/i.test(body),
+		hasDownload: Boolean(post.data.attachments?.length || post.data.files?.length),
+		hasFormula: /\$\$[\s\S]+?\$\$|(^|[^\\])\$[^$\n]+\$/m.test(body),
+	}
+}
 ---
 
 <Layout lang={lang} title={`${t.blog} | ${person.fullName}`}>
@@ -27,17 +40,29 @@ const posts = (await getCollection('blog'))
 
 	{posts.length > 0 ? (
 		<div class='grid gap-6'>
-			{posts.map((post) => (
-				<article class='card overflow-hidden border border-base-300 bg-base-200/70 shadow-sm' data-reveal>
-					{post.data.featuredImage && <img src={assetUrl(post.data.featuredImage, template.base)} alt='' class='h-52 w-full object-cover' loading='lazy' />}
-					<div class='card-body'>
-						<time class='text-sm text-base-content/60' datetime={post.data.date}>{new Date(post.data.date).toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
-						<h2 class='card-title text-2xl'><a class='hover:text-secondary' href={`${template.base}/${lang}/blog/${post.id}/`}>{post.data.title}</a></h2>
-						<p class='text-base-content/75'>{post.data.excerpt}</p>
-						<div class='card-actions mt-2 justify-end'><a class='btn btn-secondary btn-sm' href={`${template.base}/${lang}/blog/${post.id}/`}>{t.readMore}</a></div>
-					</div>
-				</article>
-			))}
+			{posts.map((post) => {
+				const features = postFeatures(post)
+				const href = `${template.base}/${lang}/blog/${post.id}/`
+				return (
+					<article class='card overflow-hidden border border-base-300 bg-base-200/70 shadow-sm' data-reveal>
+						{post.data.featuredImage && <img src={assetUrl(post.data.featuredImage, template.base)} alt='' class='h-52 w-full object-cover' loading='lazy' />}
+						<div class='card-body min-w-0'>
+							<div class='flex flex-wrap items-center gap-2'>
+								<span class:list={['badge border-0 font-semibold', post.data.language === 'zh' ? 'bg-secondary/15 text-secondary' : 'bg-primary/15 text-primary']}>
+									<span class='mr-1.5 inline-block size-1.5 rounded-full bg-current'></span>{labels[post.data.language]}
+								</span>
+								{features.hasImage && <span class='badge badge-outline gap-1.5 border-base-300 bg-base-100/55 text-base-content/70'><svg viewBox='0 0 24 24' class='size-3.5 fill-none stroke-current' stroke-width='1.8' aria-hidden='true'><rect x='3' y='4' width='18' height='16' rx='2'/><circle cx='8.5' cy='9' r='1.5'/><path d='m5 17 4.2-4.2 3.1 3.1 2.2-2.2L19 18'/></svg>{labels.image}</span>}
+								{features.hasDownload && <span class='badge badge-outline gap-1.5 border-base-300 bg-base-100/55 text-base-content/70'><svg viewBox='0 0 24 24' class='size-3.5 fill-none stroke-current' stroke-width='1.8' aria-hidden='true'><path d='M12 3v11m0 0 4-4m-4 4-4-4M5 20h14'/></svg>{labels.download}</span>}
+								{features.hasFormula && <span class='badge badge-outline gap-1.5 border-base-300 bg-base-100/55 font-serif text-base-content/70'><span class='text-[.8rem] font-bold'>∑</span>{labels.formula}</span>}
+							</div>
+							<time class='mt-1 text-sm text-base-content/60' datetime={post.data.date}>{new Date(post.data.date).toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+							<h2 class='card-title break-words text-2xl'><a class='hover:text-secondary' href={href}>{post.data.title}</a></h2>
+							<p class='break-words text-base-content/75'>{post.data.excerpt}</p>
+							<div class='card-actions mt-2 justify-end'><a class='btn btn-secondary btn-sm' href={href}>{t.readMore}</a></div>
+						</div>
+					</article>
+				)
+			})}
 		</div>
 	) : (
 		<div class='alert border border-base-300 bg-base-200/70' data-reveal><span>{t.noBlog}</span></div>
