@@ -79,6 +79,7 @@ const languagePath = `${template.base}${switchedPath}`
 
 <script is:inline>
 	(() => {
+	try { localStorage.setItem('academic-language', document.documentElement.lang === 'en' ? 'en' : 'zh') } catch {}
 	if (window.__academicRevealInstalled) return
 	window.__academicRevealInstalled = true
 	let currentObserver
