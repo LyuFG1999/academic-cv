@@ -48,7 +48,7 @@ test('conflict blocks writes and unchanged batch is a no-op', async () => {
 test('unchanged Markdown remains byte identical', () => {
   assert.equal(serializePost({ original: '---\ntitle: old\n---\ntext', edited: false }), '---\ntitle: old\n---\ntext');
 });
-const env = { GITHUB_CLIENT_ID: 'test-id', GITHUB_CLIENT_SECRET: 'test-secret', ADMIN_ORIGIN: 'https://lyufg1999.github.io', ALLOWED_USER: 'LyuFG1999', REPOSITORY: 'LyuFG1999/academic-cv' };
+const env = { GITHUB_CLIENT_ID: 'test-id', GITHUB_CLIENT_SECRET: 'test-secret', ADMIN_ORIGIN: 'https://fengguanglyu.com', ALLOWED_USER: 'LyuFG1999', REPOSITORY: 'LyuFG1999/academic-cv' };
 test('OAuth uses secure cookie, state and PKCE; rejects forged callbacks', async () => {
   const response = await worker.fetch(new Request('https://auth.example/auth?nonce=12345678-1234-1234-1234-123456789abc'), env);
   assert.equal(response.status, 302);
@@ -71,7 +71,7 @@ test('successful OAuth restricts user and returns token only to configured origi
     const result = await worker.fetch(new Request(`https://auth.example/callback?code=x&state=${state}`, { headers: { Cookie: start.headers.get('set-cookie') } }), env);
     assert.equal(result.status, 200);
     const html = await result.text();
-    assert.match(html, /postMessage/); assert.match(html, /https:\/\/lyufg1999.github.io/);
+    assert.match(html, /postMessage/); assert.match(html, /https:\/\/fengguanglyu.com/);
     assert.equal(result.headers.get('location'), null);
     assert.match(result.headers.get('cache-control'), /no-store/);
     assert.match(result.headers.get('content-security-policy'), /frame-ancestors 'none'/);
