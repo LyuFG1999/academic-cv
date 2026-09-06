@@ -119,19 +119,19 @@
   },
   "social": {
     "email": {
-      "enabled": false,
+      "enabled": true,
       "url": ""
     },
     "github": {
-      "enabled": false,
+      "enabled": true,
       "url": ""
     },
     "orcid": {
-      "enabled": false,
+      "enabled": true,
       "url": ""
     },
     "cnki": {
-      "enabled": false,
+      "enabled": true,
       "url": ""
     },
     "school": {
