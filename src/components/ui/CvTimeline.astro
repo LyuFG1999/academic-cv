@@ -1,6 +1,6 @@
 ---
-import { isExperience } from '@/types/cv';
-import type { Experience, Education } from '@/types/cv';
+import { isExperience } from '@/types/cv'
+import type { Experience, Education } from '@/types/cv'
 
 interface Props {
 	elements: (Experience | Education)[]
@@ -10,37 +10,34 @@ interface Props {
 const { elements, colored } = Astro.props
 ---
 
-<ul
-	class='timeline timeline-snap-icon max-md:timeline-compact timeline-vertical'
->
-	{
-		elements.map((element, index) => (
-			<li>
-				<div class='timeline-middle'>
-					<svg
-						xmlns='http://www.w3.org/2000/svg'
-						viewBox='0 0 20 20'
-						fill='currentColor'
-            class:list={[{ 'text-accent': colored }, 'h-5 w-5']}
-					>
-						<path
-							fill-rule='evenodd'
-							d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z'
-							clip-rule='evenodd'
-						/>
-					</svg>
+<ol class='relative space-y-5 pl-8 sm:pl-10'>
+	<div class:list={['absolute bottom-4 left-[0.72rem] top-4 w-px sm:left-[0.9rem]', colored ? 'bg-secondary/35' : 'bg-base-300']} aria-hidden='true'></div>
+	{elements.map((element) => {
+		const experience = isExperience(element)
+		const title = experience ? element.title : element.degree
+		const organization = experience ? element.company : element.school
+		return (
+			<li class='relative'>
+				<div class:list={[
+					'absolute -left-8 top-6 grid size-6 place-items-center rounded-full border text-xs shadow-sm sm:-left-10 sm:size-7',
+					colored ? 'border-secondary/25 bg-secondary/12 text-secondary' : 'border-base-300 bg-base-100 text-base-content/65',
+				]} aria-hidden='true'>
+					<span>{experience ? '💼' : '🎓'}</span>
 				</div>
-				<div
-					class={`${index % 2 === 0 ? 'timeline-start' : 'timeline-end'} mb-10 md:text-end`}
-				>
-					<time class='font-mono italic'>{element.time}</time>
-					<div class='text-lg font-black'>{isExperience(element) ? element.title : element.degree}</div>
-					<div>{element.description}</div>
-					<div>{isExperience(element) ? element.company : element.school}</div>
-					<div>{element.location}</div>
-				</div>
-        <hr class:list={[{ 'bg-accent': colored }]} />
+				<article class='rounded-2xl border border-base-300 bg-base-200/55 p-5 transition duration-300 hover:-translate-y-0.5 hover:border-secondary/30 hover:bg-base-200 sm:p-6'>
+					<div class='flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between'>
+						<div class='min-w-0'>
+							<h3 class='text-lg font-bold leading-snug text-base-content sm:text-xl'>{title}</h3>
+							<p class='mt-1.5 font-medium text-secondary'>{organization}</p>
+						</div>
+						<time class='w-fit shrink-0 rounded-full border border-base-300 bg-base-100 px-3 py-1 text-sm font-medium text-base-content/65'>{element.time}</time>
+					</div>
+					{(element.location || element.description) && <div class='mt-4 border-t border-base-300/80 pt-4'>
+						{element.location && <p class='text-sm text-base-content/55'>📍 {element.location}</p>}
+						{element.description && <p class='mt-2 leading-relaxed text-base-content/72'>{element.description}</p>}
+					</div>}
+				</article>
 			</li>
-		))
-	}
-</ul>
+		)
+	})}
+</ol>
