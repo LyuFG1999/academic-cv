@@ -147,7 +147,7 @@
       "en": "Courses"
     },
     "blog": {
-      "enabled": false,
+      "enabled": true,
       "zh": "博客",
       "en": "Blog"
     },
