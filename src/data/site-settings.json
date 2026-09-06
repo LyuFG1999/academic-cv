@@ -146,5 +146,8 @@
       "enabled": false,
       "url": ""
     }
+  },
+  "domain": {
+    "hostname": "fengguanglyu.com"
   }
 }
