@@ -62,14 +62,7 @@ export type SocialKey = 'email' | 'github' | 'orcid' | 'cnki' | 'school' | 'x' |
 export type SocialLink = { enabled: boolean; url: string }
 export type SocialSettings = Record<SocialKey, SocialLink>
 
-const legacySocial = data.social as Partial<Record<SocialKey, SocialLink | string>>
-const socialKeys: SocialKey[] = ['email', 'github', 'orcid', 'cnki', 'school', 'x', 'linkedin']
-export const social = Object.fromEntries(socialKeys.map((key) => {
-	const item = legacySocial[key]
-	return [key, typeof item === 'string'
-		? { enabled: Boolean(item), url: item }
-		: { enabled: item?.enabled ?? false, url: item?.url ?? '' }]
-})) as SocialSettings
+export const social = data.social as SocialSettings
 
 export type Appearance = typeof data.appearance
 export const appearance: Appearance = data.appearance
@@ -86,11 +79,10 @@ export const maintenance = {
 	},
 }
 
-const isNetlify = process.env.NETLIFY === 'true'
-const baseSegment = (process.env.SITE_BASE_PATH ?? (isNetlify ? '' : '/academic-cv')).replace(/^\/+|\/+$/g, '')
+const baseSegment = (process.env.SITE_BASE_PATH ?? '').replace(/^\/+|\/+$/g, '')
 
 export const template = {
-	websiteUrl: process.env.SITE_ORIGIN || (isNetlify ? (process.env.URL ?? 'https://example.netlify.app') : 'https://lyufg1999.github.io'),
+	websiteUrl: process.env.SITE_ORIGIN || 'https://fengguanglyu.com',
 	lightTheme: 'academic-light',
 	darkTheme: 'academic-dark',
 	base: baseSegment ? '/' + baseSegment : '',
