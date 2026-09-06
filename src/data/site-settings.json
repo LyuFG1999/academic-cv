@@ -13,18 +13,18 @@
   "appearance": {
     "introEnabled": true,
     "light": {
-      "primary": "#655044",
-      "secondary": "#806657",
-      "accent": "#806657",
-      "background": "#F8F5EF",
-      "surface": "#FFFDFA"
+      "primary": "#334155",
+      "secondary": "#52657A",
+      "accent": "#8A7048",
+      "background": "#F8F7F4",
+      "surface": "#FFFFFF"
     },
     "dark": {
-      "primary": "#D4BBA7",
-      "secondary": "#BDA18E",
-      "accent": "#D49B7E",
-      "background": "#1B1816",
-      "surface": "#26211D"
+      "primary": "#B8C7DB",
+      "secondary": "#96ABC5",
+      "accent": "#C9AD80",
+      "background": "#12161D",
+      "surface": "#1B222C"
     }
   },
   "avatar": "/uploads/avatar-49e1f7bb-353d-469c-9ea4-e75c3f1797b6.png",
