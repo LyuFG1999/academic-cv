@@ -169,20 +169,27 @@ window.addEventListener('hashchange', () => { if (loaded) selectPanel(location.h
 function render() {
   nav.replaceChildren(); form.replaceChildren();
   const get = name => schema.settings.find(field => field.name === name);
-  section('profile', '个人资料', [get('avatar'), ...get('profile').fields.filter(f => !['projects', 'researchAreas'].includes(f.name))], new Proxy(settings.profile, {
+  const researchKeys = ['projects', 'researchAreas', 'researchStatement', 'researchImpact'];
+  const seoKeys = ['seoTitle', 'seoDescription'];
+  const profilePanel = section('profile', '个人资料与首页', [get('avatar'), ...get('profile').fields.filter(f => ![...researchKeys, ...seoKeys].includes(f.name))], new Proxy(settings.profile, {
     get(target, key) { return key === 'avatar' ? settings.avatar : target[key]; },
     set(target, key, value) { if (key === 'avatar') settings.avatar = value; else target[key] = value; return true; },
   }), '姓名、身份与机构。中英文共用一张头像。');
-  section('research', '研究与项目', get('profile').fields.filter(f => ['projects', 'researchAreas'].includes(f.name)), settings.profile);
-  section('navigation', '导航与论文分类', get('navigation').fields, settings.navigation, '开关控制导航是否显示。三类成果可以独立开关、任意组合。');
-  section('social', '联系方式', get('social').fields, settings.social, '开启并填写链接后，显示在首页与开场页。');
-  const cvPanel = section('cv', '履历与成果', pairSchema(schema.cv), cv, '每条经历或成果只添加一次，在同一处填写中英文。');
-  renderCitationImport({panel: cvPanel, cv, el, changed, message, uploading, rerender: render});
+  profilePanel.querySelector('.fields').append(fieldNode(get('social'), settings, 'profile'));
+  section('research', '研究与项目', get('profile').fields.filter(f => researchKeys.includes(f.name)), settings.profile);
+  const papersPanel = section('papers', '研究成果', pairSchema(schema.cv.filter(f => f.name === 'publications')), cv);
+  papersPanel.querySelector('.fields').prepend(fieldNode(get('navigation').fields.find(f => f.name === 'paperVisibility'), settings.navigation, 'papers'));
+  renderCitationImport({panel: papersPanel, cv, el, changed, message, uploading, rerender: render});
   section('courses', '课程', pairSchema(schema.courses), courses);
-  section('appearance', '外观与配色', get('appearance').fields, settings.appearance);
-  section('maintenance', '网站维护', get('maintenance').fields, settings.maintenance, '发布完成后生效，管理后台仍可使用。');
-  renderDomainPanel({ settings, section, el, base });
   renderBlog({ posts, uploads, section, fieldNode, el, changed, message, bytesToBase64, uploading, base });
+  const cvFields = ['education', 'experiences', 'content'].map(name => schema.cv.find(f => f.name === name)).filter(Boolean);
+  section('cv', '履历', pairSchema(cvFields), cv, '先展示教育、工作经历，再展示自定义 Markdown 正文。论文与书籍在“研究成果”中管理。');
+  const advanced = section('advanced', '高级设置', [
+    { ...get('navigation'), fields: get('navigation').fields.filter(f => f.name !== 'paperVisibility') },
+    get('appearance'), get('maintenance'),
+    { name: 'profile', label: '搜索与分享', widget: 'object', fields: get('profile').fields.filter(f => seoKeys.includes(f.name)) },
+  ], settings, '网站导航、外观、维护与访问设置。维护开关需要发布成功后生效。');
+  renderDomainPanel({ panel: advanced, el, base });
   selectPanel(location.hash.slice(1));
 }
 async function load() {
@@ -222,19 +229,33 @@ async function load() {
     document.querySelector('#save-draft').disabled = false;
     document.querySelector('#discard-draft').disabled = false;
     saveButton.disabled = !dirty;
-    message(restored ? '已恢复本地草稿，尚未发布。' : '所有修改已同步。');
+    const draftCount = [...posts.values()].filter(post => !post.deleted && post.data.draft).length;
+    message(restored ? '已恢复本地草稿，尚未发布。' : `已读取仓库最新内容。博客有 ${draftCount} 篇草稿未公开；仓库保存与网站上线是两个独立状态。`);
   } catch (error) { message(error.message, true); loaded = false; }
   finally { busy = false; updateButtons(); }
 }
 async function watchDeployment(commit) {
   let attempts = 0;
+  let canReadRuns = true;
   clearTimeout(pollTimer);
   const check = async () => {
     try {
       const live = await fetch('./deployment.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json());
       if (live.commit === commit) { if (!dirty) message(live.maintenance ? '已发布：网站维护模式已生效。' : '已发布：刷新网站即可查看修改。'); return; }
     } catch {}
-    if (++attempts < 60) pollTimer = setTimeout(check, 5000);
+    if (canReadRuns && attempts % 3 === 0) {
+      try {
+        const result = await api(`actions/workflows/deploy.yml/runs?head_sha=${encodeURIComponent(commit)}&per_page=1`);
+        const run = result.workflow_runs?.[0];
+        if (run && !dirty) {
+          if (run.status === 'completed' && run.conclusion !== 'success') {
+            message(`内容已保存，但网站发布未成功（${run.conclusion}）。请点击“发布记录”查看原因，网站仍是上次版本。`, true); return;
+          }
+          message(run.status === 'completed' ? '构建已通过，等待网站版本同步…' : run.status === 'in_progress' ? '内容已保存，网站正在构建和部署…' : '内容已保存，网站发布正在排队…');
+        }
+      } catch { canReadRuns = false; }
+    }
+    if (++attempts < 120) pollTimer = setTimeout(check, 5000);
     else if (!dirty) message('内容已提交，但尚未确认上线。请点击“发布记录”检查 GitHub Actions。', true);
   };
   pollTimer = setTimeout(check, 5000);
@@ -306,7 +327,7 @@ document.querySelector('#account').addEventListener('click', () => {
   document.querySelector('#account').textContent = '登录后台';
   saveButton.disabled = document.querySelector('#save-draft').disabled = document.querySelector('#discard-draft').disabled = true;
   document.querySelector('#panel-title').textContent = '欢迎回来';
-  message('已安全退出。');
+  message('已清除本机登录状态。若要撤销 GitHub 授权，请在 GitHub 设置中操作。');
 });
 document.querySelector('#save-draft').addEventListener('click', async () => {
   if (!loaded || busy || pendingUploads) return;

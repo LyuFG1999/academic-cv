@@ -24,12 +24,14 @@ export function renderCitationImport({ panel, cv, el, changed, message, uploadin
   parseButton.addEventListener('click',async()=>{
     if(pending)return; pending=true; uploading(1);parseButton.disabled=true;clear();
     try {
-      parser=await import('./citations.js'); const result=parser.parseCitations(input.value,cv.publications); parsed=result.items;
-      report.textContent=`识别 ${result.total} 条 ${result.format}，排除 ${result.duplicates} 条重复，待加入 ${parsed.length} 条。缺失信息会标注，请加入后核对。`;
+      parser=await import('./citations.js'); const result=parser.parseCitations(input.value,cv.publications); parsed=[...result.items, ...result.updates];
+      report.textContent=`识别 ${result.total} 条 ${result.format}，新增 ${result.items.length} 条，可补全 ${result.updates.length} 条已有成果摘要。不会覆盖已填写的摘要。`;
       parsed.forEach((item,index)=>{
         checked.add(index);const row=el('label',undefined,'citation-row'); const select=el('input');select.type='checkbox';select.checked=true;select.setAttribute('aria-label',`导入 ${item.title}`);
         select.addEventListener('change',()=>{select.checked?checked.add(index):checked.delete(index);apply.disabled=!checked.size;});
         const details=el('span');details.append(el('strong',item.title),el('small',[item.authors,item.journal,item.time].filter(Boolean).join(' · ')));
+        if (item.existingIndex !== undefined) details.append(el('small', '补全已有成果的空摘要，不重复添加论文', 'citation-warning'));
+        details.append(el('small', item.abstract ? `摘要：${item.abstract}` : '此记录未提供摘要', 'citation-abstract'));
         if(!item.authors||!item.time)details.append(el('small','待补全：'+[!item.authors?'作者':'',!item.time?'年份':''].filter(Boolean).join('、'),'citation-warning'));
         row.append(select,details);preview.append(row);
       });apply.disabled=!checked.size;
@@ -37,8 +39,18 @@ export function renderCitationImport({ panel, cv, el, changed, message, uploadin
   });
   apply.addEventListener('click',()=>{
     if(pending||!checked.size||!parser)return;
-    const selected=parser.dedupeCitations(parsed.filter((_,index)=>checked.has(index)),cv.publications).items;
-    cv.publications.push(...selected.map(item=>parser.pairedPublication(item,category.value)));changed();rerender();message(`已加入 ${selected.length} 条成果，请核对信息后统一发布。`);
+    const selectedItems = parsed.filter((_, index) => checked.has(index));
+    let filled = 0;
+    for (const item of selectedItems.filter(item => item.existingIndex !== undefined)) {
+      const target = cv.publications[item.existingIndex];
+      if (!target || !parser.citationKeys(target).some(key => parser.citationKeys(item).includes(key))) continue;
+      target.abstract ||= { zh: '', en: '' };
+      if (!target.abstract.zh) target.abstract.zh = item.abstract;
+      if (!target.abstract.en) target.abstract.en = item.abstract;
+      filled++;
+    }
+    const selected=parser.dedupeCitations(selectedItems.filter(item => item.existingIndex === undefined),cv.publications).items;
+    cv.publications.push(...selected.map(item=>parser.pairedPublication(item,category.value)));changed();rerender();message(`已加入 ${selected.length} 条成果，补全 ${filled} 条摘要，请核对后统一发布。`);
   });
   panel.querySelector('.fields').before(box);
 }

@@ -13,7 +13,7 @@ This repository contains a bilingual academic website for `LyuFG1999/academic-cv
 - A one-switch bilingual maintenance page for temporarily hiding public content
 - Bilingual blog pages with file downloads
 - A direct settings/blog dashboard at `/admin/`, with local drafts and one atomic release
-- Automatic path handling for both GitHub Pages and Netlify
+- Automatic path handling for GitHub Pages project URLs and custom domains
 
 ## Edit content in the browser
 
@@ -50,12 +50,13 @@ Disabled or empty contact fields are omitted from the public site.
 
 Opening `/admin/` displays one settings panel at a time, selected through the highlighted sidebar. Switching panels preserves edits. Blog entries use collapsible Markdown editors. All sections share one publish action. Validation brings hidden invalid fields into view before publishing. Same-file conflicts block publication rather than overwriting concurrent changes. Maintenance takes effect after deployment; it is not immediate access control. The old `/admin/editor/` redirects to the consolidated dashboard. The YAML configuration remains as the settings schema, not an independently publishing Decap interface.
 
-The current content has been reset to an anonymous profile with an SVG avatar and empty research, CV, course and blog lists. Contact icons are hidden until a link is filled in and its switch enabled. The authentication service and repository configuration are not reset. See [the UI and functional audit](docs/redesign-audit.md) for verification details.
+Contact icons are hidden until a link is filled in and its switch enabled. See [the current editing and audit notes](docs/editor-reliability.md) for publication states, Markdown previews, CV content and security boundaries.
 
 ## Local development
 
 ```bash
 npm ci
+npm test
 npm run dev
 ```
 

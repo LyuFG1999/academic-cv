@@ -3,7 +3,10 @@ import '@citation-js/plugin-bibtex';
 import '@citation-js/plugin-ris';
 
 const plain = value => String(Array.isArray(value) ? value.join('; ') : value ?? '').replace(/<[^>]*>/g, '').trim();
-const doi = value => plain(value).replace(/^https?:\/\/(?:dx\.)?doi\.org\//i, '').replace(/^doi:\s*/i, '').toLowerCase();
+const doi = value => {
+  const candidate = plain(value).replace(/^https?:\/\/(?:dx\.)?doi\.org\//i, '').replace(/^doi:\s*/i, '').toLowerCase();
+  return /^10\.\d{4,9}\/\S+$/.test(candidate) ? candidate : '';
+};
 const text = value => typeof value === 'object' && value ? value.zh || value.en || '' : value || '';
 const normalized = value => text(value).normalize('NFKC').toLowerCase().replace(/[\s\p{P}\p{S}]/gu, '');
 export function citationKeys(item) {
@@ -26,21 +29,34 @@ export function parseCitations(source, existing = []) {
   if (!format) throw new Error('无法识别格式，请使用 BibTeX（.bib）或 RIS（.ris），暂不解析普通排版后的引文。');
   if (format === '@ris/file' && (input.match(/^TY\s{0,2}-/gm)?.length !== input.match(/^ER\s{0,2}-/gm)?.length)) throw new Error('RIS 记录缺少 ER 结束标记。');
   let records;
-  try { records = new Cite(input, { forceType: format }).data; } catch { throw new Error('引文解析失败，请检查括号、字段和记录结束标记。'); }
+  // BibLaTeX accepts BibTeX syntax and retains extension fields such as abstract.
+  try { records = new Cite(input, { forceType: format === '@bibtex/text' ? '@biblatex/text' : format }).data; } catch { throw new Error('引文解析失败，请检查括号、字段和记录结束标记。'); }
   if (!records.length || records.length > 500) throw new Error('每次请导入 1–500 条成果。');
   const result = records.map(record => {
     const date = record.issued?.['date-parts']?.[0] || [];
     const year = Number(date[0]);
     const authors = (record.author || []).map(author => plain(author.literal || [author.given, author.family].filter(Boolean).join(' '))).join('; ');
     const identifier = doi(record.DOI);
-    const link = identifier ? `https://doi.org/${identifier}` : /^https?:\/\//i.test(record.URL || '') ? record.URL : '';
+    const sourceURL = record.URL || record.DOI || '';
+    const link = identifier ? `https://doi.org/${identifier}` : /^https?:\/\//i.test(sourceURL) ? sourceURL : '';
     const title = plain(record.title);
     if (!title) throw new Error('存在无标题的记录，请补全后再导入。');
     const month = Number(date[1]) || 1, day = Number(date[2]) || 1;
     const sortDate = year >= 1000 && year <= 9999 && month <= 12 && day <= 31 ? `${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}` : '';
     return { title, authors, journal: [plain(record['container-title'] || record.publisher), plain(record.volume) + (record.issue ? `(${plain(record.issue)})` : ''), plain(record.page)].filter(Boolean).join(', '), time: year ? String(year) : '', sortDate, doi: identifier, link, abstract: plain(record.abstract), category: ['book', 'chapter'].includes(record.type) ? 'book' : ['manuscript', 'report'].includes(record.type) ? 'working' : 'published' };
   });
-  return { ...dedupeCitations(result, existing), format: format === '@ris/file' ? 'RIS' : 'BibTeX', total: records.length };
+  const updates = [];
+  const seen = new Set();
+  for (const item of result) {
+    if (!item.abstract) continue;
+    const keys = citationKeys(item);
+    const index = existing.findIndex(old => citationKeys(old).some(key => keys.includes(key)));
+    if (index < 0 || seen.has(index)) continue;
+    const old = existing[index].abstract;
+    const missing = old && typeof old === 'object' ? !old.zh || !old.en : !old;
+    if (missing) { updates.push({ ...item, existingIndex: index }); seen.add(index); }
+  }
+  return { ...dedupeCitations(result, existing), updates, format: format === '@ris/file' ? 'RIS' : 'BibTeX', total: records.length };
 }
 export function pairedPublication(item, category = 'auto') {
   return Object.fromEntries(Object.entries({ ...item, category: category === 'auto' ? item.category : category }).map(([key, value]) => [key, ['category', 'sortDate', 'doi'].includes(key) ? value : { zh: value, en: value }]));

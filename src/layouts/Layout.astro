@@ -1,5 +1,5 @@
 ---
-import { ClientRouter, fade } from 'astro:transitions'
+import DeploymentGuard from '@/components/DeploymentGuard.astro'
 import '@/styles/site.css'
 import BetterIcon from '@/components/ui/BetterIcon.astro'
 import DarkLightController from '@/components/ui/DarkLightController.astro'
@@ -38,10 +38,10 @@ const languagePath = `${template.base}${switchedPath}`
 <!doctype html>
 <html lang={lang}>
 	<head>
-		{template.transitions && <ClientRouter />}
+		<DeploymentGuard />
 		<Head lang={lang} title={pageTitle} description={pageDescription} image={pageImage} alternatePath={languagePath} />
 	</head>
-	<body transition:animate={fade({ duration: '90ms' })}>
+	<body>
 		{maintenance.enabled ? <MaintenanceScreen lang={lang} /> : <>
 		{immersiveIntro && appearance.introEnabled && <IntroGate lang={lang} />}
 		<div class='min-h-screen bg-base-100 drawer lg:drawer-open' data-site-shell>

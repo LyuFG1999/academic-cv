@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import typography from '@tailwindcss/typography'
 import daisyui from 'daisyui'
+import { contrastInk } from './src/lib/colors.mjs'
 
 const siteSettings = JSON.parse(fs.readFileSync(new URL('./src/data/site-settings.json', import.meta.url), 'utf8'))
 const appearance = siteSettings.appearance
@@ -18,11 +19,11 @@ export default {
                 "academic-light": {
                     "color-scheme": "light",
                     primary: appearance.light.primary,
-                    "primary-content": "#ffffff",
+                    "primary-content": contrastInk(appearance.light.primary),
                     secondary: appearance.light.secondary,
-                    "secondary-content": "#ffffff",
+                    "secondary-content": contrastInk(appearance.light.secondary),
                     accent: appearance.light.accent,
-                    "accent-content": "#ffffff",
+                    "accent-content": contrastInk(appearance.light.accent),
                     neutral: "#1E293B",
                     "neutral-content": "#F8FAFC",
                     "base-100": appearance.light.background,
@@ -39,11 +40,11 @@ export default {
                 "academic-dark": {
                     "color-scheme": "dark",
                     primary: appearance.dark.primary,
-                    "primary-content": "#0B1020",
+                    "primary-content": contrastInk(appearance.dark.primary),
                     secondary: appearance.dark.secondary,
-                    "secondary-content": "#0B1020",
+                    "secondary-content": contrastInk(appearance.dark.secondary),
                     accent: appearance.dark.accent,
-                    "accent-content": "#0B1020",
+                    "accent-content": contrastInk(appearance.dark.accent),
                     neutral: "#D8E0EE",
                     "neutral-content": "#101625",
                     "base-100": appearance.dark.background,

@@ -27,7 +27,7 @@ const otherLanguage: Language = lang === 'zh' ? 'en' : 'zh'
 			<div class='intro-portrait-halo'></div>
 			<img src={`${template.base}${person.avatar}`} alt={person.fullName} class='intro-portrait' width='184' height='184' />
 		</div>
-		<h1>{person.fullName}</h1>
+		<p class='intro-name'>{person.fullName}</p>
 		<p class='intro-role'>{person.title}</p>
 		{person.institute && <p class='intro-institute'>{person.institute}</p>}
 		<div class='intro-contacts'><SocialIcons lang={lang} size='large' /></div>
@@ -137,7 +137,7 @@ const otherLanguage: Language = lang === 'zh' ? 'en' : 'zh'
 	.intro-portrait-wrap { position: relative; margin-bottom: clamp(1.25rem, 4vh, 2rem); }
 	.intro-portrait-halo { position: absolute; inset: -1rem; border: 1px solid color-mix(in oklab, var(--fallback-p, oklch(var(--p))) 42%, transparent); border-radius: 999px; animation: halo 3.2s ease-in-out infinite; }
 	.intro-portrait { position: relative; width: clamp(5rem, 20vh, 11.5rem); aspect-ratio: 1; border-radius: 999px; object-fit: cover; border: .35rem solid color-mix(in oklab, var(--fallback-b1, oklch(var(--b1))) 88%, transparent); box-shadow: 0 2rem 6rem color-mix(in oklab, var(--fallback-p, oklch(var(--p))) 25%, transparent); }
-	.intro-profile h1 { font-size: clamp(2rem, min(7vw, 9vh), 5rem); font-weight: 800; letter-spacing: -.04em; line-height: 1.2; overflow-wrap: anywhere; }
+	.intro-name { font-size: clamp(2rem, min(7vw, 9vh), 5rem); font-weight: 800; letter-spacing: -.04em; line-height: 1.2; overflow-wrap: anywhere; }
 	.intro-role { margin-top: 1.35rem; font-size: clamp(1.05rem, 2.2vw, 1.45rem); font-weight: 650; }
 	.intro-institute { margin-top: .45rem; color: color-mix(in oklab, currentColor 58%, transparent); font-size: clamp(.95rem, 1.8vw, 1.1rem); }
 	.intro-scroll { position: relative; z-index: 3; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: .5rem; padding: .5rem 1rem; color: color-mix(in oklab, currentColor 70%, transparent); font-size: .75rem; font-weight: 600; letter-spacing: .12em; }

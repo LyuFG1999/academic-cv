@@ -20,10 +20,10 @@
 - DNS、HTTPS 签发和所有者真实 OAuth 登录需要对应服务完成配置后另行验证；本轮未改动腾讯云解析或 Worker 的密钥/环境变量。
 - 静态维护模式不是访问鉴权，不能撤回已下载文件或历史缓存。
 
-## fengguanglyu.com 接入顺序
+## example.com 接入顺序
 
 1. 建议先在 GitHub 账户 Settings → Pages 验证域名所有权，按页面提示在腾讯云 DNSPod 添加 TXT。
-2. 仓库 Settings → Pages → Custom domain 填 `fengguanglyu.com` 并保存。
+2. 仓库 Settings → Pages → Custom domain 填 `example.com` 并保存。
 3. 腾讯云 DNSPod 配置下表。若有同名 A/AAAA/CNAME，先核对现有用途，避免冲突；不更改 MX 邮箱记录。
 
 | 主机记录 | 类型 | 记录值 |
@@ -36,7 +36,7 @@
 
 4. 在 GitHub Actions 手动运行 Deploy to GitHub Pages，构建会自动使用新域名与根路径。
 5. DNS 检查通过且证书就绪后，开启 Enforce HTTPS。
-6. Cloudflare Worker 的 `ADMIN_ORIGIN` 改为 `https://fengguanglyu.com`。GitHub App 的 Homepage URL 改为 `https://fengguanglyu.com/admin/`；Redirect URI 仍是 `https://academic-cv-auth.lvfg1999.workers.dev/callback`。
+6. Cloudflare Worker 的 `ADMIN_ORIGIN` 改为 `https://example.com`。GitHub App 的 Homepage URL 改为 `https://example.com/admin/`；Redirect URI 仍使用你已经配置的 Worker `/callback` 地址。
 7. 检查主页、双语导航、图片/附件与后台登录。切换域名后，本地草稿受浏览器来源隔离，不会自动迁移；切换前先发布需保留的草稿。
 
 本项目使用自定义 Actions 发布，因此只添加 CNAME 文件不能完成绑定。以上依据 [GitHub 官方自定义域名说明](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site)。

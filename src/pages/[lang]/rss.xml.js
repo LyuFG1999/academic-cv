@@ -11,7 +11,7 @@ export async function GET(context) {
   const { lang } = context.props
   const blog = (await getCollection('blog'))
     .filter((post) => !post.data.draft && post.data.language === lang)
-    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+    .sort((a, b) => Date.parse(b.data.date) - Date.parse(a.data.date))
 
   return rss({
     title: maintenance.enabled ? maintenance.title[lang] : seo[lang].defaultTitle,
@@ -19,7 +19,7 @@ export async function GET(context) {
     site: new URL(`${template.base}/${lang}/`, context.site),
     items: (maintenance.enabled ? [] : blog).map((post) => ({
       title: post.data.title,
-      pubDate: post.data.date,
+      pubDate: new Date(post.data.date),
       description: post.data.excerpt,
       link: `${template.base}/${lang}/blog/${post.id}/`,
     })),

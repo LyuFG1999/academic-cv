@@ -4,6 +4,7 @@ import cvZh from './cv.zh.json'
 import cvEn from './cv.en.json'
 
 export type LocalizedCv = {
+	content: string
 	experiences: Experience[]
 	education: Education[]
 	skills: Skill[]
@@ -11,6 +12,7 @@ export type LocalizedCv = {
 }
 
 const normalizeCv = (value: Partial<LocalizedCv>): LocalizedCv => ({
+	content: typeof value.content === 'string' ? value.content : '',
 	experiences: value.experiences ?? [],
 	education: value.education ?? [],
 	skills: value.skills ?? [],

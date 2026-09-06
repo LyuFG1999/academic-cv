@@ -13,9 +13,10 @@ export function renderBlog({ posts, uploads, section, fieldNode, el, changed, me
       if (post.deleted) continue;
       const slug = path.split('/').pop().replace(/\.md$/, '');
       const item = el('details', undefined, 'blog-entry'); item.open = path === openPath;
-      const summary = el('summary', post.data.title || '新文章'); item.append(summary);
+      const statusLabel = () => `${post.data.title || '新文章'} · ${post.data.draft ? '草稿（不公开）' : '公开'} · ${post.data.language === 'en' ? 'EN' : '中文'}`;
+      const summary = el('summary', statusLabel()); item.append(summary);
       const edit = el('fieldset', undefined, 'blog-fields'); item.append(edit);
-      const mark = () => { post.edited = true; changed(); summary.textContent = post.data.title || '新文章'; };
+      const mark = () => { post.edited = true; changed(); summary.textContent = statusLabel(); };
       const busy = async task => {
         uploading(1); edit.disabled = true;
         try { await task(); } catch (error) { message(error.message || '文件处理失败，请重试。', true); }
@@ -42,8 +43,13 @@ export function renderBlog({ posts, uploads, section, fieldNode, el, changed, me
         { name: 'language', label: '语言', widget: 'select', options: [{ label: '中文', value: 'zh' }, { label: 'English', value: 'en' }] },
         { name: 'date', label: '日期', widget: 'datetime' },
         { name: 'excerpt', label: '摘要', widget: 'text' },
-        { name: 'draft', label: '隐藏此文章（草稿）', widget: 'boolean' },
       ]) edit.append(fieldNode(field, post.data, 'blog-' + slug));
+      const visibility = el('label', undefined, 'field publication-status'); visibility.append(el('span', '文章状态'));
+      const visibilityInput = el('select'); visibilityInput.setAttribute('aria-label', '文章状态');
+      for (const [value, label] of [['draft', '草稿 · 仅后台可见'], ['public', '公开 · 网站发布成功后可见']]) { const option = el('option', label); option.value = value; visibilityInput.append(option); }
+      visibilityInput.value = post.data.draft ? 'draft' : 'public';
+      visibilityInput.addEventListener('change', () => { post.data.draft = visibilityInput.value === 'draft'; mark(); });
+      visibility.append(visibilityInput, el('small', '“发布修改”会保存全部设置，但不会自动公开草稿。中文文章仅在中文博客列表展示，英文同理。', 'hint')); edit.append(visibility);
       const tags = el('label', undefined, 'field'); tags.append(el('span', '标签（用逗号分隔）'));
       const tagsInput = el('input'); tagsInput.value = (post.data.tags || []).join(', ');
       tagsInput.addEventListener('input', () => { post.data.tags = tagsInput.value.split(/[,，]/).map(v => v.trim()).filter(Boolean); });
@@ -51,9 +57,16 @@ export function renderBlog({ posts, uploads, section, fieldNode, el, changed, me
       const bodyLabel = el('label', undefined, 'field'); bodyLabel.append(el('span', '正文 · Markdown'));
       const body = el('textarea'); body.className = 'markdown-body'; body.value = post.body;
       body.addEventListener('input', () => { post.body = body.value; }); bodyLabel.append(body); edit.append(bodyLabel);
+      const preview = el('iframe', undefined, 'blog-preview'); preview.title = '博客文章预览'; preview.setAttribute('sandbox', ''); preview.hidden = true;
+      const previewActions = el('div', undefined, 'file-actions');
+      previewActions.append(button('预览 / 刷新预览', async () => {
+        await busy(async () => { const { renderPreview } = await import('./markdown-preview.js'); renderPreview(preview, post, uploads, base); preview.hidden = false; });
+      }), button('收起预览', () => { preview.hidden = true; preview.removeAttribute('srcdoc'); }));
+      edit.append(previewActions, el('p', '预览包含未发布的正文、图片和文末附件；链接仅展示，不会打开。修改后点击刷新预览。', 'hint'), preview);
 
       const manager = el('section', undefined, 'file-manager'); manager.append(el('h3', '文章文件'));
       manager.append(el('p', '上传图片、文档，或登记外部下载链接。复制 Markdown 后可粘贴到正文；也可将同一文件加入文末下载区。', 'hint'));
+      manager.append(el('p', '隐私提醒：发布后文件会进入 Git 历史，草稿引用的文件也可能被直接访问。请勿上传敏感文件；移出列表不等于撤回文件。', 'hint'));
       const uploadLabel = el('label', undefined, 'field'); uploadLabel.append(el('span', '上传文件（单个 ≤ 20 MB，每次最多 20 个）'));
       const upload = el('input'); upload.type = 'file'; upload.multiple = true;
       upload.accept = '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv,.txt,.zip,.png,.jpg,.jpeg,.webp,.gif,.avif';

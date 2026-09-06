@@ -14,7 +14,7 @@ import remarkBase from './src/lib/remark-base.mjs';
 export default defineConfig({
     vite: { resolve: { alias: [{ find: /^(node-fetch|sync-fetch)$/, replacement: fileURLToPath(new URL('./src/admin/citation-offline-fetch.js', import.meta.url)) }] } },
     markdown: { remarkPlugins: [[remarkBase, { base: template.base }]] },
-    integrations: [tailwind({ applyBaseStyles: false }), sitemap({ filter: (page) => !page.includes('/admin/') && (!maintenance.enabled || /\/(zh|en)\/?$/.test(page)) }), {
+    integrations: [tailwind({ applyBaseStyles: false }), sitemap({ filter: (page) => !maintenance.enabled && /^\/(zh|en)(\/|$)/.test(new URL(page).pathname.slice(template.base.length)) }), {
         name: 'maintenance-media',
         hooks: {
             'astro:build:done': async ({ dir }) => {

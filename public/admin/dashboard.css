@@ -135,6 +135,12 @@ input[type=color] { display:block; flex:0 0 44px; width:44px; height:44px; margi
 .citation-row small { color: var(--muted); }
 .citation-row .citation-warning { color: #956119; }
 .domain-guide { line-height: 1.9; }
+.blog-preview { width: 100%; height: 640px; margin: 16px 0; border: 1px solid var(--line); border-radius: 14px; background: #fafcfb; }
+.blog-preview[hidden] { display: none; }
+.publication-status { padding: 16px; border: 1px solid var(--line); border-radius: 10px; background: #f8fbf9; }
+.citation-abstract { white-space: pre-wrap; max-height: 180px; overflow: auto; }
+#section-advanced > .fields > fieldset { margin-bottom: 30px; }
+#section-cv textarea { min-height: 320px; font-family: ui-monospace, monospace; line-height: 1.7; }
 .domain-guide li { margin: 14px 0; }
 .domain-guide a { display: inline-block; margin: 12px 20px 0 0; color: var(--primary); text-decoration: underline; }
 .domain-guide table { width: 100%; border-collapse: collapse; margin: 18px 0; }

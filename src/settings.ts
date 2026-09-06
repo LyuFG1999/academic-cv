@@ -87,13 +87,13 @@ export const maintenance = {
 }
 
 const isNetlify = process.env.NETLIFY === 'true'
+const baseSegment = (process.env.SITE_BASE_PATH ?? (isNetlify ? '' : '/academic-cv')).replace(/^\/+|\/+$/g, '')
 
 export const template = {
 	websiteUrl: process.env.SITE_ORIGIN || (isNetlify ? (process.env.URL ?? 'https://example.netlify.app') : 'https://lyufg1999.github.io'),
-	transitions: true,
 	lightTheme: 'academic-light',
 	darkTheme: 'academic-dark',
-	base: process.env.SITE_BASE_PATH ?? (isNetlify ? '' : '/academic-cv'),
+	base: baseSegment ? '/' + baseSegment : '',
 }
 
 export const seo = {
