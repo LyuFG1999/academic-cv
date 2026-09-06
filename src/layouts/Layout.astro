@@ -1,6 +1,7 @@
 ---
 import DeploymentGuard from '@/components/DeploymentGuard.astro'
 import '@/styles/site.css'
+import 'katex/dist/katex.min.css'
 import BetterIcon from '@/components/ui/BetterIcon.astro'
 import DarkLightController from '@/components/ui/DarkLightController.astro'
 import Navbar from '@/components/ui/Navbar.astro'
@@ -109,7 +110,6 @@ const languagePath = `${template.base}${switchedPath}`
 </script>
 
 <style is:global>
-	iframe#nl-badge-frame, iframe[title='Powered by Netlify'] { display: none !important; visibility: hidden !important; }
 	html { scroll-behavior: smooth; }
 	:focus-visible { outline: 2px solid var(--fallback-p, oklch(var(--p))); outline-offset: 4px; }
 	.site-main:focus { outline: none; }
@@ -125,6 +125,7 @@ const languagePath = `${template.base}${switchedPath}`
 	.page-content .prose :where(pre, table) { max-width: 100%; overflow-x: auto; }
 	.page-content .prose table { display: block; }
 	.page-content .prose img { border-radius: .85rem; }
+	.page-content .prose .katex-display { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding-block: .2rem; }
 	.page-content > :not(:first-child) { clear: both; }
 	@media(max-width: 640px) { .site-main { padding-top: 1.5rem; } .page-tools { gap: .3rem; margin-left: .75rem; } .page-tools .btn { min-height: 2.25rem; height: 2.25rem; } .page-tools .btn-circle, .page-tools .btn-square { width: 2.25rem; } .page-content h1 { font-size: 2rem; } }
 	.drawer-content { overflow: clip; }
@@ -143,11 +144,7 @@ const languagePath = `${template.base}${switchedPath}`
 	.btn { border-radius: 999px; }
 	::selection { color: var(--fallback-pc, oklch(var(--pc))); background: var(--fallback-p, oklch(var(--p))); }
 	.alert > span { min-width: 0; overflow-wrap: anywhere; }
-	[data-reveal] {
-		opacity: 1;
-		transform: none;
-		transition: opacity 150ms ease, transform 150ms ease;
-	}
+	[data-reveal] { opacity: 1; transform: none; transition: opacity 150ms ease, transform 150ms ease; }
 	.js [data-reveal]:not(.is-visible) { opacity: 0; transform: translateY(.3rem); }
 	.js [data-reveal].is-visible { opacity: 1; transform: none; }
 	@media (prefers-reduced-motion: reduce) {
