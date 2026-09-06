@@ -1,35 +1,14 @@
 export const RESEARCH_ICONS = {
-  sociology: { title: 'Sociology', path: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m20 0v-2a4 4 0 0 0-3-3.87M13 3.13a4 4 0 0 1 0 7.75M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8' },
-  economics: { title: 'Economics', path: 'M3 3v18h18M7 16v-4m5 4V8m5 8V5' },
-  education: { title: 'Education', path: 'm2 9 10-6 10 6-10 6L2 9Zm4 3v6c4 3 8 3 12 0v-6m4-3v8' },
-  data: { title: 'Data and methods', path: 'M4 4h16v16H4V4Zm0 5h16M9 4v16m0-6h11' },
-  globe: { title: 'Population and society', path: 'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM3 12h18M12 3c5 5 5 13 0 18-5-5-5-13 0-18' },
-  'computer-science': {
-    path: 'M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12H3V5.25',
-    title: 'Computer Science'
-  },
-  'physics': {
-    path: 'M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9',
-    title: 'Physics'
-  },
-  'biology': {
-    path: 'M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5',
-    title: 'Biology'
-  },
-  'chemistry': {
-    path: 'M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15',
-    title: 'Chemistry'
-  },
-  'mathematics': {
-    path: 'M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008zm0 2.25h.008v.008H8.25V13.5zm0 2.25h.008v.008H8.25v-.008zm0 2.25h.008v.008H8.25V18zm2.498-6.75h.007v.008h-.007v-.008zm0 2.25h.007v.008h-.007V13.5zm0 2.25h.007v.008h-.007v-.008zm0 2.25h.007v.008h-.007V18zm2.504-6.75h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5zm0 2.25h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V18zm2.498-6.75h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V13.5z',
-    title: 'Mathematics'
-  },
-  'law': {
-    path: 'M12 3c1.88 0 2.83.72 4.83 2.72 2 2 2.17 2.28 2.17 4.28 0 2-.17 2.28-2.17 4.28-2 2-2.95 2.72-4.83 2.72s-2.83-.72-4.83-2.72C5.17 12.28 5 12 5 10c0-2 .17-2.28 2.17-4.28C9.17 3.72 10.12 3 12 3zM6.5 10c0-1.5.5-2 2-3.5C10 5 10.5 4.5 12 4.5s2 .5 3.5 2c1.5 1.5 2 2 2 3.5s-.5 2-2 3.5c-1.5 1.5-2 2-3.5 2s-2-.5-3.5-2c-1.5-1.5-2-2-2-3.5z',
-    title: 'Law'
-  },
-  'engineering': {
-    path: 'M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25zm.75-12h9v9h-9v-9z',
-    title: 'Engineering'
-  }
+  sociology: { title: 'Sociology', emoji: '👥' },
+  economics: { title: 'Economics', emoji: '📈' },
+  education: { title: 'Education', emoji: '🎓' },
+  data: { title: 'Data and methods', emoji: '📊' },
+  globe: { title: 'Population and society', emoji: '🌍' },
+  'computer-science': { title: 'Computer Science', emoji: '💻' },
+  physics: { title: 'Physics', emoji: '⚛️' },
+  biology: { title: 'Biology', emoji: '🧬' },
+  chemistry: { title: 'Chemistry', emoji: '⚗️' },
+  mathematics: { title: 'Mathematics', emoji: '∑' },
+  law: { title: 'Law', emoji: '⚖️' },
+  engineering: { title: 'Engineering', emoji: '⚙️' },
 } as const;
