@@ -1,7 +1,164 @@
 ---
-import RedirectPage from '@/components/RedirectPage.astro'
-import { template } from '@/settings'
-const to = `${template.base}/zh/`
+import DeploymentGuard from '@/components/DeploymentGuard.astro'
+import Head from '@/components/Head.astro'
+import DarkLightController from '@/components/ui/DarkLightController.astro'
+import SocialIcons from '@/components/ui/SocialIcons.astro'
+import '@/styles/site.css'
+import { profile, seo, template } from '@/settings'
+
+const zh = profile.zh
+const en = profile.en
 ---
 
-<RedirectPage {to} />
+<!doctype html>
+<html lang='zh'>
+	<head>
+		<DeploymentGuard />
+		<Head lang='zh' title={seo.zh.defaultTitle} description={seo.zh.defaultDescription} image={zh.avatar} />
+	</head>
+	<body class='landing-body'>
+		<section
+			class='landing-gate'
+			data-landing-gate
+			data-base={template.base}
+			data-name-zh={zh.fullName}
+			data-name-en={en.fullName}
+			data-role-zh={zh.title}
+			data-role-en={en.title}
+			data-institute-zh={zh.institute}
+			data-institute-en={en.institute}
+		>
+			<div class='landing-controls'>
+				<button type='button' class='btn btn-ghost rounded-full border border-base-300 bg-base-100/70 px-4 backdrop-blur-xl' data-language-toggle aria-label='切换语言 / Switch language'>
+					<span class='font-black' data-language-label>EN</span>
+				</button>
+				<DarkLightController lang='zh' />
+			</div>
+
+			<div class='landing-aura landing-aura-one'></div>
+			<div class='landing-aura landing-aura-two'></div>
+			<div class='landing-grid'></div>
+
+			<div class='landing-profile'>
+				<div class='landing-portrait-wrap'>
+					<div class='landing-portrait-halo'></div>
+					<img src={`${template.base}${zh.avatar}`} alt={zh.fullName} class='landing-portrait' width='184' height='184' />
+				</div>
+				<p class='landing-name' data-profile-name>{zh.fullName}</p>
+				<p class='landing-role' data-profile-role>{zh.title}</p>
+				<p class='landing-institute' data-profile-institute>{zh.institute}</p>
+				<div class='landing-contacts'><SocialIcons lang='zh' size='large' /></div>
+			</div>
+
+			<button type='button' class='landing-enter' data-landing-enter aria-label='向下滑动进入 / Scroll to enter'>
+				<span data-enter-label>向下滑动进入</span>
+				<span class='landing-enter-track'><span></span></span>
+			</button>
+		</section>
+	</body>
+</html>
+
+<script is:inline>
+	(() => {
+		const gate = document.querySelector('[data-landing-gate]')
+		if (!(gate instanceof HTMLElement)) return
+
+		const readLanguage = () => {
+			try {
+				const saved = localStorage.getItem('academic-language')
+				if (saved === 'zh' || saved === 'en') return saved
+			} catch {}
+			return navigator.language?.toLowerCase().startsWith('zh') ? 'zh' : 'en'
+		}
+
+		let language = readLanguage()
+		let dismissed = false
+		let touchStart = 0
+		const name = gate.querySelector('[data-profile-name]')
+		const role = gate.querySelector('[data-profile-role]')
+		const institute = gate.querySelector('[data-profile-institute]')
+		const languageLabel = gate.querySelector('[data-language-label]')
+		const enterLabel = gate.querySelector('[data-enter-label]')
+
+		const applyLanguage = () => {
+			document.documentElement.lang = language
+			if (name) name.textContent = gate.dataset[`name${language === 'zh' ? 'Zh' : 'En'}`] || ''
+			if (role) role.textContent = gate.dataset[`role${language === 'zh' ? 'Zh' : 'En'}`] || ''
+			if (institute) institute.textContent = gate.dataset[`institute${language === 'zh' ? 'Zh' : 'En'}`] || ''
+			if (languageLabel) languageLabel.textContent = language === 'zh' ? 'EN' : '中文'
+			if (enterLabel) enterLabel.textContent = language === 'zh' ? '向下滑动进入' : 'Scroll to enter'
+			try { localStorage.setItem('academic-language', language) } catch {}
+		}
+
+		const targetPath = () => {
+			const base = (gate.dataset.base || '').replace(/\/$/, '')
+			return `${base}/${language}/`
+		}
+
+		const dismiss = () => {
+			if (dismissed) return
+			dismissed = true
+			gate.classList.add('is-leaving')
+			window.setTimeout(() => window.location.assign(targetPath()), window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 800)
+		}
+
+		const onWheel = (event) => {
+			if (event.deltaY > 8) {
+				event.preventDefault()
+				dismiss()
+			}
+		}
+		const onTouchStart = (event) => { touchStart = event.touches[0]?.clientY ?? 0 }
+		const onTouchEnd = (event) => {
+			const end = event.changedTouches[0]?.clientY ?? touchStart
+			if (touchStart - end > 24) dismiss()
+		}
+		const onKeyDown = (event) => {
+			if (event.target.closest?.('button, a, input, textarea, select')) return
+			if (['ArrowDown', 'PageDown', ' '].includes(event.key)) {
+				event.preventDefault()
+				dismiss()
+			}
+		}
+
+		gate.querySelector('[data-language-toggle]')?.addEventListener('click', () => {
+			language = language === 'zh' ? 'en' : 'zh'
+			applyLanguage()
+		})
+		gate.querySelector('[data-landing-enter]')?.addEventListener('click', dismiss)
+		window.addEventListener('wheel', onWheel, { passive: false })
+		window.addEventListener('touchstart', onTouchStart, { passive: true })
+		window.addEventListener('touchend', onTouchEnd, { passive: true })
+		window.addEventListener('keydown', onKeyDown)
+		applyLanguage()
+	})()
+</script>
+
+<style is:global>
+	html, body { margin: 0; min-height: 100%; }
+	.landing-body { min-height: 100dvh; overflow: hidden; background: var(--fallback-b1, oklch(var(--b1))); color: var(--fallback-bc, oklch(var(--bc))); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", sans-serif; }
+	.landing-gate { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; overflow: hidden; padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom)); gap: clamp(1rem, 3vh, 2rem); background: color-mix(in oklab, var(--fallback-b1, oklch(var(--b1))) 94%, transparent); transition: opacity .75s ease, clip-path .8s cubic-bezier(.76,0,.24,1); clip-path: inset(0 0 0 0 round 0); }
+	.landing-gate.is-leaving { opacity: 0; clip-path: inset(0 0 100% 0 round 0 0 50% 50%); pointer-events: none; }
+	.landing-controls { position: relative; z-index: 4; align-self: flex-end; display: flex; align-items: center; gap: .5rem; }
+	.landing-grid, .landing-aura { pointer-events: none; }
+	.landing-grid { position: absolute; inset: -20%; opacity: .13; background-image: linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px); background-size: 4rem 4rem; mask-image: radial-gradient(circle, black, transparent 68%); transform: perspective(700px) rotateX(58deg) translateY(20%); }
+	.landing-aura { position: absolute; border-radius: 999px; filter: blur(8px); opacity: .18; }
+	.landing-aura-one { width: 38rem; height: 38rem; left: -12rem; top: -16rem; background: var(--fallback-p, oklch(var(--p))); animation: landing-drift 11s ease-in-out infinite alternate; }
+	.landing-aura-two { width: 32rem; height: 32rem; right: -10rem; bottom: -14rem; background: var(--fallback-s, oklch(var(--s))); animation: landing-drift 13s ease-in-out -4s infinite alternate-reverse; }
+	.landing-profile { position: relative; z-index: 2; display: flex; width: min(100%, 48rem); flex: 1; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+	.landing-portrait-wrap { position: relative; margin-bottom: clamp(1.25rem, 4vh, 2rem); }
+	.landing-portrait-halo { position: absolute; inset: -1rem; border: 1px solid color-mix(in oklab, var(--fallback-p, oklch(var(--p))) 42%, transparent); border-radius: 999px; animation: landing-halo 3.2s ease-in-out infinite; }
+	.landing-portrait { position: relative; width: clamp(5rem, 20vh, 11.5rem); aspect-ratio: 1; border-radius: 999px; object-fit: cover; border: .35rem solid color-mix(in oklab, var(--fallback-b1, oklch(var(--b1))) 88%, transparent); box-shadow: 0 2rem 6rem color-mix(in oklab, var(--fallback-p, oklch(var(--p))) 25%, transparent); }
+	.landing-name { margin: 0; font-size: clamp(2rem, min(7vw, 9vh), 5rem); font-weight: 800; letter-spacing: -.04em; line-height: 1.2; }
+	.landing-role { margin: 1.35rem 0 0; font-size: clamp(1.05rem, 2.2vw, 1.45rem); font-weight: 650; }
+	.landing-institute { margin: .45rem 0 0; color: color-mix(in oklab, currentColor 58%, transparent); font-size: clamp(.95rem, 1.8vw, 1.1rem); }
+	.landing-contacts { margin-top: clamp(1rem, 3vh, 1.75rem); max-width: 100%; }
+	.landing-enter { position: relative; z-index: 3; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: .5rem; padding: .5rem 1rem; border: 0; background: transparent; color: color-mix(in oklab, currentColor 70%, transparent); font: inherit; font-size: .75rem; font-weight: 600; letter-spacing: .12em; cursor: pointer; }
+	.landing-enter-track { display: block; width: 1px; height: clamp(1rem, 4vh, 2rem); overflow: hidden; background: color-mix(in oklab, currentColor 16%, transparent); }
+	.landing-enter-track span { display: block; width: 100%; height: 45%; background: var(--fallback-p, oklch(var(--p))); animation: landing-scrollcue 1.8s ease-in-out infinite; }
+	@keyframes landing-scrollcue { 0% { transform: translateY(-120%); } 65%,100% { transform: translateY(240%); } }
+	@keyframes landing-halo { 50% { transform: scale(1.055); opacity: .45; } }
+	@keyframes landing-drift { to { transform: translate3d(3rem, 2rem, 0) scale(1.08); } }
+	@media (max-height: 560px) { .landing-portrait { width: 4rem; } .landing-role { margin-top: .5rem; } .landing-portrait-wrap { margin-bottom: .75rem; } .landing-gate { gap: .5rem; } .landing-contacts { margin-top: .75rem; } }
+	@media (prefers-reduced-motion: reduce) { .landing-aura, .landing-portrait-halo, .landing-enter-track span { animation: none; } .landing-gate { transition: none; } }
+</style>
