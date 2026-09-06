@@ -1,23 +1,4 @@
-backend:
-  name: github
-  repo: LyuFG1999/academic-cv
-  branch: main
-
-site_url: https://lyufg1999.github.io/academic-cv
-display_url: https://lyufg1999.github.io/academic-cv
-publish_mode: simple
-show_preview_links: false
-editor:
-  preview: false
-media_folder: public/uploads
-public_folder: /uploads
-
-commit_messages:
-  create: "内容：新建 {{collection}} {{slug}}"
-  update: "内容：更新 {{collection}} {{slug}}"
-  delete: "内容：删除 {{collection}} {{slug}}"
-  uploadMedia: "媒体：上传 {{path}}"
-  deleteMedia: "媒体：删除 {{path}}"
+# 后台字段定义。当前自研管理后台只读取 collections；不再保留旧 CMS/托管平台发布配置。
 
 collections:
   - name: settings

@@ -119,20 +119,20 @@
   },
   "social": {
     "email": {
-      "enabled": true,
-      "url": "123@123.com"
+      "enabled": false,
+      "url": ""
     },
     "github": {
-      "enabled": true,
-      "url": "https://www.apple.com.cn/"
+      "enabled": false,
+      "url": ""
     },
     "orcid": {
-      "enabled": true,
-      "url": "https://www.apple.com.cn/"
+      "enabled": false,
+      "url": ""
     },
     "cnki": {
-      "enabled": true,
-      "url": "https://www.apple.com.cn/"
+      "enabled": false,
+      "url": ""
     },
     "school": {
       "enabled": false,
@@ -146,8 +146,5 @@
       "enabled": false,
       "url": ""
     }
-  },
-  "domain": {
-    "hostname": "fengguanglyu.com"
   }
 }

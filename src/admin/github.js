@@ -42,7 +42,7 @@ export async function publishBatch(changes, request = api) {
     sha: item.content === null ? null : (await request('git/blobs', { content: item.content, encoding: item.encoding ?? 'utf-8' })).sha,
   })));
   const tree = await request('git/trees', { base_tree: current.sha, tree: entries });
-  const commit = await request('git/commits', { message: '统一发布网站设置、博客与附件 [skip netlify]', tree: tree.sha, parents: [head] });
+  const commit = await request('git/commits', { message: '统一发布网站设置、博客与附件', tree: tree.sha, parents: [head] });
   await request('git/refs/heads/main', { sha: commit.sha, force: false }, 'PATCH');
   return { commit: commit.sha, entries };
 }
