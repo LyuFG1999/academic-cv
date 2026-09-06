@@ -90,7 +90,7 @@
         }
       },
       {
-        "field": "organization",
+        "field": "sociology",
         "title": {
           "zh": "经济社会学",
           "en": "Economic Sociology"
@@ -101,7 +101,7 @@
         }
       },
       {
-        "field": "organization",
+        "field": "sociology",
         "title": {
           "zh": "组织社会学",
           "en": "Organizational Sociology"
@@ -112,7 +112,7 @@
         }
       },
       {
-        "field": "methods",
+        "field": "data",
         "title": {
           "zh": "定量研究",
           "en": "Quantitative Methods"
@@ -165,7 +165,7 @@
   "social": {
     "email": {
       "enabled": true,
-      "url": "mailto:lvfg1999@126.com"
+      "url": "lvfg1999@126.com"
     },
     "github": {
       "enabled": true,
