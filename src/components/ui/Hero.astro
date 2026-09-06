@@ -16,15 +16,22 @@ const t = copy[lang]
 
 <div class='home-profile'>
 	<p class='mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-secondary'>{t.introPrefix}</p>
-	<h1 class='text-5xl font-bold text-base-content sm:text-6xl'>{fullName}</h1>
+	<h1 class='home-name font-bold text-base-content'>{fullName}</h1>
 	<p class='home-affiliation'>{title}{title && institute ? ' · ' : ''}{institute}</p>
 	<div class='home-contacts'><SocialIcons lang={lang} size='large' align='start' /></div>
 	{intro && <p class='home-intro'>{intro}</p>}
 </div>
 <style>
-  .home-profile { padding-block: .25rem 1rem; }
-  .home-affiliation { clear: both; padding-top: 1.35rem; color: color-mix(in srgb, currentColor 68%, transparent); font-size: 1.05rem; line-height: 1.8; }
-  .home-contacts { margin-top: 1.25rem; }
+  .home-profile { min-width: 0; padding-block: .25rem 1rem; }
+  .home-name { max-width: 100%; font-size: clamp(2.25rem, 10vw, 3.75rem); line-height: 1.08; overflow-wrap: anywhere; }
+  .home-affiliation { clear: both; max-width: 100%; padding-top: 1.35rem; color: color-mix(in srgb, currentColor 68%, transparent); font-size: 1.05rem; line-height: 1.8; overflow-wrap: anywhere; }
+  .home-contacts { margin-top: 1.25rem; max-width: 100%; }
   .home-contacts:empty { display: none; }
-  .home-intro { margin-top: 2rem; max-width: 43rem; font-size: 1.125rem; line-height: 1.95; color: color-mix(in srgb, currentColor 82%, transparent); }
+  .home-intro { margin-top: 2rem; max-width: 43rem; font-size: 1.125rem; line-height: 1.95; color: color-mix(in srgb, currentColor 82%, transparent); overflow-wrap: anywhere; }
+  @media (max-width: 640px) {
+    .home-profile { padding-top: 0; }
+    .home-affiliation { padding-top: 1rem; font-size: .98rem; line-height: 1.7; }
+    .home-contacts { margin-top: 1rem; }
+    .home-intro { margin-top: 1.5rem; font-size: 1rem; line-height: 1.8; }
+  }
 </style>
