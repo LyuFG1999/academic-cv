@@ -4,14 +4,15 @@ import { tokenizeAuthors } from '@/lib/utils'
 type Props = {
 	authors: string
 	authorName: string
+	correspondingAuthor?: boolean
 }
 
-const { authors, authorName } = Astro.props
+const { authors, authorName, correspondingAuthor = false } = Astro.props
 const tokens = tokenizeAuthors(authors, authorName)
 ---
 
 <span>
 	{tokens.map((token) => token.highlighted
-		? <strong class='rounded bg-primary/12 px-1 font-semibold text-primary underline decoration-primary/40 decoration-2 underline-offset-4'>{token.text}</strong>
+		? <><strong class='rounded bg-primary/12 px-1 font-semibold text-primary underline decoration-primary/40 decoration-2 underline-offset-4'>{token.text}</strong>{correspondingAuthor && <sup class='ml-0.5 align-super text-[0.72em] font-semibold text-primary'>*</sup>}</>
 		: token.text)}
 </span>

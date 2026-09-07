@@ -25,16 +25,28 @@ export function GET() {
 
   const cv = fields('cv')
   const publications = cv.find((field: { name?: string }) => field.name === 'publications')
-  if (publications && Array.isArray(publications.fields) && !publications.fields.some((field: { name?: string }) => field.name === 'featured')) {
-    publications.hint = '每条成果中的“首页代表性成果 / Featured on homepage”提供中文与 English 两个开关，分别控制该成果是否显示在中文或英文首页的“代表性成果 / Selected Publications”区块。'
+  if (publications && Array.isArray(publications.fields)) {
+    publications.hint = '“首页代表性成果 / Featured on homepage”和“本人为通讯作者 / Corresponding author”均提供中文与 English 两个开关，分别控制当前语言版本。通讯作者开启后，仅在本人姓名后显示上标 *。'
     const categoryIndex = publications.fields.findIndex((field: { name?: string }) => field.name === 'category')
-    publications.fields.splice(categoryIndex + 1, 0, {
-      name: 'featured',
-      label: '首页代表性成果 / Featured on homepage',
-      widget: 'boolean',
-      default: false,
-      required: false,
-    })
+    if (!publications.fields.some((field: { name?: string }) => field.name === 'featured')) {
+      publications.fields.splice(categoryIndex + 1, 0, {
+        name: 'featured',
+        label: '首页代表性成果 / Featured on homepage',
+        widget: 'boolean',
+        default: false,
+        required: false,
+      })
+    }
+    if (!publications.fields.some((field: { name?: string }) => field.name === 'correspondingAuthor')) {
+      const featuredIndex = publications.fields.findIndex((field: { name?: string }) => field.name === 'featured')
+      publications.fields.splice(featuredIndex + 1, 0, {
+        name: 'correspondingAuthor',
+        label: '本人为通讯作者 / Corresponding author',
+        widget: 'boolean',
+        default: false,
+        required: false,
+      })
+    }
   }
 
   return new Response(JSON.stringify({

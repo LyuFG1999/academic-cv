@@ -30,6 +30,7 @@ export interface Publication {
   sortDate?: string;
   category?: 'published' | 'working' | 'book';
   featured?: boolean;
+  correspondingAuthor?: boolean;
   link?: string;
   abstract?: string;
 }
