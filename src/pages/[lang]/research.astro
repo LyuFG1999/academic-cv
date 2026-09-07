@@ -1,4 +1,5 @@
 ---
+import '@/styles/typography.css'
 import Layout from '@/layouts/Layout.astro'
 import { copy, isLanguage, languages } from '@/i18n'
 import { profile } from '@/settings'
@@ -13,8 +14,6 @@ if (!isLanguage(rawLang)) throw new Error(`Unsupported language: ${rawLang}`)
 const lang = rawLang
 const t = copy[lang]
 const person = profile[lang]
-const sectionTitleClass = 'mb-6 text-3xl font-bold text-base-content'
-const sectionBodyClass = 'text-base leading-8 text-base-content/78'
 ---
 
 <Layout lang={lang} title={`${t.research} | ${person.fullName}`}>
@@ -24,18 +23,18 @@ const sectionBodyClass = 'text-base leading-8 text-base-content/78'
 	</header>
 
 	<section data-reveal>
-		<h2 class={sectionTitleClass}>{t.researchStatement}</h2>
-		<p class={sectionBodyClass}>{person.researchStatement}</p>
+		<h2 class='section-title'>{t.researchStatement}</h2>
+		<p class='text-lead'>{person.researchStatement}</p>
 	</section>
 
-	<section class='mt-14' data-reveal>
-		<h2 class={sectionTitleClass}>{t.researchAreas}</h2>
+	<section class='section-flow' data-reveal>
+		<h2 class='section-title'>{t.researchAreas}</h2>
 		{person.researchAreas.length > 0 ? (
-			<div class='grid gap-4 sm:grid-cols-2'>
+			<div class='content-wide grid gap-4 sm:grid-cols-2'>
 				{person.researchAreas.map((area) => (
 					<article class='rounded-xl border border-base-300 bg-base-200/55 px-5 py-4 transition hover:border-secondary/35 hover:bg-base-200'>
 						<h3 class='text-base font-semibold leading-7 text-base-content'>{area.title}</h3>
-						{area.description && <p class={`mt-2 ${sectionBodyClass}`}>{area.description}</p>}
+						{area.description && <p class='mt-2 text-base leading-8 text-base-content/78'>{area.description}</p>}
 					</article>
 				))}
 			</div>
@@ -45,15 +44,15 @@ const sectionBodyClass = 'text-base leading-8 text-base-content/78'
 	</section>
 
 	{person.projects.length > 0 && (
-		<section class='mt-14' data-reveal>
-			<h2 class={sectionTitleClass}>{t.currentProjects}</h2>
-			<div class='grid gap-4 sm:grid-cols-2'>
+		<section class='section-flow' data-reveal>
+			<h2 class='section-title'>{t.currentProjects}</h2>
+			<div class='content-wide grid gap-4 sm:grid-cols-2'>
 				{person.projects.map((project) => {
 					const link = safeHttpUrl(project.link)
 					return (
 						<article class='rounded-xl border border-base-300 bg-base-200/55 px-5 py-4'>
 							<h3 class='text-base font-semibold leading-7'>{link ? <a class='hover:text-secondary' href={link} target='_blank' rel='noopener noreferrer'>{project.title}</a> : project.title}</h3>
-							<p class={`mt-2 ${sectionBodyClass}`}>{project.description}</p>
+							<p class='mt-2 text-base leading-8 text-base-content/78'>{project.description}</p>
 						</article>
 					)
 				})}
@@ -62,9 +61,9 @@ const sectionBodyClass = 'text-base leading-8 text-base-content/78'
 	)}
 
 	{person.researchImpact && (
-		<section class='mt-14' data-reveal>
-			<h2 class={sectionTitleClass}>{t.researchImpact}</h2>
-			<p class={sectionBodyClass}>{person.researchImpact}</p>
+		<section class='section-flow' data-reveal>
+			<h2 class='section-title'>{t.researchImpact}</h2>
+			<p class='text-lead'>{person.researchImpact}</p>
 		</section>
 	)}
 </Layout>

@@ -1,4 +1,5 @@
 ---
+import '@/styles/typography.css'
 import Layout from '@/layouts/Layout.astro'
 import { copy, isLanguage, languages } from '@/i18n'
 import { courses } from '@/data/courses'
@@ -20,12 +21,12 @@ const data = courses[lang]
 <Layout lang={lang} title={`${t.courses} | ${person.fullName}`}>
 	<header class='mb-10' data-reveal>
 		<p class='text-sm font-semibold uppercase tracking-[0.2em] text-secondary'>{t.courses}</p>
-		<h1 class='mt-3 text-4xl font-black'>{t.courses}</h1>
-		{data.intro && <p class='mt-4 max-w-3xl text-lg text-base-content/70'>{data.intro}</p>}
+		<h1 class='page-title mt-3'>{t.courses}</h1>
+		{data.intro && <p class='text-lead mt-4'>{data.intro}</p>}
 	</header>
 
 	{data.courses.length > 0 ? (
-		<div class='grid gap-6 md:grid-cols-2'>
+		<div class='content-wide grid gap-6 md:grid-cols-2'>
 			{data.courses.map((course) => {
 				const link = safeHttpUrl(course.link)
 				return (
@@ -36,7 +37,7 @@ const data = courses[lang]
 							{course.code && <span class='badge badge-outline'>{course.code}</span>}
 						</div>
 						<p class='text-sm font-semibold text-secondary'>{course.term}{course.role ? ` · ${course.role}` : ''}</p>
-						{course.description && <p class='text-base-content/75'>{course.description}</p>}
+						{course.description && <p class='text-base leading-8 text-base-content/75'>{course.description}</p>}
 						{link && <div class='card-actions mt-3 justify-end'><a href={link} class='btn btn-secondary btn-sm' target='_blank' rel='noopener noreferrer'>{t.courseWebsite}</a></div>}
 					</div>
 				</article>
