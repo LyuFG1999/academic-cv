@@ -1,4 +1,21 @@
 {
-  "intro": "",
-  "courses": []
+  "intro": "Supported undergraduate and graduate teaching and research methods workshops, coordinated teaching assistants, and mentored students, earning recognition for teaching and research advising.",
+  "courses": [
+    {
+      "title": "Summer Workshop on Empirical Social Science Research Methods, Xi'an Jiaotong University",
+      "code": "",
+      "term": "July 2026; July 2025",
+      "role": "Teaching Assistant",
+      "description": "",
+      "link": ""
+    },
+    {
+      "title": "“Social Research Methods”",
+      "code": "",
+      "term": "Spring 2025",
+      "role": "Teaching Assistant",
+      "description": "Undergraduate Course",
+      "link": ""
+    }
+  ]
 }

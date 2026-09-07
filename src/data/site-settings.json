@@ -142,7 +142,7 @@
       "en": "Papers"
     },
     "courses": {
-      "enabled": false,
+      "enabled": true,
       "zh": "课程",
       "en": "Courses"
     },
