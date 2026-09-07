@@ -36,14 +36,14 @@ const publicationTags = (value?: string) => [...new Set((value ?? '').split(/[;ï
 							const link = safeHttpUrl(paper.link)
 							const tags = publicationTags(paper.tags)
 							return (
-							<article class='publication-card card border border-base-300 bg-base-200/70 shadow-sm'><div class='card-body'>
+							<article class='publication-card card border border-base-300 bg-base-200/70 shadow-sm'><div class='publication-body card-body'>
 								<h3 class='publication-title card-title text-xl'>{link ? <a href={link} target='_blank' rel='noopener noreferrer' class='hover:text-secondary'>{paper.title}</a> : paper.title}</h3>
 								<p class='publication-authors'><span class='font-medium'>{t.authors}:</span> <AuthorNames authors={paper.authors} authorName={authorAliases} correspondingAuthor={paper.correspondingAuthor} /></p>
 								<p class='publication-meta text-sm'><span class='italic'>{paper.journal}</span>{paper.time ? ` Â· ${paper.time}` : ''}</p>
 								{paper.abstract && <p class='publication-abstract text-sm text-base-content/75'>{paper.abstract}</p>}
-								{(tags.length > 0 || link) && <div class='publication-footer mt-3 flex flex-wrap items-center justify-between gap-3'>
-									{tags.length > 0 ? <div class='flex min-w-0 flex-wrap gap-2'>{tags.map((tag) => <span class='badge badge-outline border-base-300 bg-base-100/60 text-base-content/70'>{tag}</span>)}</div> : <span />}
-									{link && <a href={link} class='btn btn-secondary btn-sm shrink-0' target='_blank' rel='noopener noreferrer'>{t.readPaper}</a>}
+								{(tags.length > 0 || link) && <div class='publication-footer mt-3'>
+									{tags.length > 0 && <div class='publication-tags'>{tags.map((tag) => <span class='badge badge-outline border-base-300 bg-base-100/60 text-base-content/70'>{tag}</span>)}</div>}
+									{link && <div class='publication-action-slot'><a href={link} class='publication-read-link btn btn-secondary btn-sm shrink-0' target='_blank' rel='noopener noreferrer'>{t.readPaper}</a></div>}
 								</div>}
 							</div></article>
 						)})}
@@ -55,7 +55,7 @@ const publicationTags = (value?: string) => [...new Set((value ?? '').split(/[;ï
 					<h2 class='mb-5 text-2xl font-bold'>{t.policyReports}</h2>
 					<div class='space-y-6'>
 						{policyReports.map((report) => (
-							<article class='publication-card card border border-base-300 bg-base-200/70 shadow-sm'><div class='card-body'>
+							<article class='publication-card card border border-base-300 bg-base-200/70 shadow-sm'><div class='publication-body card-body'>
 								<h3 class='publication-title card-title text-xl'>{report.title}</h3>
 								<p class='publication-authors'><span class='font-medium'>{t.authors}:</span> <AuthorNames authors={report.authors} authorName={authorAliases} /></p>
 								<p class='publication-meta text-sm'><span class='font-medium'>{t.adoptedBy}:</span> {report.adoptedBy}{report.time ? ` Â· ${report.time}` : ''}</p>
@@ -69,7 +69,14 @@ const publicationTags = (value?: string) => [...new Set((value ?? '').split(/[;ï
 </Layout>
 
 <style>
-	.publication-sections,.publication-card,.publication-card :global(.card-body),.publication-title,.publication-title :global(a),.publication-authors,.publication-meta,.publication-abstract,.publication-footer { min-width:0; max-width:100%; }
+	.publication-sections,.publication-card,.publication-body,.publication-title,.publication-title :global(a),.publication-authors,.publication-meta,.publication-abstract,.publication-footer,.publication-tags,.publication-action-slot { min-width:0; max-width:100%; }
+	.publication-body { display:grid; grid-template-columns:minmax(0,1fr); }
+	.publication-title { display:block; }
 	.publication-title,.publication-title :global(a),.publication-authors,.publication-meta,.publication-abstract { white-space:normal; overflow-wrap:anywhere; word-break:normal; }
-	@media (max-width:640px) { .publication-sections,.publication-sections :global(section){width:100%}.publication-card :global(.card-body){padding:1rem;gap:.7rem}.publication-title{font-size:1.05rem;line-height:1.55;display:block}.publication-authors{font-size:.93rem;line-height:1.65}.publication-meta{line-height:1.6}.publication-abstract{line-height:1.7}.publication-footer{align-items:flex-start}.publication-footer :global(.btn){width:fit-content;max-width:100%} }
+	.publication-footer { display:flex; width:100%; flex-wrap:wrap; align-items:center; gap:.75rem 1rem; }
+	.publication-tags { display:flex; flex:1 1 auto; flex-wrap:wrap; gap:.5rem; order:0; }
+	.publication-action-slot { display:inline-flex; flex:0 0 auto; margin-left:auto; align-items:center; justify-content:flex-end; order:999; }
+	.publication-action-slot :global(*) { max-width:100%; }
+	.publication-read-link { margin-left:auto; order:999; }
+	@media (max-width:640px) { .publication-sections,.publication-sections :global(section){width:100%}.publication-body{padding:1rem;gap:.7rem}.publication-title{font-size:1.05rem;line-height:1.55}.publication-authors{font-size:.93rem;line-height:1.65}.publication-meta{line-height:1.6}.publication-abstract{line-height:1.7}.publication-footer{align-items:flex-start}.publication-action-slot{width:100%;justify-content:flex-start;margin-left:0}.publication-read-link{margin-left:0;width:fit-content;max-width:100%} }
 </style>
