@@ -89,4 +89,4 @@ document.querySelector('#token-login').addEventListener('submit', event => { eve
 document.querySelector('#account').addEventListener('click', () => { if (busy || pendingUploads) return; if (user) { setCredential(''); user = false; loaded = false; form.hidden = true; document.querySelector('#login-panel').hidden = false; document.querySelector('#account').textContent = '登录后台'; message('已退出登录。'); } });
 document.querySelector('#save-draft').addEventListener('click', async () => { if (!loaded || busy || pendingUploads) return; await draftStore('put', draftKey, { settings, cv, courses, files: [...files], posts: [...posts], uploads: [...uploads] }); message('已保存本地草稿。'); });
 document.querySelector('#discard-draft').addEventListener('click', async () => { if (!loaded || busy || pendingUploads || !confirm('放弃当前所有未发布修改并重新读取仓库？')) return; await draftStore('delete', draftKey); location.reload(); });
-initializeOAuth({ login, message, base });
+initializeOAuth(login, message);
