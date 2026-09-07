@@ -3,17 +3,11 @@ import settingsData from './site-settings.json'
 
 export type NavigationKey = 'home' | 'research' | 'papers' | 'courses' | 'blog' | 'cv'
 export type PaperCategory = 'published' | 'working' | 'book'
-export type PaperVisibility = Record<PaperCategory, boolean>
+export type PaperVisibilityKey = PaperCategory | 'policyReport'
+export type PaperVisibility = Record<PaperVisibilityKey, boolean>
 
-export type NavigationItem = {
-	enabled: boolean
-	zh: string
-	en: string
-}
-
-export type NavigationSettings = Record<NavigationKey, NavigationItem> & {
-	paperVisibility: PaperVisibility
-}
+export type NavigationItem = { enabled: boolean; zh: string; en: string }
+export type NavigationSettings = Record<NavigationKey, NavigationItem> & { paperVisibility: PaperVisibility }
 
 const defaults: NavigationSettings = {
 	home: { enabled: true, zh: '首页', en: 'Home' },
@@ -22,7 +16,7 @@ const defaults: NavigationSettings = {
 	courses: { enabled: true, zh: '课程', en: 'Courses' },
 	blog: { enabled: true, zh: '博客', en: 'Blog' },
 	cv: { enabled: true, zh: '履历', en: 'CV' },
-	paperVisibility: { published: true, working: true, book: true },
+	paperVisibility: { published: true, working: true, book: true, policyReport: true },
 }
 const input = settingsData.navigation as Partial<NavigationSettings>
 export const navigation = Object.fromEntries([
@@ -31,14 +25,6 @@ export const navigation = Object.fromEntries([
 ]) as NavigationSettings
 
 export const navigationOrder: Array<{ key: NavigationKey; path: string }> = [
-	{ key: 'home', path: '' },
-	{ key: 'research', path: 'research' },
-	{ key: 'papers', path: 'papers' },
-	{ key: 'courses', path: 'courses' },
-	{ key: 'blog', path: 'blog' },
-	{ key: 'cv', path: 'cv' },
+	{ key: 'home', path: '' }, { key: 'research', path: 'research' }, { key: 'papers', path: 'papers' }, { key: 'courses', path: 'courses' }, { key: 'blog', path: 'blog' }, { key: 'cv', path: 'cv' },
 ]
-
-export function navigationLabel(key: NavigationKey, lang: Language) {
-	return navigation[key][lang]
-}
+export function navigationLabel(key: NavigationKey, lang: Language) { return navigation[key][lang] }

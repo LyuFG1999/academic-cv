@@ -8,7 +8,11 @@ export type ResearchArea = {
 }
 
 export type Project = {
+	source: string
 	title: string
+	code: string
+	status: string
+	role: string
 	description: string
 	link?: string
 }
@@ -33,7 +37,15 @@ type BilingualText = Partial<Record<Language, string>>
 const data = settingsData as Omit<typeof settingsData, 'profile'> & {
 	profile: Omit<typeof settingsData.profile, 'researchAreas' | 'projects'> & {
 		researchAreas: { title: BilingualText; description: BilingualText; field: string }[]
-		projects: { title: BilingualText; description: BilingualText; link?: BilingualText }[]
+		projects: {
+			source?: BilingualText
+			title: BilingualText
+			code?: BilingualText
+			status?: BilingualText
+			role?: BilingualText
+			description?: BilingualText
+			link?: BilingualText
+		}[]
 		siteIcon?: string
 	}
 }
@@ -53,8 +65,16 @@ const buildProfile = (lang: Language): Profile => ({
 		.map((item) => ({ title: localized(item.title, lang, ''), description: localized(item.description, lang, ''), field: item.field }))
 		.filter((item) => item.title || item.description),
 	projects: (data.profile.projects ?? [])
-		.map((item) => ({ title: localized(item.title, lang, ''), description: localized(item.description, lang, ''), link: localized(item.link, lang, '') }))
-		.filter((item) => item.title || item.description),
+		.map((item) => ({
+			source: localized(item.source, lang, ''),
+			title: localized(item.title, lang, ''),
+			code: localized(item.code, lang, ''),
+			status: localized(item.status, lang, ''),
+			role: localized(item.role, lang, ''),
+			description: localized(item.description, lang, ''),
+			link: localized(item.link, lang, ''),
+		}))
+		.filter((item) => item.title || item.description || item.source || item.code),
 })
 
 export const profile: Record<Language, Profile> = { zh: buildProfile('zh'), en: buildProfile('en') }

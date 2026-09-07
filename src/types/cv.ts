@@ -35,6 +35,14 @@ export interface Publication {
   abstract?: string;
 }
 
+export interface PolicyReport {
+  title: string;
+  authors: string;
+  time: string;
+  sortDate?: string;
+  adoptedBy: string;
+}
+
 export function isExperience(element: Experience | Education): element is Experience {
   return 'title' in element && 'company' in element;
 }
