@@ -1,4 +1,4 @@
-import type { Education, Experience, Publication, Skill } from '@/types/cv'
+import type { Education, Experience, PolicyReport, Publication, Skill } from '@/types/cv'
 import type { Language } from '@/i18n'
 import cvZh from './cv.zh.json'
 import cvEn from './cv.en.json'
@@ -9,10 +9,12 @@ export type LocalizedCv = {
 	education: Education[]
 	skills: Skill[]
 	publications: Publication[]
+	policyReports: PolicyReport[]
 }
 
-type RawCv = Partial<Omit<LocalizedCv, 'publications'>> & {
+type RawCv = Partial<Omit<LocalizedCv, 'publications' | 'policyReports'>> & {
 	publications?: Array<Record<string, unknown>>
+	policyReports?: Array<Record<string, unknown>>
 }
 
 const asBoolean = (value: unknown) => value === true || value === 'true'
@@ -28,6 +30,11 @@ const normalizeCv = (value: unknown): LocalizedCv => {
 			}) as unknown as Publication)
 			.filter(item => item.title?.trim())
 		: []
+	const policyReports = Array.isArray(source.policyReports)
+		? source.policyReports
+			.map(item => item as unknown as PolicyReport)
+			.filter(item => item.title?.trim())
+		: []
 
 	return {
 		content: typeof source.content === 'string' ? source.content : '',
@@ -35,6 +42,7 @@ const normalizeCv = (value: unknown): LocalizedCv => {
 		education: source.education ?? [],
 		skills: source.skills ?? [],
 		publications,
+		policyReports,
 	}
 }
 
