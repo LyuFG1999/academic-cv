@@ -18,10 +18,11 @@ if (!isLanguage(rawLang)) throw new Error(`Unsupported language: ${rawLang}`)
 const lang = rawLang
 const t = copy[lang]
 const person = profile[lang]
-const publications = cv[lang].publications
+const visiblePublications = cv[lang].publications
 	.filter((paper) => navigation.paperVisibility[paper.category ?? 'published'])
 	.sort(compareByAcademicDate)
-	.slice(0, 3)
+const publications = visiblePublications.slice(0, 3)
+const featuredPublications = visiblePublications.filter((paper) => paper.featured)
 ---
 
 <Layout lang={lang}>
@@ -38,6 +39,12 @@ const publications = cv[lang].publications
 	{publications.length > 0 && (
 		<section class='py-14' data-reveal>
 			<ArticleList listTitle={t.recentPublications} listItems={publications} />
+		</section>
+	)}
+
+	{featuredPublications.length > 0 && (
+		<section class='pb-14 pt-2' data-reveal>
+			<ArticleList listTitle={t.lastPublications} listItems={featuredPublications} />
 		</section>
 	)}
 </Layout>
