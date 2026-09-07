@@ -8,6 +8,7 @@ const doi = value => {
   return /^10\.\d{4,9}\/\S+$/.test(candidate) ? candidate : '';
 };
 const text = value => typeof value === 'object' && value ? value.zh || value.en || '' : value || '';
+const localized = (value, lang = 'zh') => typeof value === 'object' && value ? value[lang] || value.zh || value.en || '' : value || '';
 const normalized = value => text(value).normalize('NFKC').toLowerCase().replace(/[\s\p{P}\p{S}]/gu, '');
 export function citationKeys(item) {
   const id = doi(text(item.doi) || (/doi\.org\//i.test(text(item.link)) ? text(item.link) : ''));
@@ -60,4 +61,45 @@ export function parseCitations(source, existing = []) {
 }
 export function pairedPublication(item, category = 'auto') {
   return Object.fromEntries(Object.entries({ ...item, category: category === 'auto' ? item.category : category }).map(([key, value]) => [key, ['category', 'sortDate', 'doi'].includes(key) ? value : { zh: value, en: value }]));
+}
+
+const bibEscape = value => plain(value).replace(/\\/g, '\\\\').replace(/[{}]/g, match => `\\${match}`);
+const bibKey = (item, index, lang) => {
+  const author = localized(item.authors, lang).split(/[;，,]/)[0]?.trim().split(/\s+/).pop() || 'item';
+  const year = localized(item.time, lang).match(/\d{4}/)?.[0] || 'nd';
+  return `${author}${year}${String(index + 1).padStart(2, '0')}`.replace(/[^\p{L}\p{N}_:-]/gu, '');
+};
+export function exportCitations(items, format = 'bibtex', lang = 'zh') {
+  if (!Array.isArray(items) || !items.length) throw new Error('当前范围没有可导出的成果。');
+  const selected = items.filter(item => localized(item.title, lang).trim());
+  if (!selected.length) throw new Error('当前范围没有可导出的成果。');
+  if (format === 'ris') {
+    return selected.map(item => {
+      const category = item.category || 'published';
+      const lines = [`TY  - ${category === 'book' ? 'BOOK' : category === 'working' ? 'UNPB' : 'JOUR'}`];
+      lines.push(`TI  - ${plain(localized(item.title, lang))}`);
+      plain(localized(item.authors, lang)).split(/\s*;\s*/).filter(Boolean).forEach(author => lines.push(`AU  - ${author}`));
+      if (localized(item.journal, lang)) lines.push(`JO  - ${plain(localized(item.journal, lang))}`);
+      if (localized(item.time, lang)) lines.push(`PY  - ${plain(localized(item.time, lang))}`);
+      if (item.doi) lines.push(`DO  - ${plain(item.doi)}`);
+      if (localized(item.link, lang)) lines.push(`UR  - ${plain(localized(item.link, lang))}`);
+      if (localized(item.abstract, lang)) lines.push(`AB  - ${plain(localized(item.abstract, lang))}`);
+      lines.push('ER  -');
+      return lines.join('\n');
+    }).join('\n\n') + '\n';
+  }
+  return selected.map((item, index) => {
+    const category = item.category || 'published';
+    const type = category === 'book' ? 'book' : category === 'working' ? 'unpublished' : 'article';
+    const fields = [
+      ['title', localized(item.title, lang)],
+      ['author', plain(localized(item.authors, lang)).split(/\s*;\s*/).filter(Boolean).join(' and ')],
+      [type === 'book' ? 'publisher' : 'journal', localized(item.journal, lang)],
+      ['year', localized(item.time, lang)],
+      ['doi', item.doi],
+      ['url', localized(item.link, lang)],
+      ['abstract', localized(item.abstract, lang)],
+    ].filter(([, value]) => plain(value));
+    return `@${type}{${bibKey(item, index, lang)},\n${fields.map(([key, value]) => `  ${key} = {${bibEscape(value)}}`).join(',\n')}\n}`;
+  }).join('\n\n') + '\n';
 }

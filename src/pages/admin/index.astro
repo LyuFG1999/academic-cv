@@ -12,7 +12,8 @@ const base = template.base;
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; worker-src 'self' blob:; frame-src 'self' about:; style-src 'self'; img-src 'self' blob: data: https:; connect-src 'self' https://api.github.com; object-src 'none'; base-uri 'self'; form-action 'none'" />
   <title>网站管理</title>
   <link rel="stylesheet" href={`${base}/admin/dashboard.css`} />
-  <script>import '../../admin/dashboard.js';</script>
+  <link rel="stylesheet" href={`${base}/admin/collapsible.css`} />
+  <script>import '../../admin/dashboard.js'; import '../../admin/collapsible-lists.js';</script>
 </head>
 <body>
   <div class="admin-shell">
