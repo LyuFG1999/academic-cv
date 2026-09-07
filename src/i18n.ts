@@ -6,14 +6,14 @@ export const copy = {
 	zh: {
 		home: '首页', research: '研究', papers: '成果', cv: '履历', blog: '博客', courses: '课程', language: 'English', theme: '切换明暗主题', openMenu: '打开菜单', closeMenu: '关闭菜单', introPrefix: '你好，我是',
 		researchAreas: '研究领域', recentPublications: '近期成果', researchStatement: '研究简介', currentProjects: '研究项目', researchImpact: '研究贡献',
-		projectSource: '项目来源', projectCode: '项目代号', projectStatus: '项目状态', projectRole: '参与角色',
+		projectSource: '项目来源', projectCode: '项目代号', projectStatus: '项目状态', projectRole: '参与角色', projectAmount: '项目金额',
 		publications: '学术成果', publishedPapers: '已发表论文', workingPapers: '工作论文', books: '书籍', policyReports: '资政报告', adoptedBy: '被采纳机构',
 		authors: '作者', readPaper: '查看成果', readMore: '阅读全文', noBlog: '暂无博客文章。', noCourses: '课程信息即将更新。', courseWebsite: '课程页面', attachments: '附件下载', education: '教育经历', experiences: '工作经历', lastPublications: '代表性成果', skills: '研究技能', emptyProfile: '个人简介即将更新。', emptyResearch: '研究信息即将更新。', emptyPapers: '暂无公开成果。', emptyCv: '履历信息即将更新。', contact: '联系方式', email: '邮箱', github: 'GitHub', orcid: 'ORCID', cnki: '知网', school: '学校主页', x: 'X', linkedin: '领英', scrollToEnter: '向下滑动进入主页', pending: '待填写', copyright: '保留所有权利',
 	},
 	en: {
 		home: 'Home', research: 'Research', papers: 'Papers', cv: 'CV', blog: 'Blog', courses: 'Courses', language: '中文', theme: 'Toggle light and dark theme', openMenu: 'Open menu', closeMenu: 'Close menu', introPrefix: "Hello, I'm",
 		researchAreas: 'Research Areas', recentPublications: 'Recent Publications', researchStatement: 'Research Statement', currentProjects: 'Research Projects', researchImpact: 'Research Impact',
-		projectSource: 'Source', projectCode: 'Project Code', projectStatus: 'Status', projectRole: 'Role',
+		projectSource: 'Source', projectCode: 'Project Code', projectStatus: 'Status', projectRole: 'Role', projectAmount: 'Funding',
 		publications: 'Publications', publishedPapers: 'Published Papers', workingPapers: 'Working Papers', books: 'Books', policyReports: 'Policy Reports', adoptedBy: 'Adopted by',
 		authors: 'Authors', readPaper: 'Read Paper', readMore: 'Read more', noBlog: 'No blog posts yet.', noCourses: 'Course information coming soon.', courseWebsite: 'Course page', attachments: 'Downloads', education: 'Education', experiences: 'Experience', lastPublications: 'Selected Publications', skills: 'Skills', emptyProfile: 'Profile coming soon.', emptyResearch: 'Research information coming soon.', emptyPapers: 'No public research outputs yet.', emptyCv: 'Curriculum vitae coming soon.', contact: 'Contact', email: 'Email', github: 'GitHub', orcid: 'ORCID', cnki: 'CNKI', school: 'University', x: 'X', linkedin: 'LinkedIn', scrollToEnter: 'Scroll to enter', pending: 'Add link', copyright: 'All rights reserved',
 	},
