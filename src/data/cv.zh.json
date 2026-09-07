@@ -30,6 +30,7 @@
   "publications": [
     {
       "category": "published",
+      "featured": "",
       "title": "环境治理的生育潜力释放效应——来自中国地级市的证据",
       "authors": "杜晓静; 王振杰; 吕风光",
       "doi": "",
@@ -41,6 +42,7 @@
     },
     {
       "category": "published",
+      "featured": "",
       "title": "Convergence or Divergence? The Impact of Common Institutional Ownership on Firms' Innovation Trajectories",
       "authors": "Yuhan He; Fengguang Lyu; Shougui Luo",
       "doi": "10.1016/j.ribaf.2025.103137",
@@ -52,6 +54,7 @@
     },
     {
       "category": "published",
+      "featured": true,
       "title": "中国劳动者失业风险感知变迁——基于APC模型的动态分析",
       "authors": "吕风光; 张顺",
       "doi": "",
@@ -63,6 +66,7 @@
     },
     {
       "category": "working",
+      "featured": "",
       "title": "The Age-Period-Cohort Varying-Coefficient Model: Describing and Testing Temporal Heterogeneity in Regression Relationships",
       "authors": "Fengguang Lyu",
       "doi": "10.2139/ssrn.7380278",
@@ -74,6 +78,7 @@
     },
     {
       "category": "published",
+      "featured": "",
       "title": "Multiple Shareholding Institutional Investors and Green Governance of Heavy-Polluting Industries",
       "authors": "Fengguang Lyu; Zhiping Zhang; Guangxin Fu; Zhangxin (Frank) Liu; Sirimon Treepongkaruna",
       "doi": "10.1002/bse.3667",
@@ -85,6 +90,7 @@
     },
     {
       "category": "published",
+      "featured": "",
       "title": "企业数字化对劳动力市场就业风险的影响",
       "authors": "张顺; 吕风光",
       "doi": "10.20069/j.cnki.DJKX.202404002",
@@ -96,6 +102,7 @@
     },
     {
       "category": "published",
+      "featured": true,
       "title": "数字时代的就业风险分配:制度主义的视角",
       "authors": "张顺; 吕风光",
       "doi": "",
@@ -107,6 +114,7 @@
     },
     {
       "category": "published",
+      "featured": true,
       "title": "智能时代的职业风险对主观阶层认同的影响",
       "authors": "张顺; 吕风光",
       "doi": "10.15992/j.cnki.31-1123/c.2024.05.006",
@@ -118,6 +126,7 @@
     },
     {
       "category": "published",
+      "featured": "",
       "title": "混合所有制改革背景下异质性大股东治理效应研究——基于并购价值视角的实证分析与检验",
       "authors": "张志平; 凌士显; 吕风光",
       "doi": "10.19559/j.cnki.12-1387.2021.09.006",
@@ -129,6 +138,7 @@
     },
     {
       "category": "published",
+      "featured": "",
       "title": "连锁机构投资者的双重功能与企业并购价值",
       "authors": "张志平; 潘爱玲; 吕风光",
       "doi": "10.19616/j.cnki.bmj.2022.11.008",
@@ -140,6 +150,7 @@
     },
     {
       "category": "published",
+      "featured": "",
       "title": "新冠疫情的资本市场冲击效应研究",
       "authors": "张志平; 朱思颖; 吕风光",
       "doi": "",
