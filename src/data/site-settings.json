@@ -123,7 +123,158 @@
         }
       }
     ],
-    "projects": []
+    "projects": [
+      {
+        "source": {
+          "zh": "国家社会科学基金重大项目",
+          "en": "Major Project of the National Social Science Fund of China"
+        },
+        "title": {
+          "zh": "新形势下我国面临的主要就业风险及多维治理研究",
+          "en": "Research on Major Employment Risks Facing China under the New Circumstances and Multidimensional Governance"
+        },
+        "code": {
+          "zh": "21&ZD181",
+          "en": "21&ZD181"
+        },
+        "status": {
+          "zh": "",
+          "en": ""
+        },
+        "role": {
+          "zh": "参与",
+          "en": "Participant"
+        },
+        "description": {
+          "zh": "",
+          "en": ""
+        },
+        "link": {
+          "zh": "",
+          "en": ""
+        }
+      },
+      {
+        "source": {
+          "zh": "国家社会科学基金一般项目",
+          "en": "General Project of the National Social Science Fund of China"
+        },
+        "title": {
+          "zh": "虚拟社会与现实社会中人际交往的比较研究",
+          "en": "A Comparative Study of Interpersonal Interaction in Virtual and Real Societies"
+        },
+        "code": {
+          "zh": "23BSH022",
+          "en": "23BSH022"
+        },
+        "status": {
+          "zh": "",
+          "en": ""
+        },
+        "role": {
+          "zh": "参与",
+          "en": "Participant"
+        },
+        "description": {
+          "zh": "",
+          "en": ""
+        },
+        "link": {
+          "zh": "",
+          "en": ""
+        }
+      },
+      {
+        "source": {
+          "zh": "国家社会科学基金青年项目",
+          "en": "Youth Project of the National Social Science Fund of China"
+        },
+        "title": {
+          "zh": "能源劳动者职业流动的机理及对策研究",
+          "en": "Mechanisms and Policy Responses of Occupational Mobility among Energy Workers"
+        },
+        "code": {
+          "zh": "25CSH045",
+          "en": "25CSH045"
+        },
+        "status": {
+          "zh": "",
+          "en": ""
+        },
+        "role": {
+          "zh": "参与",
+          "en": "Participant"
+        },
+        "description": {
+          "zh": "",
+          "en": ""
+        },
+        "link": {
+          "zh": "",
+          "en": ""
+        }
+      },
+      {
+        "source": {
+          "zh": "国家自然科学基金青年项目",
+          "en": "Young Scientists Fund of the National Natural Science Foundation of China"
+        },
+        "title": {
+          "zh": "中国情境下并购目标公司选择的动因与效应研究：产业政策视角",
+          "en": "Motivations and Effects of M&A Target Selection in the Chinese Context: An Industrial Policy Perspective"
+        },
+        "code": {
+          "zh": "71902099",
+          "en": "71902099"
+        },
+        "status": {
+          "zh": "",
+          "en": ""
+        },
+        "role": {
+          "zh": "参与",
+          "en": "Participant"
+        },
+        "description": {
+          "zh": "",
+          "en": ""
+        },
+        "link": {
+          "zh": "",
+          "en": ""
+        }
+      },
+      {
+        "source": {
+          "zh": "西安交通大学“国之大者”专项研究",
+          "en": "Xi'an Jiaotong University “Matters of National Importance” Special Research Project"
+        },
+        "title": {
+          "zh": "促进各民族交往交流交融与铸牢中华民族共同体意识研究",
+          "en": "Promoting Interethnic Interaction, Exchange, and Integration and Forging a Strong Sense of Community for the Chinese Nation"
+        },
+        "code": {
+          "zh": "2025GZDZ026",
+          "en": "2025GZDZ026"
+        },
+        "status": {
+          "zh": "",
+          "en": ""
+        },
+        "role": {
+          "zh": "参与",
+          "en": "Participant"
+        },
+        "description": {
+          "zh": "",
+          "en": ""
+        },
+        "link": {
+          "zh": "",
+          "en": ""
+        }
+      }
+    ]
   },
   "navigation": {
     "home": {
