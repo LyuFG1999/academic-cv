@@ -11,15 +11,34 @@ export type LocalizedCv = {
 	publications: Publication[]
 }
 
-const normalizeCv = (value: Partial<LocalizedCv>): LocalizedCv => ({
-	content: typeof value.content === 'string' ? value.content : '',
-	experiences: value.experiences ?? [],
-	education: value.education ?? [],
-	skills: value.skills ?? [],
-	publications: (value.publications ?? []).filter(item => item.title?.trim()),
-})
+type RawCv = Partial<Omit<LocalizedCv, 'publications'>> & {
+	publications?: Array<Record<string, unknown>>
+}
+
+const asBoolean = (value: unknown) => value === true || value === 'true'
+
+const normalizeCv = (value: unknown): LocalizedCv => {
+	const source = (value && typeof value === 'object' ? value : {}) as RawCv
+	const publications = Array.isArray(source.publications)
+		? source.publications
+			.map(item => ({
+				...item,
+				featured: asBoolean(item.featured),
+				correspondingAuthor: asBoolean(item.correspondingAuthor),
+			}) as unknown as Publication)
+			.filter(item => item.title?.trim())
+		: []
+
+	return {
+		content: typeof source.content === 'string' ? source.content : '',
+		experiences: source.experiences ?? [],
+		education: source.education ?? [],
+		skills: source.skills ?? [],
+		publications,
+	}
+}
 
 export const cv: Record<Language, LocalizedCv> = {
-	zh: normalizeCv(cvZh as Partial<LocalizedCv>),
-	en: normalizeCv(cvEn as Partial<LocalizedCv>),
+	zh: normalizeCv(cvZh),
+	en: normalizeCv(cvEn),
 }
