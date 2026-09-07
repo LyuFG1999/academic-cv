@@ -18,9 +18,6 @@ export function GET() {
     }
     const projects = profile.fields.find((field: { name?: string }) => field.name === 'projects')
     if (projects && Array.isArray(projects.fields)) {
-      const add = (name: string, label: string, widget = 'string') => {
-        if (!projects.fields.some((field: { name?: string }) => field.name === name)) projects.fields.push({ name, label, widget, required: false, fields: widget === 'object' ? [{ name: 'zh', label: '中文', widget: 'string', required: false }, { name: 'en', label: 'English', widget: 'string', required: false }] : undefined })
-      }
       const bilingual = (name: string, label: string, text = false) => {
         if (!projects.fields.some((field: { name?: string }) => field.name === name)) projects.fields.push({ name, label, widget: 'object', fields: [{ name: 'zh', label: '中文', widget: text ? 'text' : 'string', required: false }, { name: 'en', label: 'English', widget: text ? 'text' : 'string', required: false }] })
       }
@@ -28,9 +25,8 @@ export function GET() {
       bilingual('code', '项目代号 / Project code')
       bilingual('status', '项目状态 / Status')
       bilingual('role', '参与角色 / Role')
-      add('noop', '', 'string')
-      projects.fields = projects.fields.filter((field: { name?: string }) => field.name !== 'noop')
-      projects.hint = '每个项目可独立展开编辑。前台按全宽卡片展示项目来源、名称、代号、状态、参与角色、简介与链接。'
+      bilingual('amount', '项目金额 / Funding')
+      projects.hint = '每个项目可独立展开编辑。前台使用全宽卡片：项目名称为主标题，来源、代号、角色与状态直接作为信息展示，不显示字段名称；项目金额保留“项目金额 / Funding”标签。'
     }
   }
 

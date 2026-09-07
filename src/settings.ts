@@ -13,6 +13,7 @@ export type Project = {
 	code: string
 	status: string
 	role: string
+	amount: string
 	description: string
 	link?: string
 }
@@ -43,6 +44,7 @@ const data = settingsData as Omit<typeof settingsData, 'profile'> & {
 			code?: BilingualText
 			status?: BilingualText
 			role?: BilingualText
+			amount?: BilingualText
 			description?: BilingualText
 			link?: BilingualText
 		}[]
@@ -71,6 +73,7 @@ const buildProfile = (lang: Language): Profile => ({
 			code: localized(item.code, lang, ''),
 			status: localized(item.status, lang, ''),
 			role: localized(item.role, lang, ''),
+			amount: localized(item.amount, lang, ''),
 			description: localized(item.description, lang, ''),
 			link: localized(item.link, lang, ''),
 		}))
