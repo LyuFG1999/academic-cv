@@ -1,11 +1,12 @@
 :root {
-  --measure-lead: 42rem;
-  --measure-prose: 46rem;
+  --measure-lead: 100%;
+  --measure-prose: 100%;
   --measure-wide: 70rem;
+  --measure-home-intro: 43rem;
   --text-page-title: clamp(2rem, 4vw, 2.125rem);
   --text-section-title: clamp(1.375rem, 2.4vw, 1.5rem);
-  --text-lead: clamp(1rem, 1.4vw, 1.125rem);
-  --text-body: 1rem;
+  --text-copy: 1.0625rem;
+  --text-home-intro: 1.125rem;
   --line-lead: 1.8;
   --line-body: 1.8;
   --space-section: clamp(3.5rem, 7vw, 4.5rem);
@@ -31,7 +32,7 @@
 .text-lead {
   width: 100%;
   max-width: var(--measure-lead);
-  font-size: var(--text-lead);
+  font-size: var(--text-copy);
   line-height: var(--line-lead);
   color: color-mix(in srgb, currentColor 78%, transparent);
   overflow-wrap: anywhere;
@@ -40,7 +41,7 @@
 .prose-content {
   width: 100%;
   max-width: var(--measure-prose);
-  font-size: var(--text-body);
+  font-size: var(--text-copy);
   line-height: var(--line-body);
   overflow-wrap: anywhere;
 }
@@ -55,7 +56,7 @@
 }
 
 .prose-content :where(p, li) {
-  font-size: var(--text-body);
+  font-size: var(--text-copy);
   line-height: var(--line-body);
 }
 
@@ -84,9 +85,11 @@
   :root {
     --measure-lead: 100%;
     --measure-prose: 100%;
+    --measure-home-intro: 100%;
     --text-page-title: 2rem;
     --text-section-title: 1.375rem;
-    --text-lead: 1rem;
+    --text-copy: 1rem;
+    --text-home-intro: 1rem;
     --space-section: 3.25rem;
   }
 }
