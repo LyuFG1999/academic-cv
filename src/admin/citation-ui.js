@@ -1,6 +1,6 @@
 export function renderCitationImport({ panel, cv, el, changed, message, uploading, rerender }) {
   const box = el('section', undefined, 'citation-import'); box.append(el('h3', '导入研究成果'));
-  box.append(el('p', '支持 BibTeX / BibLaTeX 与 RIS。先预览、勾选，再加入成果列表；中英文保留同一份原始题名，不自动翻译。', 'hint'));
+  box.append(el('p', '支持 BibTeX / BibLaTeX 与 RIS。先预览、勾选，再加入成果列表；中英文保留同一份原始题名，不自动翻译。批量导入后，单条成果仍可独立展开编辑。', 'hint'));
   const fileLabel = el('label', undefined, 'field'); fileLabel.append(el('span', '选择引文文件（最多 2 MB、500 条）'));
   const file = el('input'); file.type = 'file'; file.accept = '.bib,.bibtex,.ris'; fileLabel.append(file); box.append(fileLabel);
   const label = el('label', undefined, 'field'); label.append(el('span', '或粘贴引文内容'));
@@ -53,4 +53,31 @@ export function renderCitationImport({ panel, cv, el, changed, message, uploadin
     cv.publications.push(...selected.map(item=>parser.pairedPublication(item,category.value)));changed();rerender();message(`已加入 ${selected.length} 条成果，补全 ${filled} 条摘要，请核对后统一发布。`);
   });
   panel.querySelector('.fields').before(box);
+
+  const exportBox = el('section', undefined, 'citation-export'); exportBox.append(el('h3', '批量导出研究成果'));
+  exportBox.append(el('p', '从当前后台成果数据直接导出多条 BibTeX 或 RIS；网站专用字段（代表性成果、通讯作者开关等）不会写入引文文件。', 'hint'));
+  const grid = el('div', undefined, 'citation-export-grid');
+  const langLabel = el('label', undefined, 'field'); langLabel.append(el('span', '导出语言'));
+  const lang = el('select'); [['zh','中文字段'],['en','English fields']].forEach(([value,title]) => { const option=el('option',title); option.value=value; lang.append(option); }); langLabel.append(lang);
+  const rangeLabel = el('label', undefined, 'field'); rangeLabel.append(el('span', '导出范围'));
+  const range = el('select'); [['all','全部成果'],['published','已发表论文'],['working','工作论文'],['book','书籍']].forEach(([value,title]) => { const option=el('option',title); option.value=value; range.append(option); }); rangeLabel.append(range);
+  const formatLabel = el('label', undefined, 'field'); formatLabel.append(el('span', '格式'));
+  const format = el('select'); [['bibtex','BibTeX (.bib)'],['ris','RIS (.ris)']].forEach(([value,title]) => { const option=el('option',title); option.value=value; format.append(option); }); formatLabel.append(format);
+  grid.append(langLabel, rangeLabel, formatLabel); exportBox.append(grid);
+  const exportActions=el('div',undefined,'file-actions');
+  const download=el('button','导出当前范围'); download.type='button';
+  download.addEventListener('click', async()=>{
+    try {
+      const module = parser || await import('./citations.js');
+      const selected = (cv.publications || []).filter(item => range.value === 'all' || (item.category || 'published') === range.value);
+      const content = module.exportCitations(selected, format.value, lang.value);
+      const blob = new Blob([content], { type: format.value === 'ris' ? 'application/x-research-info-systems;charset=utf-8' : 'application/x-bibtex;charset=utf-8' });
+      const url = URL.createObjectURL(blob); const link = document.createElement('a');
+      link.href = url; link.download = `academic-publications-${range.value}-${lang.value}.${format.value === 'ris' ? 'ris' : 'bib'}`;
+      document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 0);
+      message(`已导出 ${selected.length} 条成果。`);
+    } catch (error) { message(error.message || '导出失败，请重试。', true); }
+  });
+  exportActions.append(download); exportBox.append(exportActions);
+  panel.querySelector('.fields').before(exportBox);
 }
