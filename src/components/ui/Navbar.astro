@@ -1,17 +1,12 @@
 ---
 import { localizedPath, type Language } from '@/i18n'
 import { profile, template } from '@/settings'
-import { cv } from '@/data/cv'
 import { navigation, navigationLabel, navigationOrder } from '@/data/navigation'
-import { compareByAcademicDate } from '@/lib/utils'
 
 type Props = { lang: Language }
 const { lang } = Astro.props
 const person = profile[lang]
-const data = cv[lang]
-const latestExperience = [...data.experiences].sort(compareByAcademicDate)[0]
-const latestEducation = [...data.education].sort(compareByAcademicDate)[0]
-const currentInstitution = latestExperience?.company?.trim() || latestEducation?.school?.trim() || person.institute?.trim()
+const currentInstitution = person.institute?.trim()
 const navItems = navigationOrder
 	.filter(({ key }) => navigation[key].enabled)
 	.map(({ key, path }) => ({ label: navigationLabel(key, lang), path: localizedPath(lang, path) }))

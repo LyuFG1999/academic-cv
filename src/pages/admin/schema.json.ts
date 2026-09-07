@@ -26,6 +26,7 @@ export function GET() {
   const cv = fields('cv')
   const publications = cv.find((field: { name?: string }) => field.name === 'publications')
   if (publications && Array.isArray(publications.fields) && !publications.fields.some((field: { name?: string }) => field.name === 'featured')) {
+    publications.hint = '每条成果中的“首页代表性成果 / Featured on homepage”提供中文与 English 两个开关，分别控制该成果是否显示在中文或英文首页的“代表性成果 / Selected Publications”区块。'
     const categoryIndex = publications.fields.findIndex((field: { name?: string }) => field.name === 'category')
     publications.fields.splice(categoryIndex + 1, 0, {
       name: 'featured',
@@ -33,7 +34,6 @@ export function GET() {
       widget: 'boolean',
       default: false,
       required: false,
-      hint: '开启后，该成果会显示在首页“代表性成果 / Selected Publications”区块。中文和英文成果可分别设置。',
     })
   }
 
