@@ -33,6 +33,7 @@ export interface Publication {
   correspondingAuthor?: boolean;
   link?: string;
   abstract?: string;
+  tags?: string;
 }
 
 export interface PolicyReport {
