@@ -43,6 +43,7 @@ const postFeatures = (post: (typeof posts)[number]) => {
 			{posts.map((post) => {
 				const features = postFeatures(post)
 				const href = `${template.base}/${lang}/blog/${post.id}/`
+				const tags = [...new Set((post.data.tags || []).map((tag: string) => tag.trim()).filter(Boolean))]
 				return (
 					<article class='card overflow-hidden border border-base-300 bg-base-200/70 shadow-sm' data-reveal>
 						{post.data.featuredImage && <img src={assetUrl(post.data.featuredImage, template.base)} alt='' class='h-52 w-full object-cover' loading='lazy' />}
@@ -58,7 +59,10 @@ const postFeatures = (post: (typeof posts)[number]) => {
 							<time class='mt-1 text-sm text-base-content/60' datetime={post.data.date}>{new Date(post.data.date).toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
 							<h2 class='card-title break-words text-2xl'><a class='hover:text-secondary' href={href}>{post.data.title}</a></h2>
 							<p class='break-words text-base-content/75'>{post.data.excerpt}</p>
-							<div class='card-actions mt-2 justify-end'><a class='btn btn-secondary btn-sm' href={href}>{t.readMore}</a></div>
+							<div class='mt-2 flex flex-wrap items-center justify-between gap-3'>
+								{tags.length > 0 ? <div class='flex min-w-0 flex-wrap gap-2'>{tags.map((tag) => <span class='badge badge-outline border-base-300 bg-base-100/60 text-base-content/70'>{tag}</span>)}</div> : <span />}
+								<a class='btn btn-secondary btn-sm shrink-0' href={href}>{t.readMore}</a>
+							</div>
 						</div>
 					</article>
 				)

@@ -40,12 +40,18 @@ export function GET() {
   const cv = fields('cv')
   const publications = cv.find((field: { name?: string }) => field.name === 'publications')
   if (publications && Array.isArray(publications.fields)) {
-    publications.hint = '“首页代表性成果 / Featured on homepage”和“本人为通讯作者 / Corresponding author”均提供中文与 English 两个开关。资政报告使用独立模块，不参与 BibTeX/RIS 导入导出。'
+    publications.hint = '“首页代表性成果 / Featured on homepage”和“本人为通讯作者 / Corresponding author”均提供中文与 English 两个开关。论文与书籍可填写多个标签，使用中文分号“；”或英文分号“;”分隔。资政报告使用独立模块，不参与 BibTeX/RIS 导入导出。'
     const categoryIndex = publications.fields.findIndex((field: { name?: string }) => field.name === 'category')
     if (!publications.fields.some((field: { name?: string }) => field.name === 'featured')) publications.fields.splice(categoryIndex + 1, 0, { name: 'featured', label: '首页代表性成果 / Featured on homepage', widget: 'boolean', default: false, required: false })
     if (!publications.fields.some((field: { name?: string }) => field.name === 'correspondingAuthor')) {
       const featuredIndex = publications.fields.findIndex((field: { name?: string }) => field.name === 'featured')
       publications.fields.splice(featuredIndex + 1, 0, { name: 'correspondingAuthor', label: '本人为通讯作者 / Corresponding author', widget: 'boolean', default: false, required: false })
+    }
+    if (!publications.fields.some((field: { name?: string }) => field.name === 'tags')) {
+      const abstractIndex = publications.fields.findIndex((field: { name?: string }) => field.name === 'abstract')
+      const tagsField = { name: 'tags', label: '标签 / Tags', widget: 'string', required: false, hint: '可填写多个标签，使用中文分号“；”或英文分号“;”分隔，例如：人工智能；劳动力市场；社会分层。' }
+      if (abstractIndex >= 0) publications.fields.splice(abstractIndex + 1, 0, tagsField)
+      else publications.fields.push(tagsField)
     }
   }
   if (!cv.some((field: { name?: string }) => field.name === 'policyReports')) {
