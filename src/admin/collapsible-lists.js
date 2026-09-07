@@ -38,7 +38,7 @@ function labelFor(card, index) {
 function enhanceSection(section) {
   if (!managedSections.has(section.id)) return;
   const rawCards = [...section.querySelectorAll('.list-item')].filter(card => !card.closest('.collapsible-entry'));
-  rawCards.forEach((card, index) => {
+  rawCards.forEach(card => {
     const details = document.createElement('details');
     details.className = 'collapsible-entry';
     const summary = document.createElement('summary');
