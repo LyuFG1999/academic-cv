@@ -23,9 +23,23 @@ export function GET() {
     })
   }
 
+  const cv = fields('cv')
+  const publications = cv.find((field: { name?: string }) => field.name === 'publications')
+  if (publications && Array.isArray(publications.fields) && !publications.fields.some((field: { name?: string }) => field.name === 'featured')) {
+    const categoryIndex = publications.fields.findIndex((field: { name?: string }) => field.name === 'category')
+    publications.fields.splice(categoryIndex + 1, 0, {
+      name: 'featured',
+      label: '首页代表性成果 / Featured on homepage',
+      widget: 'boolean',
+      default: false,
+      required: false,
+      hint: '开启后，该成果会显示在首页“代表性成果 / Selected Publications”区块。中文和英文成果可分别设置。',
+    })
+  }
+
   return new Response(JSON.stringify({
     settings,
-    cv: [...fields('cv'), { name: 'content', label: '履历正文 · Markdown', widget: 'text', required: false, hint: '放在教育和工作经历之后。# 一级标题与经历标题同级；支持列表、表格、链接与图片。' }],
+    cv: [...cv, { name: 'content', label: '履历正文 · Markdown', widget: 'text', required: false, hint: '放在教育和工作经历之后。# 一级标题与经历标题同级；支持列表、表格、链接与图片。' }],
     courses: fields('courses'),
   }), { headers: { 'Content-Type': 'application/json' } })
 }
