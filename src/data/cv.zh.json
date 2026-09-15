@@ -181,6 +181,20 @@
       "link": "https://kns.cnki.net/kcms2/article/abstract?v=HTCMX8yYpPHGokKybFS-0-nvowsxoFuv_GtA2BNOoVZK585juURptWr_HWUeqf6WB_yBEzqbBy4ywkPhPOfn9ap_LZYx_YEYF-aCcrT1czKs8iPHEHN_KqgiZSJGdbvXYlFLol4oQ4b8aIy2aJcpSxDThFofsS_m9NvE2VBv8oj_K3_Qn2sqDA==&uniplatform=NZKPT&language=CHS",
       "abstract": "新冠肺炎疫情作为重大突发公共卫生事件,短期内对经济发展以及资本市场都带来巨大冲击。文章以中国资本市场相关股票交易数据为样本,通过行业异质性分析、拐点分析与事件研究法探讨了新冠疫情对资本市场的冲击效应。研究结果表明:新冠疫情对资本市场的短期冲击剧烈,这种冲击具有明显的行业异质性特征,受疫情影响较大的行业凸显更强的冲击效应;机制分析发现投资者情绪是新冠疫情存在资本市场冲击效应的重要传导路径。研究新冠疫情对资本市场的冲击效应及其路径于促进我国经济发展以及稳定资本市场都具有重要意义。",
       "tags": "封面文章；北大核心"
+    },
+    {
+      "category": "working",
+      "featured": false,
+      "correspondingAuthor": true,
+      "title": "apciflex: Age-Period-Cohort Interaction Analysis with Flexible Grouping on Irregular Observed Lexis Grids",
+      "authors": "Fengguang Lyu",
+      "doi": "10.2139/ssrn.7440381",
+      "journal": "Social Science Research Network",
+      "time": "2026",
+      "sortDate": "2026-09-01",
+      "link": "https://doi.org/10.2139/ssrn.7440381",
+      "abstract": "The age-period-cohort interaction model decomposes the outcome surface on a Lexis grid into age, period, and interaction components and describes cohort patterns by organizing the interaction components along cohort lines. In applied research, survey periods may be unevenly spaced, age coverage may vary across periods, and the original temporal divisions in the data may differ from the groupings required for theory-guided analysis. This article introduces the Stata command apciflex, which combines model estimation on the observed grid with flexible grouping of age, period, and cohort in a single analysis. The command identifies cohorts from actual time values and extracts age, period, and interaction components while allowing for empty cells. It then uses linear contrasts and the full covariance matrix to obtain grouped estimates and statistical tests. This article presents the decomposition framework and its inferential procedures, describes the command's syntax, options, and stored results, and illustrates these procedures with a reproducible example containing unevenly spaced periods and empty cells.",
+      "tags": ""
     }
   ],
   "policyReports": [],
